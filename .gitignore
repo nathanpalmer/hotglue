@@ -1,0 +1,9 @@
+*.obj
+*.exe
+*.pdb
+*.user
+*.suo
+
+[Ll]ibraries
+[Bb]in
+[Oo]bj
