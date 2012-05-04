@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <%= HotGlue.Script.Reference("/Scripts/dep1.js") %>
     <script src="/Scripts/dep1.stitch"></script>
 </head>
 <body>

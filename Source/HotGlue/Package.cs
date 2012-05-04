@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using HotGlue.Compilers;
 using HotGlue.Model;
 
 namespace HotGlue
@@ -18,6 +19,35 @@ namespace HotGlue
             _relativeRoot = relativeRoot;
             _compilers = compilers;
             _reference = reference;
+        }
+
+        public static Package Build(HotGlueConfiguration configuration)
+        {
+            IReference reference;
+            if (configuration == null || string.IsNullOrWhiteSpace(configuration.Referencer))
+            {
+                reference = new HTMLReference();
+            }
+            else
+            {
+                reference = (IReference)Activator.CreateInstance(Type.GetType(configuration.Referencer));
+            }
+
+            IEnumerable<ICompile> compilers;
+            if (configuration == null || configuration.Compilers.Length == 0)
+            {
+                compilers = new[]
+                    {
+                        new JavaScriptCompiler()
+                    };
+            }
+            else
+            {
+                compilers = configuration.Compilers.Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type))).ToList();
+            }
+
+            var package = new Package("", compilers, reference);
+            return package;
         }
 
         public string Compile(IEnumerable<Reference> references)
