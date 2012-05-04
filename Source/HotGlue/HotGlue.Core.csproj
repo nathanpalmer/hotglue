@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
     <Compile Include="Compilers\JavaScriptCompiler.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Referencers\HTMLReference.cs" />
     <Compile Include="ICompile.cs" />

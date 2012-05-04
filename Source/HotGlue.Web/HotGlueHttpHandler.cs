@@ -27,7 +27,7 @@ namespace HotGlue.Web
         {
             var package = new Package("", _compilers, _reference);
             // find references
-            var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath).Replace(".stitch",".js");
+            var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath).Replace(".jsglue",".js");
             var references = new[]
                 {
                     new Reference
