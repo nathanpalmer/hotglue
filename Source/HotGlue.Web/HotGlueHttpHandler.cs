@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace HotGlue.Web
     {
         private ICompile[] _compilers;
         private IReference _reference;
+        private IReferenceLocator _locator;
+        private HotGlueConfiguration _configuration;
 
         public HotGlueHttpHandler()
         {
@@ -21,22 +24,28 @@ namespace HotGlue.Web
                     new JavaScriptCompiler()
                 };
             _reference = new HTMLReference();
+            _configuration = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
+            
         }
 
         public void ProcessRequest(HttpContext context)
         {
-            var package = new Package("", _compilers, _reference);
+            _configuration = new HotGlueConfiguration { ScriptPath = context.Server.MapPath("~/Scripts/"), ScriptSharedFolder = context.Server.MapPath("~/Scripts/Shared/") };
+            _locator = new DynamicLoading(_configuration);
+            var package = new Package(_configuration.ScriptPath, _compilers, _reference);
             // find references
             var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath).Replace(".jsglue",".js");
-            var references = new[]
+            var root = context.Server.MapPath("~");
+            var relative = context.Server.MapPath(".") + "\\";
+            file = file.Replace(relative, "");
+            var reference = new Reference
                 {
-                    new Reference
-                        {
-                            Root = "",
-                            Path = file,
-                            Module = false
-                        }
+                    Root = relative,
+                    Path = file,
+                    Module = false
                 };
+
+            var references = _locator.Load(root, reference);
             var content = package.Compile(references);
 
             context.Response.ContentType = "application/x-javascript";
