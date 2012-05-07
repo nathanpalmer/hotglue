@@ -8,12 +8,10 @@ namespace HotGlue
     public class GetReferences : IGetReferences
     {
         private readonly IEnumerable<IFindReference> _findReferences;
-        //private GetFileReferences _getFileReferences;
 
         public GetReferences(IEnumerable<IFindReference> findReferences)
         {
             _findReferences = findReferences;
-            //_getFileReferences = new GetFileReferences(new[]{ new SlashSlashEqualReference() });
         }
 
         public Dictionary<string, IList<FileReference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)

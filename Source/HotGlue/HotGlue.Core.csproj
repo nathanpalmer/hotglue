@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DynamicLoading.cs" />
-    <Compile Include="FileReference.cs" />
+    <Compile Include="Model\FileReference.cs" />
     <Compile Include="GetReferences.cs" />
     <Compile Include="IFindReference.cs" />
     <Compile Include="IFindReferences.cs" />
