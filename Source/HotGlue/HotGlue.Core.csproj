@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicLoading.cs" />
+    <Compile Include="FileReference.cs" />
+    <Compile Include="GetReferences.cs" />
+    <Compile Include="IFindReference.cs" />
+    <Compile Include="IFindReferences.cs" />
+    <Compile Include="IGetReferences.cs" />
     <Compile Include="IReferenceLocator.cs" />
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
     <Compile Include="Compilers\JavaScriptCompiler.cs" />
@@ -52,6 +58,8 @@
     <Compile Include="Model\Reference.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FindReferences\RequireReference.cs" />
+    <Compile Include="FindReferences\SlashSlashEqualReference.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

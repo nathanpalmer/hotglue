@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -30,7 +31,8 @@ namespace HotGlue.Web
                                     ScriptPath = "Scripts\\",
                                     ScriptSharedFolder = "Scripts\\Shared\\"
                                 };
-            _locator = new DynamicLoading(_configuration);
+            var getReferences = new GetReferences(new[] {new SlashSlashEqualReference()});
+            _locator = new DynamicLoading(_configuration, getReferences);
         }
 
         public void ProcessRequest(HttpContext context)
