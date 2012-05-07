@@ -24,32 +24,31 @@ namespace HotGlue.Web
                     new JavaScriptCompiler()
                 };
             _reference = new HTMLReference();
-            _configuration = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
-            
+            _configuration = (HotGlueConfiguration) ConfigurationManager.GetSection("hotglue")
+                             ?? new HotGlueConfiguration
+                                {
+                                    ScriptPath = "Scripts\\",
+                                    ScriptSharedFolder = "Scripts\\Shared\\"
+                                };
+            _locator = new DynamicLoading(_configuration);
         }
 
         public void ProcessRequest(HttpContext context)
         {
-            _configuration = new HotGlueConfiguration
-                             {
-                                 ScriptPath = "Scripts\\", 
-                                 ScriptSharedFolder = "Scripts\\Shared\\"
-                             };
-            _locator = new DynamicLoading(_configuration);
-            
             // find references
             var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath).Replace(".jsglue",".js");
             var root = context.Server.MapPath("~");
             var relative = context.Server.MapPath(".") + "\\";
             file = file.Replace(relative, "");
-            var package = new Package(root, _compilers, _reference);
-            var reference = new Reference
-                {
-                    Root = relative,
-                    Path = file,
-                    Module = false
-                };
 
+            var reference = new Reference
+            {
+                Root = relative,
+                Path = file,
+                Module = false
+            };
+
+            var package = new Package(root, _compilers, _reference);
             var references = _locator.Load(root, reference);
             var content = package.Compile(references);
 
