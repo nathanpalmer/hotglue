@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\Module2\app.js" />
+    <Content Include="Scripts\Module2\mod.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Web.config" />
@@ -90,7 +92,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50169</DevelopmentServerPort>
+          <DevelopmentServerPort>59009</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
