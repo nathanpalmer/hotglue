@@ -22,10 +22,8 @@ namespace HotGlue
         {
             _configuration = HotGlueConfigurationSection.Load();
             _package = Package.Build(_configuration);
-            CompilationSection compilationSection = (CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation");
-            _debug = compilationSection.Debug;
-            var getReferences = new GetReferences(new[] { new SlashSlashEqualReference() });
-            _locator = new DynamicLoading(_configuration, getReferences);
+            _debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
+            _locator = new DynamicLoading(_configuration, new GetReferences(new[] { new SlashSlashEqualReference() }));
         }
 
         public static string Reference(string name)
