@@ -24,5 +24,15 @@ namespace HotGlue.Web
 
             return null;
         }
+
+        public static HotGlueConfiguration Load()
+        {
+            return (HotGlueConfiguration) ConfigurationManager.GetSection("hotglue")
+                   ?? new HotGlueConfiguration
+                       {
+                           ScriptPath = "Scripts\\",
+                           ScriptSharedFolder = "Scripts\\Shared\\"
+                       };
+        }
     }
 }

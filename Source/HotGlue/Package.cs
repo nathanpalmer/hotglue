@@ -34,7 +34,7 @@ namespace HotGlue
             }
 
             IEnumerable<ICompile> compilers;
-            if (configuration == null || configuration.Compilers.Length == 0)
+            if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
             {
                 compilers = new[]
                     {

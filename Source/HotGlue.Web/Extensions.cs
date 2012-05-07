@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Configuration;
 using HotGlue.Model;
+using HotGlue.Web;
 
 namespace HotGlue
 {
@@ -13,29 +16,38 @@ namespace HotGlue
         private static HotGlueConfiguration _configuration;
         private static Package _package;
         private static bool _debug;
+        private static IReferenceLocator _locator;
 
         static Script()
         {
-            _configuration = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
+            _configuration = HotGlueConfigurationSection.Load();
             _package = Package.Build(_configuration);
             CompilationSection compilationSection = (CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation");
             _debug = compilationSection.Debug;
+            var getReferences = new GetReferences(new[] { new SlashSlashEqualReference() });
+            _locator = new DynamicLoading(_configuration, getReferences);
         }
 
         public static string Reference(string name)
         {
             if (_debug)
             {
-                // Find other references
-                var references = new[]
-                    {
-                        new Reference
-                            {
-                                Root = "",
-                                Path = name,
-                                Module = false
-                            }
-                    };
+                var context = HttpContext.Current;
+                var root = context.Server.MapPath("~");
+                name = name.Replace("/", "\\");
+                name = name.StartsWith("\\") ? name.Substring(1) : name;
+                var file = Path.Combine(root, name.Replace("/", "\\"));
+                var relative = file.Substring(0, file.LastIndexOf("\\")) + "\\";
+                file = file.Substring(file.LastIndexOf("\\")+1);
+
+                var reference = new Reference
+                {
+                    Root = relative,
+                    Path = file,
+                    Module = false
+                };
+
+                var references = _locator.Load(root, reference);
 
                 return _package.References(references);
             }
