@@ -30,14 +30,19 @@ namespace HotGlue.Web
 
         public void ProcessRequest(HttpContext context)
         {
-            _configuration = new HotGlueConfiguration { ScriptPath = context.Server.MapPath("~/Scripts/"), ScriptSharedFolder = context.Server.MapPath("~/Scripts/Shared/") };
+            _configuration = new HotGlueConfiguration
+                             {
+                                 ScriptPath = "Scripts\\", 
+                                 ScriptSharedFolder = "Scripts\\Shared\\"
+                             };
             _locator = new DynamicLoading(_configuration);
-            var package = new Package(_configuration.ScriptPath, _compilers, _reference);
+            
             // find references
             var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath).Replace(".jsglue",".js");
             var root = context.Server.MapPath("~");
             var relative = context.Server.MapPath(".") + "\\";
             file = file.Replace(relative, "");
+            var package = new Package(root, _compilers, _reference);
             var reference = new Reference
                 {
                     Root = relative,

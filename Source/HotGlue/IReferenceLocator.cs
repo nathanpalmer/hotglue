@@ -45,11 +45,11 @@ namespace HotGlue
             //    throw new ArgumentNullException("fileName");
             //}
 
-            var rootIndex = reference.Root.IndexOf(_config.ScriptPath, StringComparison.OrdinalIgnoreCase);
+            var rootIndex = reference.Root.IndexOf(rootPath, StringComparison.OrdinalIgnoreCase);
             var relativePath = reference.Root;
             if (rootIndex >= 0)
             {
-                relativePath = relativePath.Substring(rootIndex+_config.ScriptPath.Length);
+                relativePath = relativePath.Substring(rootIndex+rootPath.Length);
                 if (relativePath.Length > 1 && relativePath.StartsWith("/") || relativePath.StartsWith("\\"))
                 {
                     relativePath = relativePath.Substring(1);
@@ -102,7 +102,7 @@ namespace HotGlue
                 returnOrder += "// " + loops + "\r\n";
                 foreach (var noDependency in noDependencies)
                 {
-                    var path = noDependency.Key.Replace(_config.ScriptPath, "");
+                    var path = noDependency.Key.Replace(rootPath, "");
                     var file = path.Substring(path.LastIndexOf("\\") + 1);
                     path = path.Replace(file, "");
                     yield return new Reference
@@ -237,11 +237,11 @@ namespace HotGlue
 
         public Dictionary<String, IList<FileReference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)
         {
-            String currentPath = Path.Combine(config.ScriptPath, relativePath);
+            String currentPath = Path.Combine(rootPath, relativePath);
             String sharedPath = null;
             if (!String.IsNullOrWhiteSpace(config.ScriptSharedFolder))
             {
-                sharedPath = Path.Combine(config.ScriptPath, config.ScriptSharedFolder);
+                sharedPath = Path.Combine(rootPath, config.ScriptSharedFolder);
             }
             var references = new Dictionary<String, IList<FileReference>>();
             Parse(currentPath, sharedPath, fileName, references, null);
