@@ -121,39 +121,80 @@ namespace HotGlue
         }
     }
 
-    public class GetFileReferences
+    public interface IFindReference
+    {
+        IEnumerable<FileReference> Parse(String fileText);
+    }
+
+    public interface IFindReferences
+    {
+        IList<FileReference> Parse(String fileText);
+    }
+
+    public class SlashSlashEqualReference : IFindReference
     {
         static readonly Regex ReferenceCommentRegex = new Regex(
             @"^\s*(//|\*|#)=\s*require\s*(""|')?(?<path>.+?)(""|')?$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
-        static readonly Regex ReferenceVariableRegex = new Regex(
+        public IEnumerable<FileReference> Parse(string fileText)
+        {
+            if (string.IsNullOrWhiteSpace(fileText)) yield break;
+
+            var matches = ReferenceCommentRegex.Matches(fileText)
+                .Cast<Match>()
+                .Select(m => new FileReference() {Name = m.Groups["path"].Value})
+                .Where(m => !String.IsNullOrWhiteSpace(m.Name));
+
+            foreach(var match in matches)
+            {
+                yield return match;
+            }
+        }
+    }
+
+    public class RequireReference : IFindReference
+    {
+        private static readonly Regex ReferenceVariableRegex = new Regex(
             @"^\s*var\s+(?<variable>\S+)\s*=\s*require\((""|')?(?<path>.+?)(""|')?\)\s*;?$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
+        public IEnumerable<FileReference> Parse(string fileText)
+        {
+            if (string.IsNullOrWhiteSpace(fileText)) yield break;
+
+            var matches = ReferenceVariableRegex.Matches(fileText)
+                .Cast<Match>()
+                .Select(m => new FileReference() {Name = m.Groups["path"].Value, Variable = m.Groups["variable"].Value, Wrap = true})
+                .Where(m => !String.IsNullOrWhiteSpace(m.Name) && !String.IsNullOrWhiteSpace(m.Variable));
+
+            foreach (var match in matches)
+            {
+                yield return match;
+            }
+        }
+    }
+
+
+    public class GetFileReferences : IFindReferences
+    {
+        private readonly IEnumerable<IFindReference> _findReferences;
+
+        public GetFileReferences(IEnumerable<IFindReference> findReferences)
+        {
+            _findReferences = findReferences;
+        }
+
+
         public IList<FileReference> Parse(String fileText)
         {
             var fileReferences = new List<FileReference>();
-            if (String.IsNullOrWhiteSpace(fileText))
+            foreach (var findReference in _findReferences)
             {
-                return fileReferences;
+                fileReferences.AddRange(findReference.Parse(fileText));
             }
-
-            var commentMatches = ReferenceCommentRegex.Matches(fileText)
-                                    .Cast<Match>()
-                                    .Select(m => new FileReference() { Name = m.Groups["path"].Value })
-                                    .Where(m => !String.IsNullOrWhiteSpace(m.Name))
-                                    .ToList();
-            fileReferences.AddRange(commentMatches);
-
-            var variableMatches = ReferenceVariableRegex.Matches(fileText)
-                                    .Cast<Match>()
-                                    .Select(m => new FileReference() { Name = m.Groups["path"].Value, Variable = m.Groups["variable"].Value, Wrap = true })
-                                    .Where(m => !String.IsNullOrWhiteSpace(m.Name) && !String.IsNullOrWhiteSpace(m.Variable))
-                                    .ToList();
-            fileReferences.AddRange(variableMatches);
 
             return fileReferences;
         }
@@ -232,7 +273,7 @@ namespace HotGlue
 
         public GetReferences()
         {
-            _getFileReferences = new GetFileReferences();
+            _getFileReferences = new GetFileReferences(new[]{ new SlashSlashEqualReference() });
         }
 
         public Dictionary<String, IList<FileReference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)
