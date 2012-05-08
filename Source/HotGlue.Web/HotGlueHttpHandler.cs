@@ -31,8 +31,8 @@ namespace HotGlue.Web
                                     ScriptPath = "Scripts\\",
                                     ScriptSharedFolder = "Scripts\\Shared\\"
                                 };
-            var getReferences = new GetReferences(new[] {new SlashSlashEqualReference()});
-            _locator = new DynamicLoading(_configuration, getReferences);
+            var findReferences = new List<IFindReference>() {new SlashSlashEqualReference(), new RequireReference() };
+            _locator = new GraphReferenceLocator(_configuration, findReferences);
         }
 
         public void ProcessRequest(HttpContext context)

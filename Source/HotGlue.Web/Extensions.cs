@@ -23,7 +23,7 @@ namespace HotGlue
             _configuration = HotGlueConfigurationSection.Load();
             _package = Package.Build(_configuration);
             _debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
-            _locator = new DynamicLoading(_configuration, new GetReferences(new[] { new SlashSlashEqualReference() }));
+            _locator = new GraphReferenceLocator(_configuration, new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() });
         }
 
         public static string Reference(string name)

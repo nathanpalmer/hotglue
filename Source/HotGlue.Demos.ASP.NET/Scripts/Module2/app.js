@@ -1,3 +1,3 @@
-﻿var mod = require('mod');
+﻿var mod = require('mod.js');
 
 var j = 1;

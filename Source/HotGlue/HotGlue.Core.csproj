@@ -41,12 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynamicLoading.cs" />
+    <Compile Include="GraphReferenceLocator.cs" />
     <Compile Include="Model\FileReference.cs" />
-    <Compile Include="GetReferences.cs" />
     <Compile Include="IFindReference.cs" />
-    <Compile Include="IFindReferences.cs" />
-    <Compile Include="IGetReferences.cs" />
     <Compile Include="IReferenceLocator.cs" />
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
     <Compile Include="Compilers\JavaScriptCompiler.cs" />

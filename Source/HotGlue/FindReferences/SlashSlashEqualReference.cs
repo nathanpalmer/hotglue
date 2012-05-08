@@ -8,7 +8,7 @@ namespace HotGlue
     public class SlashSlashEqualReference : IFindReference
     {
         static readonly Regex ReferenceCommentRegex = new Regex(
-            @"^\s*(//|\*|#)=\s*require\s*(""|')?(?<path>.+?)(""|')?$",
+            @"^\s*(//|\*|#)=\s*require\s*(""|')?(?<path>.+?)(""|')?\s*$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
