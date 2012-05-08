@@ -6,7 +6,7 @@ using PT = System.IO.Path;
 
 namespace HotGlue.Model
 {
-    public class Reference
+    public class Reference : IComparable
     {
         public string Path { get; set; }
         public string Name { get; set; }
@@ -44,6 +44,12 @@ namespace HotGlue.Model
                 hash = hash * 7 + Path.GetHashCode();
                 return hash;
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (this.Equals(obj)) return 0;
+            return -1;
         }
     }
 }

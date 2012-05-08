@@ -44,7 +44,7 @@ namespace HotGlue
                 }
             }
 
-            var results = Parse(_config, rootPath, relativePath, reference.Name);
+            var results = Parse(rootPath, relativePath, _config.ScriptSharedFolder, reference.Name);
 
             if (!results.Any())
             {
@@ -85,7 +85,8 @@ namespace HotGlue
             // Check for circular reference, if there are any, loading order won't work.
             foreach (var root in references)
             {
-                foreach (var value in root.Value)
+                var values = references.Where(x => !x.Key.Equals(root.Key)).SelectMany(x => x.Value);
+                foreach (var value in values)
                 {
                     foreach (var subResults in references[value])
                     {
@@ -98,13 +99,13 @@ namespace HotGlue
             }
         }
 
-        public Dictionary<Reference, IList<Reference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)
+        private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String sharedFolder, String fileName)
         {
             String currentPath = Path.Combine(rootPath, relativePath);
             String sharedPath = null;
-            if (!String.IsNullOrWhiteSpace(config.ScriptSharedFolder))
+            if (!String.IsNullOrWhiteSpace(sharedFolder))
             {
-                sharedPath = Path.Combine(rootPath, config.ScriptSharedFolder);
+                sharedPath = Path.Combine(rootPath, sharedFolder);
             }
             var references = new Dictionary<Reference, IList<Reference>>();
             Parse(currentPath, sharedPath, new Reference() { Name =  fileName }, references);
@@ -150,7 +151,7 @@ namespace HotGlue
                 var existing = references.Keys.Single(x => x.Equals(reference));
                 if (existing.Module != reference.Module)
                 {
-                    throw new Exception(String.Format("A new require reference was found for the file: '{0}', but the require type was different than the existing. You can only have //=requires or var variable = require('') for all references to the same file.", reference.GetPath()));
+                    throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", reference.GetPath()));
                 }
                 return new List<Reference>(); // already parsed file
             }
