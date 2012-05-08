@@ -56,7 +56,7 @@ var mod2 = require('module2.js');
             // Assert
             references.Count().ShouldBe(2);
             references.First().Name.ShouldBe("module1.js");
-            references.First().Wrap.ShouldBe(true);
+            references.First().Module.ShouldBe(true);
         }
 
         [Test]
@@ -74,7 +74,7 @@ var mod1 = require('module1.js');
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
-            references.First().Wrap.ShouldBe(true);
+            references.First().Module.ShouldBe(true);
         }
     }
 }

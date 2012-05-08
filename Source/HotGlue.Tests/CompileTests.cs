@@ -25,8 +25,8 @@ namespace HotGlue.Tests
                 {
                     new Reference
                         {
-                            Root = "/Scripts/",
-                            Path = "dep1.js",
+                            Path = "/Scripts/",
+                            Name = "dep1.js",
                             Module = false
                         }
                 };
@@ -51,8 +51,8 @@ namespace HotGlue.Tests
                 {
                     new Reference
                         {
-                            Root = "/Scripts/",
-                            Path = "module1.js",
+                            Path = "/Scripts/",
+                            Name = "module1.js",
                             Module = true
                         }
                 };

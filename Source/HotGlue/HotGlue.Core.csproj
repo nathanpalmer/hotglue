@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GraphReferenceLocator.cs" />
-    <Compile Include="Model\FileReference.cs" />
     <Compile Include="IFindReference.cs" />
     <Compile Include="IReferenceLocator.cs" />
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />

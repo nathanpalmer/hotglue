@@ -123,7 +123,7 @@ namespace HotGlue
                 var i = 0;
                 foreach (var module in modules)
                 {
-                    var itemName = module.Path.ToLower().Replace(module.Root, "").Replace("\\", "/");
+                    var itemName = module.Name.ToLower().Replace(module.Path, "").Replace("\\", "/");
                     var item = new FileInfo(module.FullPath(_relativeRoot));
                     if (!string.IsNullOrWhiteSpace(item.Extension))
                     {

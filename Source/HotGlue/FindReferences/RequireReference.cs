@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using HotGlue.Model;
 
 namespace HotGlue
 {
@@ -12,14 +13,14 @@ namespace HotGlue
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
-        public IEnumerable<FileReference> Parse(string fileText)
+        public IEnumerable<Reference> Parse(string fileText)
         {
             if (string.IsNullOrWhiteSpace(fileText)) yield break;
 
             var matches = ReferenceVariableRegex.Matches(fileText)
                 .Cast<Match>()
-                .Select(m => new FileReference() {Name = m.Groups["path"].Value, Variable = m.Groups["variable"].Value, Wrap = true})
-                .Where(m => !String.IsNullOrWhiteSpace(m.Name) && !String.IsNullOrWhiteSpace(m.Variable));
+                .Select(m => new Reference() {Name = m.Groups["path"].Value, Module = true})
+                .Where(m => !String.IsNullOrWhiteSpace(m.Name));
 
             foreach (var match in matches)
             {

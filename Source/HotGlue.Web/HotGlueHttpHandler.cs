@@ -45,8 +45,8 @@ namespace HotGlue.Web
 
             var reference = new Reference
             {
-                Root = relative,
-                Path = file,
+                Path = relative,
+                Name = file,
                 Module = false
             };
 

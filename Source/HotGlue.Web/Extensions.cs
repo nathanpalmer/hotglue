@@ -40,8 +40,8 @@ namespace HotGlue
 
                 var reference = new Reference
                 {
-                    Root = relative,
-                    Path = file,
+                    Path = relative,
+                    Name = file,
                     Module = false
                 };
 
@@ -56,8 +56,8 @@ namespace HotGlue
                 {
                     new Reference
                         {
-                            Root = "",
-                            Path = handlerName,
+                            Path = "",
+                            Name = handlerName,
                             Module = false
                         }
                 });

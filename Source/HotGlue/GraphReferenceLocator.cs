@@ -33,8 +33,8 @@ namespace HotGlue
             }
 
             // Ensure we have the root path separate from the reference
-            var rootIndex = reference.Root.IndexOf(rootPath, StringComparison.OrdinalIgnoreCase);
-            var relativePath = reference.Root;
+            var rootIndex = reference.Path.IndexOf(rootPath, StringComparison.OrdinalIgnoreCase);
+            var relativePath = reference.Path;
             if (rootIndex >= 0)
             {
                 relativePath = relativePath.Substring(rootIndex+rootPath.Length);
@@ -44,7 +44,7 @@ namespace HotGlue
                 }
             }
 
-            var results = Parse(_config, rootPath, relativePath, reference.Path);
+            var results = Parse(_config, rootPath, relativePath, reference.Name);
 
             if (!results.Any())
             {
@@ -57,6 +57,7 @@ namespace HotGlue
             var processed = new List<String>();
             var loops = 0;
             var maxLoops = results.Count;
+            var fileReferences = results.Values.SelectMany(x => x).ToList();
             while (results.Any())
             {
                 if (loops++ > maxLoops)
@@ -79,8 +80,8 @@ namespace HotGlue
                     yield return new Reference
                                  {
                                      Module = false,
-                                     Root = path,
-                                     Path = file
+                                     Path = path,
+                                     Name = file
                                  };
                     processed.Add(noDependency.Key);
                     results.Remove(noDependency.Key);
@@ -88,7 +89,7 @@ namespace HotGlue
             }
         }
 
-        private void CheckForCircularReferences(Dictionary<string, IList<FileReference>> references)
+        private void CheckForCircularReferences(Dictionary<string, IList<Reference>> references)
         {
             // Check for circular reference, if there are any, loading order won't work.
             foreach (var root in references)
@@ -108,7 +109,7 @@ namespace HotGlue
             }
         }
 
-        public Dictionary<string, IList<FileReference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)
+        public Dictionary<string, IList<Reference>> Parse(HotGlueConfiguration config, String rootPath, String relativePath, String fileName)
         {
             String currentPath = Path.Combine(rootPath, relativePath);
             String sharedPath = null;
@@ -116,13 +117,13 @@ namespace HotGlue
             {
                 sharedPath = Path.Combine(rootPath, config.ScriptSharedFolder);
             }
-            var references = new Dictionary<String, IList<FileReference>>();
+            var references = new Dictionary<String, IList<Reference>>();
             Parse(currentPath, sharedPath, fileName, references, null);
             return references;
         }
 
         // recursive function
-        private void Parse(String currentPath, String sharedPath, String fileName, Dictionary<String, IList<FileReference>> references, FileReference parentReference)
+        private void Parse(String currentPath, String sharedPath, String fileName, Dictionary<String, IList<Reference>> references, Reference parentReference)
         {
             String pathToLookAt = null;
             String fileToLookAt = null;
@@ -155,7 +156,7 @@ namespace HotGlue
             }
         }
 
-        private IList<FileReference> HasReferences(String path, String file, Dictionary<String, IList<FileReference>> references, FileReference parentReference)
+        private IList<Reference> HasReferences(String path, String file, Dictionary<String, IList<Reference>> references, Reference parentReference)
         {
             if (parentReference != null)
             {
@@ -164,19 +165,19 @@ namespace HotGlue
 
             if (references.ContainsKey(file))
             {
-                return new List<FileReference>(); // already parsed file
+                return new List<Reference>(); // already parsed file
             }
 
-            references.Add(file, new List<FileReference>());
+            references.Add(file, new List<Reference>());
 
             var text = File.ReadAllText(file);
-            var currentReferences = new List<FileReference>();
+            var currentReferences = new List<Reference>();
             foreach (var findReference in _findReferences)
             {
                 currentReferences.AddRange(findReference.Parse(text));
             }
 
-            var newReferences = new List<FileReference>();
+            var newReferences = new List<Reference>();
             var list = references[file];
             foreach (var currentReference in currentReferences)
             {

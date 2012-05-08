@@ -7,7 +7,7 @@ namespace HotGlue
     {
         public string GenerateReference(Reference reference)
         {
-            return string.Format("<script src=\"{0}\"></script>", Path.Combine(reference.Root,reference.Path));
+            return string.Format("<script src=\"{0}\"></script>", Path.Combine(reference.Path,reference.Name));
         }
     }
 }
