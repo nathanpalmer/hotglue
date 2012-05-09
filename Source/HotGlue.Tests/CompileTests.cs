@@ -17,7 +17,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var compilers = new[] { new JavaScriptCompiler() };
-            var referencer = new HTMLReference();
+            var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
 
@@ -43,7 +43,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var compilers = new[] { new JavaScriptCompiler() };
-            var referencer = new HTMLReference();
+            var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
 

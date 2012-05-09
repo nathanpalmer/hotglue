@@ -3,7 +3,7 @@ using HotGlue.Model;
 
 namespace HotGlue
 {
-    public class HTMLReference : IReference
+    public class HTMLGenerateScriptReference : IGenerateScriptReference
     {
         public string GenerateReference(Reference reference)
         {

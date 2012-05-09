@@ -14,7 +14,7 @@ namespace HotGlue.Web
     public class HotGlueHttpHandler : IHttpHandler
     {
         private ICompile[] _compilers;
-        private IReference _reference;
+        private IGenerateScriptReference _generateScriptReference;
         private IReferenceLocator _locator;
         private HotGlueConfiguration _configuration;
 
@@ -24,7 +24,7 @@ namespace HotGlue.Web
                 {
                     new JavaScriptCompiler()
                 };
-            _reference = new HTMLReference();
+            _generateScriptReference = new HTMLGenerateScriptReference();
             _configuration = (HotGlueConfiguration) ConfigurationManager.GetSection("hotglue")
                              ?? new HotGlueConfiguration
                                 {
@@ -50,7 +50,7 @@ namespace HotGlue.Web
                 Module = false
             };
 
-            var package = new Package(root, _compilers, _reference);
+            var package = new Package(root, _compilers, _generateScriptReference);
             var references = _locator.Load(root, reference);
             var content = package.Compile(references);
 

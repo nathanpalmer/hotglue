@@ -83,19 +83,25 @@ namespace HotGlue
         private void CheckForCircularReferences(Dictionary<Reference, IList<Reference>> references)
         {
             // Check for circular reference, if there are any, loading order won't work.
-            foreach (var root in references)
-            {
-                var values = references.Where(x => !x.Key.Equals(root.Key)).SelectMany(x => x.Value);
-                foreach (var value in values)
+            Action<Reference, KeyValuePair<Reference, IList<Reference>>> compareChildren = null;
+            compareChildren = (reference, list) =>
                 {
-                    foreach (var subResults in references[value])
+                    foreach (var childReference in list.Value)
                     {
-                        if (subResults.Equals(root.Key))
+                        if (childReference.Equals(reference))
                         {
-                            throw new Exception(String.Format("Circular reference detected between file '{0}' and '{1}'", root.Key.GetPath(), subResults.GetPath()));
+                            throw new Exception(String.Format("Circular reference detected between file '{0}' and '{1}'", reference.GetPath(), list.Key.GetPath()));
+                        }
+                        if (references.ContainsKey(childReference))
+                        {
+                            compareChildren(reference, references.Single(x => x.Key.Equals(childReference)));
                         }
                     }
-                }
+                };
+
+            foreach (var root in references.Where(root => root.Value.Any()))
+            {
+                compareChildren(root.Key, root);
             }
         }
 

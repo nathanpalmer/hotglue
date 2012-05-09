@@ -47,10 +47,10 @@
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
     <Compile Include="Compilers\JavaScriptCompiler.cs" />
     <Compile Include="Model\Configuration.cs" />
-    <Compile Include="Referencers\HTMLReference.cs" />
+    <Compile Include="Referencers\HTMLGenerateScriptReference.cs" />
     <Compile Include="ICompile.cs" />
     <Compile Include="IPackage.cs" />
-    <Compile Include="IReference.cs" />
+    <Compile Include="IGenerateScriptReference.cs" />
     <Compile Include="Model\Reference.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

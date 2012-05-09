@@ -12,25 +12,25 @@ namespace HotGlue
     {
         private readonly string _relativeRoot;
         private readonly IEnumerable<ICompile> _compilers;
-        private readonly IReference _reference;
+        private readonly IGenerateScriptReference _generateScriptReference;
 
-        public Package(string relativeRoot, IEnumerable<ICompile> compilers, IReference reference)
+        public Package(string relativeRoot, IEnumerable<ICompile> compilers, IGenerateScriptReference generateScriptReference)
         {
             _relativeRoot = relativeRoot;
             _compilers = compilers;
-            _reference = reference;
+            _generateScriptReference = generateScriptReference;
         }
 
         public static Package Build(HotGlueConfiguration configuration)
         {
-            IReference reference;
+            IGenerateScriptReference generateScriptReference;
             if (configuration == null || string.IsNullOrWhiteSpace(configuration.Referencer))
             {
-                reference = new HTMLReference();
+                generateScriptReference = new HTMLGenerateScriptReference();
             }
             else
             {
-                reference = (IReference)Activator.CreateInstance(Type.GetType(configuration.Referencer));
+                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.Referencer));
             }
 
             IEnumerable<ICompile> compilers;
@@ -46,7 +46,7 @@ namespace HotGlue
                 compilers = configuration.Compilers.Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type))).ToList();
             }
 
-            var package = new Package("", compilers, reference);
+            var package = new Package("", compilers, generateScriptReference);
             return package;
         }
 
@@ -153,7 +153,7 @@ namespace HotGlue
 
             foreach (var reference in references)
             {
-                sw.Append(_reference.GenerateReference(reference));
+                sw.Append(_generateScriptReference.GenerateReference(reference));
             }
 
             return sw.ToString();

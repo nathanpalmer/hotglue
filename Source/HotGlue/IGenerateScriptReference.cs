@@ -2,7 +2,7 @@ using HotGlue.Model;
 
 namespace HotGlue
 {
-    public interface IReference
+    public interface IGenerateScriptReference
     {
         string GenerateReference(Reference reference);
     }

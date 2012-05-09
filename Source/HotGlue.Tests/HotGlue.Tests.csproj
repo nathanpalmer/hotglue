@@ -72,10 +72,15 @@
     <Content Include="Scripts\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Module1\app.js" />
+    <Content Include="Scripts\Module1\mod.js" />
     <Content Include="Scripts\reference.js" />
     <Content Include="Scripts\reference_module.js" />
     <Content Include="Scripts\reference_multiple.js" />
     <Content Include="Scripts\reference_require.js" />
+    <Content Include="Scripts\Shared\dep1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
