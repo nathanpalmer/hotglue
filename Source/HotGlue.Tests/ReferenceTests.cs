@@ -31,7 +31,8 @@ namespace HotGlue.Tests
             var result = package.References(references);
 
             // Assert
-            result.ShouldBe("<script src=\"/Scripts/dep1.js\"></script>");
+            result.ShouldBe(@"<script src=""/Scripts/dep1.js""></script>
+");
         }
     }
 }

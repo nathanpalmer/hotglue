@@ -63,4 +63,22 @@ namespace HotGlue
                 });
         }
     }
+
+    public static class Extensions
+    {
+        public static Reference BuildReference(this HttpContext context, Reference.TypeEnum type)
+        {
+            var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath);
+            file = file.Substring(0, file.LastIndexOf(".js")+3);
+            var relative = context.Server.MapPath(".") + "\\";
+            file = file.Replace(relative, "");
+
+            return new Reference
+            {
+                Path = relative,
+                Name = file,
+                Type = type
+            };
+        }
+    }
 }

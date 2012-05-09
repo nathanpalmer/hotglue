@@ -45,6 +45,8 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="HotGlueConfigurationSection.cs" />
     <Compile Include="HotGlueHttpHandler.cs" />
+    <Compile Include="HotGlueModuleHandler.cs" />
+    <Compile Include="HotGlueStitchHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

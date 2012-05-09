@@ -60,8 +60,7 @@ namespace HotGlue
             var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
             foreach (var dependency in dependencies)
             {
-                sw.WriteLine(File.ReadAllText(dependency.FullPath(_relativeRoot)));
-                sw.WriteLine();
+                sw.WriteLine(CompileDependency(dependency));
             }
 
             var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
@@ -71,29 +70,43 @@ namespace HotGlue
                 //var i = 0;
                 foreach (var module in modules)
                 {
-                    var itemName = module.Name.ToLower().Replace(module.Path, "").Replace("\\", "/");
-                    var item = new FileInfo(module.FullPath(_relativeRoot));
-                    if (!string.IsNullOrWhiteSpace(item.Extension))
-                    {
-                        itemName = itemName.Replace(item.Extension, "");
-                    }
-                    //sw.Write(i == 0 ? "" : ", ");
-                    //sw.Write(string.Format("\"{0}\"", itemName));
-                    //sw.Write(": function(exports, require, module) ");
-
-                    var compiler = _compilers.FirstOrDefault(c => c.Handles(item.Extension));
-                    if (compiler == null) return null; // Just returning if there isn't a compiler for this handler. Could possibly handle this differently
-
-                    sw.WriteLine(@"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {
-" + compiler.Compile(item) + @"
-}");
-
-                    //sw.Write("{" + Environment.NewLine + compiler.Compile(item) + Environment.NewLine + "}" + Environment.NewLine);
-
-                    //i++;
+                    sw.WriteLine(CompileModule(module));
                 }
 
-                sw.WriteLine(@"
+                sw.WriteLine(CompileStitch());
+            }
+
+            var app = references.Single(x => x.Type == Reference.TypeEnum.App);
+            sw.WriteLine(CompileDependency(app));
+
+            return sw.ToString();
+        }
+
+        public string CompileDependency(Reference reference)
+        {
+            return File.ReadAllText(reference.FullPath(_relativeRoot));
+        }
+
+        public string CompileModule(Reference reference)
+        {
+            var itemName = reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
+            var item = new FileInfo(reference.FullPath(_relativeRoot));
+            if (!string.IsNullOrWhiteSpace(item.Extension))
+            {
+                itemName = itemName.Replace(item.Extension, "");
+            }
+
+            var compiler = _compilers.FirstOrDefault(c => c.Handles(item.Extension));
+            if (compiler == null) return null; // Just returning if there isn't a compiler for this handler. Could possibly handle this differently
+
+            return @"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {
+" + compiler.Compile(item) + @"
+}";
+        }
+
+        public string CompileStitch()
+        {
+            return @"
 if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
 (function(assets) {
   if (!this.require) {
@@ -145,24 +158,46 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
     };
   }
   return this.require.define;
-}).call(this)(__hotglue_assets)");
-                sw.WriteLine();
-            }
-
-            var app = references.Single(x => x.Type == Reference.TypeEnum.App);
-            sw.WriteLine(File.ReadAllText(app.FullPath(_relativeRoot)));
-
-            return sw.ToString();
+}).call(this)(__hotglue_assets)";
         }
 
         public string References(IEnumerable<Reference> references)
         {
+            if (references == null) return "";
+            var refs = references.ToList();
+
             var sw = new StringBuilder();
 
-            foreach (var reference in references)
+            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
+            foreach (var dependency in dependencies)
             {
-                sw.Append(_generateScriptReference.GenerateReference(reference));
+                sw.AppendLine(_generateScriptReference.GenerateReference(dependency));
             }
+
+            var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
+            if (modules.Any())
+            {
+                //var i = 0;
+                foreach (var module in modules)
+                {
+                    sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                        {
+                            Name = module.Name + "module",
+                            Type = module.Type,
+                            Path = module.Path
+                        }));
+                }
+
+                sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                    {
+                        Name = "stitch.jsstitch",
+                        Type = Reference.TypeEnum.Dependency,
+                        Path = ""
+                    }));
+            }
+
+            var app = refs.Single(x => x.Type == Reference.TypeEnum.App);
+            sw.AppendLine(_generateScriptReference.GenerateReference(app));
 
             return sw.ToString();
         }
