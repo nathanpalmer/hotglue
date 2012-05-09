@@ -11,14 +11,14 @@ using HotGlue.Model;
 
 namespace HotGlue.Web
 {
-    public class HotGlueHttpHandler : IHttpHandler
+    public class HotGlueHandler : IHttpHandler
     {
         private ICompile[] _compilers;
         private IGenerateScriptReference _generateScriptReference;
         private IReferenceLocator _locator;
         private HotGlueConfiguration _configuration;
 
-        public HotGlueHttpHandler()
+        public HotGlueHandler()
         {
             _compilers = new[]
                 {
