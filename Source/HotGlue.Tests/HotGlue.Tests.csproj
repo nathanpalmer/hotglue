@@ -65,6 +65,7 @@
     <Content Include="Scripts\circular_begin.js" />
     <Content Include="Scripts\circular_end.js" />
     <Content Include="Scripts\circular_middle.js" />
+    <Content Include="Scripts\reference_forever.js" />
     <Content Include="Scripts\graph_test.js" />
     <Content Include="Scripts\module1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -77,7 +77,7 @@ namespace HotGlue.Tests
             foreach (var reference1 in references)
             {
                 // Assert
-                Assert.Fail("Expected circular reference detected exception");    
+                Assert.Fail("Expected circular reference detected exception");
             }
         }
 
@@ -94,8 +94,24 @@ namespace HotGlue.Tests
             foreach (var reference1 in references)
             {
                 // Assert
-                Assert.Fail("Expected different require type type exception");    
+                Assert.Fail("Expected different require type type exception");
             }
+        }
+
+        [Test]
+        [ExpectedException(ExpectedMessage = "Circular reference detected", MatchType = MessageMatch.Contains)]
+        public void You_Cannot_Reference_Yourself()
+        {
+            // Arrange
+            var referencers = new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() };
+            var locator = new GraphReferenceLocator(configuration, referencers);
+            var reference = new Reference() { Name = "reference_forever.js", Path = configuration.ScriptPath };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            Assert.Fail("Expected circular reference detected exception");
         }
     }
 }
