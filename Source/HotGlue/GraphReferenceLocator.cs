@@ -9,20 +9,28 @@ namespace HotGlue
     public class GraphReferenceLocator : IReferenceLocator
     {
         private readonly HotGlueConfiguration _config;
-        private readonly IEnumerable<IFindReference> _findReferences;
+        private IFindReference[] _findReferences;
 
-        public GraphReferenceLocator(HotGlueConfiguration config, IEnumerable<IFindReference> findReferences)
+        public GraphReferenceLocator(HotGlueConfiguration config)
         {
             if (config == null)
             {
                 throw new ArgumentNullException("config");
             }
-            if (!findReferences.Any())
-            {
-                throw new ArgumentException("No findReferences found, nothing to parse");
-            }
             _config = config;
-            _findReferences = findReferences;
+
+            if (_config.Referencers == null || _config.Referencers.Length == 0)
+            {
+                _findReferences = new IFindReference[]
+                    {
+                        new SlashSlashEqualReference(),
+                        new RequireReference()
+                    };
+            }
+            else
+            {
+                _findReferences = _config.Referencers.Select(referencer => (IFindReference)Activator.CreateInstance(Type.GetType(referencer.Type))).ToArray();
+            }
         }
 
         public IEnumerable<Reference> Load(string rootPath, Reference reference)
@@ -44,7 +52,7 @@ namespace HotGlue
                 }
             }
 
-            var results = Parse(rootPath, relativePath, _config.ScriptSharedFolder, reference.Name);
+            var results = Parse(rootPath, relativePath, _config.ScriptSharedPath, reference.Name);
 
             if (!results.Any())
             {

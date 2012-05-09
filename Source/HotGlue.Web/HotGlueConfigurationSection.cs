@@ -31,7 +31,7 @@ namespace HotGlue.Web
                    ?? new HotGlueConfiguration
                        {
                            ScriptPath = "Scripts\\",
-                           ScriptSharedFolder = "Scripts\\Shared\\"
+                           ScriptSharedPath = "Scripts\\Shared\\"
                        };
         }
     }

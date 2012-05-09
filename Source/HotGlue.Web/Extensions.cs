@@ -14,24 +14,24 @@ namespace HotGlue
     public static class Script
     {
         private static HotGlueConfiguration _configuration;
-        private static Package _package;
         private static bool _debug;
         private static IReferenceLocator _locator;
 
         static Script()
         {
             _configuration = HotGlueConfigurationSection.Load();
-            _package = Package.Build(_configuration);
             _debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
-            _locator = new GraphReferenceLocator(_configuration, new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() });
+            _locator = new GraphReferenceLocator(_configuration);
         }
 
         public static string Reference(string name)
         {
+            var context = HttpContext.Current;
+            var root = context.Server.MapPath("~");
+            var package = Package.Build(_configuration, root);
+
             if (_debug)
             {
-                var context = HttpContext.Current;
-                var root = context.Server.MapPath("~");
                 name = name.Replace("/", "\\");
                 name = name.StartsWith("\\") ? name.Substring(1) : name;
                 var file = Path.Combine(root, name.Replace("/", "\\"));
@@ -47,12 +47,12 @@ namespace HotGlue
 
                 var references = _locator.Load(root, reference);
 
-                return _package.References(references);
+                return package.References(references);
             }
 
             var handlerName = name + "-glue";
 
-            return _package.References(new[]
+            return package.References(new[]
                 {
                     new Reference
                         {

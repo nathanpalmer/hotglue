@@ -21,16 +21,16 @@ namespace HotGlue
             _generateScriptReference = generateScriptReference;
         }
 
-        public static Package Build(HotGlueConfiguration configuration)
+        public static Package Build(HotGlueConfiguration configuration, string root)
         {
             IGenerateScriptReference generateScriptReference;
-            if (configuration == null || string.IsNullOrWhiteSpace(configuration.Referencer))
+            if (configuration == null || string.IsNullOrWhiteSpace(configuration.GenerateScript))
             {
                 generateScriptReference = new HTMLGenerateScriptReference();
             }
             else
             {
-                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.Referencer));
+                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript));
             }
 
             IEnumerable<ICompile> compilers;
@@ -46,7 +46,7 @@ namespace HotGlue
                 compilers = configuration.Compilers.Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type))).ToList();
             }
 
-            var package = new Package("", compilers, generateScriptReference);
+            var package = new Package(root, compilers, generateScriptReference);
             return package;
         }
 
