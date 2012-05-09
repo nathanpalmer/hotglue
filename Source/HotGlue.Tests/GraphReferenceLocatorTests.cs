@@ -12,19 +12,20 @@ namespace HotGlue.Tests
     public class GraphReferenceLocatorTests
     {
         private string root = "..\\..\\";
+
         private HotGlueConfiguration configuration = new HotGlueConfiguration()
-                                                         {
-                                                             ScriptPath = "Scripts\\",
-                                                             ScriptSharedFolder = "Scripts\\Shared\\"
-                                                         };
+            {
+                ScriptPath = "Scripts\\",
+                ScriptSharedFolder = "Scripts\\Shared\\"
+            };
 
         [Test]
         public void Parse_And_Retrun_Reference()
         {
             // Arrange
-            var referencers = new List<IFindReference>() { new SlashSlashEqualReference() };
+            var referencers = new List<IFindReference>() {new SlashSlashEqualReference()};
             var locator = new GraphReferenceLocator(configuration, referencers);
-            var reference = new Reference() { Name = "graph_test.js", Path = configuration.ScriptPath };
+            var reference = new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath};
 
             // Act
             var references = locator.Load(root, reference).ToList();
@@ -32,22 +33,22 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             // check in list
-            references.Contains(new Reference() { Name = "dep1.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "module1.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "graph_test.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
+            references.Contains(new Reference() {Name = "dep1.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references.Contains(new Reference() {Name = "module1.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references.Contains(new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath}).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() { Name = "dep1.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
-            references[1].Equals(new Reference() { Name = "module1.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
-            references[2].Equals(new Reference() { Name = "graph_test.js", Path = root + configuration.ScriptPath }).ShouldBe(true);
+            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references[1].Equals(new Reference() {Name = "module1.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references[2].Equals(new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath}).ShouldBe(true);
         }
 
         [Test]
         public void Depedencies_At_Multiple_Levels_Should_Not_Be_Circular()
         {
             // Arrange
-            var referencers = new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() };
+            var referencers = new List<IFindReference>() {new SlashSlashEqualReference(), new RequireReference()};
             var locator = new GraphReferenceLocator(configuration, referencers);
-            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module1" };
+            var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"};
 
             // Act
             var references = locator.Load(root, reference).ToList();
@@ -55,13 +56,13 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             // check in list
-            references.Contains(new Reference() { Name = "dep1.js", Path = root + configuration.ScriptSharedFolder }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "mod.js", Path = root + configuration.ScriptPath+"Module1" }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "app.js", Path = root + configuration.ScriptPath+"Module1" }).ShouldBe(true);
+            references.Contains(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedFolder}).ShouldBe(true);
+            references.Contains(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
+            references.Contains(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() { Name = "dep1.js", Path = root + configuration.ScriptSharedFolder }).ShouldBe(true);
-            references[1].Equals(new Reference() { Name = "mod.js", Path = root + configuration.ScriptPath+"Module1" }).ShouldBe(true);
-            references[2].Equals(new Reference() { Name = "app.js", Path = root + configuration.ScriptPath + "Module1" }).ShouldBe(true);
+            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedFolder}).ShouldBe(true);
+            references[1].Equals(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
+            references[2].Equals(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var referencer = new SlashSlashEqualReference();
-            var locator = new GraphReferenceLocator(configuration, new[] { referencer });
+            var locator = new GraphReferenceLocator(configuration, new[] {referencer});
             var reference = new Reference() {Name = "circular_begin.js", Path = configuration.ScriptPath};
 
             var references = locator.Load(root, reference).ToList();
@@ -88,7 +89,7 @@ namespace HotGlue.Tests
             // Arrange
             var referencers = new List<IFindReference>() {new SlashSlashEqualReference(), new RequireReference()};
             var locator = new GraphReferenceLocator(configuration, referencers);
-            var reference = new Reference() { Name = "reference.js", Path = configuration.ScriptPath };
+            var reference = new Reference() {Name = "reference.js", Path = configuration.ScriptPath};
 
             var references = locator.Load(root, reference);
             foreach (var reference1 in references)
@@ -103,15 +104,32 @@ namespace HotGlue.Tests
         public void You_Cannot_Reference_Yourself()
         {
             // Arrange
-            var referencers = new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() };
+            var referencers = new List<IFindReference>() {new SlashSlashEqualReference(), new RequireReference()};
             var locator = new GraphReferenceLocator(configuration, referencers);
-            var reference = new Reference() { Name = "reference_forever.js", Path = configuration.ScriptPath };
+            var reference = new Reference() {Name = "reference_forever.js", Path = configuration.ScriptPath};
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
             Assert.Fail("Expected circular reference detected exception");
+        }
+
+        [Test]
+        public void Reference_Path_Should_Be_Unmodified()
+        {
+            // Arrange
+            var referencers = new List<IFindReference>() {new SlashSlashEqualReference(), new RequireReference()};
+            var locator = new GraphReferenceLocator(configuration, referencers);
+            var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module2"};
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references[0].Path.ShouldBe(configuration.ScriptSharedFolder);
+            references[1].Path.ShouldBe(configuration.ScriptPath + "Module2");
         }
     }
 }

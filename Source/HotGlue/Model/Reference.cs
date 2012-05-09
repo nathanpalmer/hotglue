@@ -12,11 +12,6 @@ namespace HotGlue.Model
         public string Name { get; set; }
         public bool Module { get; set; }
 
-        public string GetPath()
-        {
-            return PT.Combine(Path, Name);
-        }
-
         public string FullPath(string path)
         {
             if (!string.IsNullOrWhiteSpace(path) || !string.IsNullOrWhiteSpace(Path))

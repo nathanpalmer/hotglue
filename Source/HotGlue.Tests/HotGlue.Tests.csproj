@@ -65,6 +65,7 @@
     <Content Include="Scripts\circular_begin.js" />
     <Content Include="Scripts\circular_end.js" />
     <Content Include="Scripts\circular_middle.js" />
+    <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\reference_forever.js" />
     <Content Include="Scripts\graph_test.js" />
     <Content Include="Scripts\module1.js">
@@ -79,9 +80,7 @@
     <Content Include="Scripts\reference_module.js" />
     <Content Include="Scripts\reference_multiple.js" />
     <Content Include="Scripts\reference_require.js" />
-    <Content Include="Scripts\Shared\dep1.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Scripts\Shared\dep1.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -90,7 +90,7 @@ namespace HotGlue
                     {
                         if (childReference.Equals(reference))
                         {
-                            throw new Exception(String.Format("Circular reference detected between file '{0}' and '{1}'", reference.GetPath(), list.Key.GetPath()));
+                            throw new Exception(String.Format("Circular reference detected between file '{0}' and '{1}'", Path.Combine(reference.Path, reference.Name), Path.Combine(list.Key.Path, list.Key.Name)));
                         }
                         if (references.ContainsKey(childReference))
                         {
@@ -107,25 +107,26 @@ namespace HotGlue
 
         private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String sharedFolder, String fileName)
         {
+            var references = new Dictionary<Reference, IList<Reference>>();
+            Parse(rootPath, relativePath, sharedFolder, new Reference() { Name = fileName }, references);
+            return references;
+        }
+
+        // recursive function
+        private void Parse(String rootPath, String relativePath, String sharedFolder, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
+        {
             String currentPath = Path.Combine(rootPath, relativePath);
             String sharedPath = null;
             if (!String.IsNullOrWhiteSpace(sharedFolder))
             {
                 sharedPath = Path.Combine(rootPath, sharedFolder);
             }
-            var references = new Dictionary<Reference, IList<Reference>>();
-            Parse(currentPath, sharedPath, new Reference() { Name =  fileName }, references);
-            return references;
-        }
 
-        // recursive function
-        private void Parse(String currentPath, String sharedPath, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
-        {
             Reference reference = null;
             var currentFile = Path.Combine(currentPath, parentReference.Name);
             if (File.Exists(currentFile))
             {
-                reference = new Reference() { Path = currentPath, Name = parentReference.Name, Module = parentReference.Module };
+                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Module = parentReference.Module };
             }
             else if (!String.IsNullOrWhiteSpace(sharedPath))
             {
@@ -133,7 +134,7 @@ namespace HotGlue
                 if (File.Exists(sharedFile))
                 {
                     currentPath = sharedPath; // Once in shared, only look at shared for other models.
-                    reference = new Reference() { Path = sharedPath, Name = parentReference.Name, Module = parentReference.Module };
+                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Module = parentReference.Module };
                 }
             }
 
@@ -143,28 +144,28 @@ namespace HotGlue
             }
 
             parentReference.Path = reference.Path;
-            var newReferences = HasReferences(reference, references);
+            var newReferences = HasReferences(rootPath, reference, references);
             foreach (var fileReference in newReferences)
             {
-                Parse(currentPath, sharedPath, fileReference, references);
+                Parse(rootPath, relativePath, sharedFolder, fileReference, references);
             }
         }
 
-        private IList<Reference> HasReferences(Reference reference, Dictionary<Reference, IList<Reference>> references)
+        private IList<Reference> HasReferences(string rootPath, Reference reference, Dictionary<Reference, IList<Reference>> references)
         {
             if (references.ContainsKey(reference))
             {
                 var existing = references.Keys.Single(x => x.Equals(reference));
                 if (existing.Module != reference.Module)
                 {
-                    throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", reference.GetPath()));
+                    throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", Path.Combine(reference.Path,reference.Name)));
                 }
                 return new List<Reference>(); // already parsed file
             }
 
             references.Add(reference, new List<Reference>());
 
-            var text = File.ReadAllText(reference.GetPath());
+            var text = File.ReadAllText(reference.FullPath(rootPath));
             var currentReferences = new List<Reference>();
             foreach (var findReference in _findReferences)
             {
