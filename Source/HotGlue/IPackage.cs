@@ -7,5 +7,8 @@ namespace HotGlue
     {
         string Compile(IEnumerable<Reference> references);
         string References(IEnumerable<Reference> references);
+        string CompileDependency(Reference reference);
+        string CompileModule(Reference reference);
+        string CompileStitch();
     }
 }
