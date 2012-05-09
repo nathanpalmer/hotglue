@@ -53,31 +53,29 @@ namespace HotGlue
         public string Compile(IEnumerable<Reference> references)
         {
             if (references == null) return "";
-            var refs = references.ToList();
 
             var sw = new StringWriter();
+            var modules = false;
 
-            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
-            foreach (var dependency in dependencies)
+            foreach(var reference in references)
             {
-                sw.WriteLine(CompileDependency(dependency));
-            }
-
-            var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
-
-            if (modules.Any())
-            {
-                //var i = 0;
-                foreach (var module in modules)
+                switch(reference.Type)
                 {
-                    sw.WriteLine(CompileModule(module));
+                    case Reference.TypeEnum.App:
+                        if (modules) sw.WriteLine(CompileStitch());
+                        sw.WriteLine(CompileDependency(reference));
+                        break;
+                    case Reference.TypeEnum.Dependency:
+                        sw.WriteLine(CompileDependency(reference));
+                        break;
+                    case Reference.TypeEnum.Module:
+                        modules = true;
+                        sw.WriteLine(CompileModule(reference));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-
-                sw.WriteLine(CompileStitch());
             }
-
-            var app = references.Single(x => x.Type == Reference.TypeEnum.App);
-            sw.WriteLine(CompileDependency(app));
 
             return sw.ToString();
         }
