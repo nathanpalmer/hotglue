@@ -54,7 +54,7 @@ namespace HotGlue
         {
             if (references == null) return "";
 
-            var sw = new StringWriter();
+            var sw = new StringBuilder();
             var modules = false;
 
             foreach(var reference in references)
@@ -62,15 +62,15 @@ namespace HotGlue
                 switch(reference.Type)
                 {
                     case Reference.TypeEnum.App:
-                        if (modules) sw.WriteLine(CompileStitch());
-                        sw.WriteLine(CompileDependency(reference));
+                        if (modules) sw.AppendLine(CompileStitch());
+                        sw.AppendLine(CompileDependency(reference));
                         break;
                     case Reference.TypeEnum.Dependency:
-                        sw.WriteLine(CompileDependency(reference));
+                        sw.AppendLine(CompileDependency(reference));
                         break;
                     case Reference.TypeEnum.Module:
                         modules = true;
-                        sw.WriteLine(CompileModule(reference));
+                        sw.AppendLine(CompileModule(reference));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -162,40 +162,42 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
         public string References(IEnumerable<Reference> references)
         {
             if (references == null) return "";
-            var refs = references.ToList();
 
             var sw = new StringBuilder();
+            var modules = false;
 
-            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
-            foreach (var dependency in dependencies)
+            foreach (var reference in references)
             {
-                sw.AppendLine(_generateScriptReference.GenerateReference(dependency));
-            }
-
-            var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
-            if (modules.Any())
-            {
-                //var i = 0;
-                foreach (var module in modules)
+                switch (reference.Type)
                 {
-                    sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                    case Reference.TypeEnum.App:
+                        if (modules)
                         {
-                            Name = module.Name + "module",
-                            Type = module.Type,
-                            Path = module.Path
+                            sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                            {
+                                Name = "stitch.jsstitch",
+                                Type = Reference.TypeEnum.Dependency,
+                                Path = ""
+                            }));
+                        }
+                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        break;
+                    case Reference.TypeEnum.Dependency:
+                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        break;
+                    case Reference.TypeEnum.Module:
+                        modules = true;
+                        sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                        {
+                            Name = reference.Name + "module",
+                            Type = reference.Type,
+                            Path = reference.Path
                         }));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-
-                sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
-                    {
-                        Name = "stitch.jsstitch",
-                        Type = Reference.TypeEnum.Dependency,
-                        Path = ""
-                    }));
             }
-
-            var app = refs.Single(x => x.Type == Reference.TypeEnum.App);
-            sw.AppendLine(_generateScriptReference.GenerateReference(app));
 
             return sw.ToString();
         }
