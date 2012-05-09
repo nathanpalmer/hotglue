@@ -57,12 +57,45 @@ namespace HotGlue
 
             var sw = new StringWriter();
 
+            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
+            foreach (var dependency in dependencies)
+            {
+                sw.WriteLine(File.ReadAllText(dependency.FullPath(_relativeRoot)));
+                sw.WriteLine();
+            }
+
             var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
 
             if (modules.Any())
             {
-                sw.Write(@"
-(function(/*! Stitch !*/) {
+                //var i = 0;
+                foreach (var module in modules)
+                {
+                    var itemName = module.Name.ToLower().Replace(module.Path, "").Replace("\\", "/");
+                    var item = new FileInfo(module.FullPath(_relativeRoot));
+                    if (!string.IsNullOrWhiteSpace(item.Extension))
+                    {
+                        itemName = itemName.Replace(item.Extension, "");
+                    }
+                    //sw.Write(i == 0 ? "" : ", ");
+                    //sw.Write(string.Format("\"{0}\"", itemName));
+                    //sw.Write(": function(exports, require, module) ");
+
+                    var compiler = _compilers.FirstOrDefault(c => c.Handles(item.Extension));
+                    if (compiler == null) return null; // Just returning if there isn't a compiler for this handler. Could possibly handle this differently
+
+                    sw.WriteLine(@"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {
+" + compiler.Compile(item) + @"
+}");
+
+                    //sw.Write("{" + Environment.NewLine + compiler.Compile(item) + Environment.NewLine + "}" + Environment.NewLine);
+
+                    //i++;
+                }
+
+                sw.WriteLine(@"
+if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
+(function(assets) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
       name = name.replace(/.js/,'');
@@ -112,38 +145,12 @@ namespace HotGlue
     };
   }
   return this.require.define;
-}).call(this)({
-");
-
-                var i = 0;
-                foreach (var module in modules)
-                {
-                    var itemName = module.Name.ToLower().Replace(module.Path, "").Replace("\\", "/");
-                    var item = new FileInfo(module.FullPath(_relativeRoot));
-                    if (!string.IsNullOrWhiteSpace(item.Extension))
-                    {
-                        itemName = itemName.Replace(item.Extension, "");
-                    }
-                    sw.Write(i == 0 ? "" : ", ");
-                    sw.Write(string.Format("\"{0}\"", itemName));
-                    sw.Write(": function(exports, require, module) ");
-
-                    var compiler = _compilers.FirstOrDefault(c => c.Handles(item.Extension));
-                    if (compiler == null) return null; // Just returning if there isn't a compiler for this handler. Could possibly handle this differently
-
-                    sw.Write("{" + Environment.NewLine + compiler.Compile(item) + Environment.NewLine + "}" + Environment.NewLine);
-
-                    i++;
-                }
-
-                sw.Write("});" + Environment.NewLine);
+}).call(this)(__hotglue_assets)");
+                sw.WriteLine();
             }
 
-            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
-            foreach (var dependency in dependencies)
-            {
-                sw.WriteLine(File.ReadAllText(dependency.FullPath(_relativeRoot)));
-            }
+            var app = references.Single(x => x.Type == Reference.TypeEnum.App);
+            sw.WriteLine(File.ReadAllText(app.FullPath(_relativeRoot)));
 
             return sw.ToString();
         }

@@ -126,7 +126,7 @@ namespace HotGlue
             var currentFile = Path.Combine(currentPath, parentReference.Name);
             if (File.Exists(currentFile))
             {
-                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type };
+                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type};
             }
             else if (!String.IsNullOrWhiteSpace(sharedPath))
             {

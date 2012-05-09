@@ -19,7 +19,7 @@ namespace HotGlue
 
             var matches = ReferenceCommentRegex.Matches(fileText)
                 .Cast<Match>()
-                .Select(m => new Reference() {Name = m.Groups["path"].Value})
+                .Select(m => new Reference() {Name = m.Groups["path"].Value, Type = Reference.TypeEnum.Dependency})
                 .Where(m => !String.IsNullOrWhiteSpace(m.Name));
 
             foreach(var match in matches)

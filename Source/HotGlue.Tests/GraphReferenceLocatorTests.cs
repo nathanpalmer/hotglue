@@ -131,5 +131,37 @@ namespace HotGlue.Tests
             references[0].Path.ShouldBe(configuration.ScriptSharedFolder);
             references[1].Path.ShouldBe(configuration.ScriptPath + "Module2");
         }
+
+        [Test]
+        public void Reference_Type_Should_Be_Unmodified()
+        {
+            // Arrange
+            var referencers = new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() };
+            var locator = new GraphReferenceLocator(configuration, referencers);
+            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module2" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references[1].Type.ShouldBe(Reference.TypeEnum.App);
+        }
+
+        [Test]
+        public void Reference_Type_Dependency_Should_Be_Dependency()
+        {
+            // Arrange
+            var referencers = new List<IFindReference>() { new SlashSlashEqualReference(), new RequireReference() };
+            var locator = new GraphReferenceLocator(configuration, referencers);
+            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module2" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references[0].Type.ShouldBe(Reference.TypeEnum.Dependency);
+        }
     }
 }
