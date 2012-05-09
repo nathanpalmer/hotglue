@@ -53,6 +53,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Scripts\Module2\app.js" />
+    <Content Include="Scripts\Module2\alert.js" />
     <Content Include="Scripts\Module2\mod.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />

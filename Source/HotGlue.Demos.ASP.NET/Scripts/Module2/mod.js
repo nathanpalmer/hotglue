@@ -1,5 +1,7 @@
 ﻿//= require dep1.js
 
+var alertFactory = require('alert.js');
+
 module.exports.alert = function() {
-    alert('test');
+    alertFactory.alert('test');
 };

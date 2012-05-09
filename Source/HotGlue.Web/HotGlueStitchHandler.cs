@@ -4,12 +4,12 @@ using HotGlue.Compilers;
 
 namespace HotGlue.Web
 {
-    public class HotGlueStitchHandler : IHttpHandler
+    public class HotGlueRequireHandler : IHttpHandler
     {
         private ICompile[] _compilers;
         private IGenerateScriptReference _generateScriptReference;
 
-        public HotGlueStitchHandler()
+        public HotGlueRequireHandler()
         {
             _compilers = new[]
                 {

@@ -175,7 +175,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                         {
                             sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
                             {
-                                Name = "stitch.jsstitch",
+                                Name = "get.js-require",
                                 Type = Reference.TypeEnum.Dependency,
                                 Path = ""
                             }));
@@ -189,7 +189,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                         modules = true;
                         sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
                         {
-                            Name = reference.Name + "module",
+                            Name = reference.Name + "-module",
                             Type = reference.Type,
                             Path = reference.Path
                         }));

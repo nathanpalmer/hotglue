@@ -50,7 +50,7 @@ namespace HotGlue
                 return _package.References(references);
             }
 
-            var handlerName = name.Replace(".js", ".jsglue");
+            var handlerName = name + "-glue";
 
             return _package.References(new[]
                 {
