@@ -35,7 +35,8 @@ namespace HotGlue.Tests
             var result = package.Compile(references);
 
             // Assert
-            result.ShouldBe("var j = 1;");
+            result.ShouldBe(@"var j = 1;
+");
         }
 
         [Test]
@@ -65,6 +66,7 @@ namespace HotGlue.Tests
 (function(/*! Stitch !*/) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
+      name = name.replace(/.js/,'');
       var module = cache[name], path = expand(root, name), fn;
       if (module) {
         return module;

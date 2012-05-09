@@ -57,12 +57,6 @@ namespace HotGlue
 
             var sw = new StringWriter();
 
-            var dependencies = refs.Where(x => !x.Module);
-            foreach (var dependency in dependencies)
-            {
-                sw.Write(File.ReadAllText(dependency.FullPath(_relativeRoot)));
-            }
-
             var modules = refs.Where(x => x.Module);
 
             if (modules.Any())
@@ -71,6 +65,7 @@ namespace HotGlue
 (function(/*! Stitch !*/) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
+      name = name.replace(/.js/,'');
       var module = cache[name], path = expand(root, name), fn;
       if (module) {
         return module;
@@ -142,6 +137,12 @@ namespace HotGlue
                 }
 
                 sw.Write("});" + Environment.NewLine);
+            }
+
+            var dependencies = refs.Where(x => !x.Module);
+            foreach (var dependency in dependencies)
+            {
+                sw.WriteLine(File.ReadAllText(dependency.FullPath(_relativeRoot)));
             }
 
             return sw.ToString();

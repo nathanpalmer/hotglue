@@ -2,4 +2,4 @@
 
 var mod = require('mod.js');
 
-var j = 1;
+mod.alert();
