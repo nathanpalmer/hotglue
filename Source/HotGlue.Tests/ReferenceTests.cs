@@ -23,7 +23,7 @@ namespace HotGlue.Tests
                         {
                             Path = "/Scripts/",
                             Name = "dep1.js",
-                            Module = false
+                            Type = Reference.TypeEnum.App
                         }
                 };
 

@@ -57,7 +57,7 @@ namespace HotGlue
 
             var sw = new StringWriter();
 
-            var modules = refs.Where(x => x.Module);
+            var modules = refs.Where(x => x.Type == Reference.TypeEnum.Module);
 
             if (modules.Any())
             {
@@ -139,7 +139,7 @@ namespace HotGlue
                 sw.Write("});" + Environment.NewLine);
             }
 
-            var dependencies = refs.Where(x => !x.Module);
+            var dependencies = refs.Where(x => x.Type == Reference.TypeEnum.Dependency);
             foreach (var dependency in dependencies)
             {
                 sw.WriteLine(File.ReadAllText(dependency.FullPath(_relativeRoot)));

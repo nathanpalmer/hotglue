@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HotGlue.Model;
 using NUnit.Framework;
 using Shouldly;
 
@@ -56,7 +57,7 @@ var mod2 = require('module2.js');
             // Assert
             references.Count().ShouldBe(2);
             references.First().Name.ShouldBe("module1.js");
-            references.First().Module.ShouldBe(true);
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
         }
 
         [Test]
@@ -74,7 +75,7 @@ var mod1 = require('module1.js');
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
-            references.First().Module.ShouldBe(true);
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
         }
     }
 }

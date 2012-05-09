@@ -47,7 +47,7 @@ namespace HotGlue.Web
             {
                 Path = relative,
                 Name = file,
-                Module = false
+                Type = Reference.TypeEnum.App
             };
 
             var package = new Package(root, _compilers, _generateScriptReference);

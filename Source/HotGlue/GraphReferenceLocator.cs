@@ -126,7 +126,7 @@ namespace HotGlue
             var currentFile = Path.Combine(currentPath, parentReference.Name);
             if (File.Exists(currentFile))
             {
-                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Module = parentReference.Module };
+                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type };
             }
             else if (!String.IsNullOrWhiteSpace(sharedPath))
             {
@@ -134,7 +134,7 @@ namespace HotGlue
                 if (File.Exists(sharedFile))
                 {
                     currentPath = sharedPath; // Once in shared, only look at shared for other models.
-                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Module = parentReference.Module };
+                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Type = parentReference.Type };
                 }
             }
 
@@ -156,7 +156,7 @@ namespace HotGlue
             if (references.ContainsKey(reference))
             {
                 var existing = references.Keys.Single(x => x.Equals(reference));
-                if (existing.Module != reference.Module)
+                if (existing.Type != reference.Type)
                 {
                     throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", Path.Combine(reference.Path,reference.Name)));
                 }

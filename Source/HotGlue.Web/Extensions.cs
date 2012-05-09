@@ -42,7 +42,7 @@ namespace HotGlue
                 {
                     Path = relative,
                     Name = file,
-                    Module = false
+                    Type = Model.Reference.TypeEnum.App
                 };
 
                 var references = _locator.Load(root, reference);
@@ -58,7 +58,7 @@ namespace HotGlue
                         {
                             Path = "",
                             Name = handlerName,
-                            Module = false
+                            Type = Model.Reference.TypeEnum.App
                         }
                 });
         }

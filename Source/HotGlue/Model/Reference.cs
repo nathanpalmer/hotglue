@@ -10,7 +10,7 @@ namespace HotGlue.Model
     {
         public string Path { get; set; }
         public string Name { get; set; }
-        public bool Module { get; set; }
+        public TypeEnum Type { get; set; }
 
         public string FullPath(string path)
         {
@@ -45,6 +45,13 @@ namespace HotGlue.Model
         {
             if (this.Equals(obj)) return 0;
             return -1;
+        }
+
+        public enum TypeEnum
+        {
+            App,
+            Dependency,
+            Module
         }
     }
 }

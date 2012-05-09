@@ -27,7 +27,7 @@ namespace HotGlue.Tests
                         {
                             Path = "/Scripts/",
                             Name = "dep1.js",
-                            Module = false
+                            Type = Reference.TypeEnum.Dependency
                         }
                 };
 
@@ -54,7 +54,7 @@ namespace HotGlue.Tests
                         {
                             Path = "/Scripts/",
                             Name = "module1.js",
-                            Module = true
+                            Type = Reference.TypeEnum.Module
                         }
                 };
 
