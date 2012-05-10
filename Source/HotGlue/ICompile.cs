@@ -7,6 +7,6 @@ namespace HotGlue
     {
         List<string> Extensions { get; }
         bool Handles(string Extension);
-        string Compile(FileInfo File);
+        string Compile(string Data);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
 using HotGlue.Model;
@@ -19,6 +20,7 @@ namespace HotGlue.Web
             var config = ser.Deserialize(new XmlNodeReader(section)) as HotGlueConfiguration;
             if (config != null)
             {
+                config.Debug = ((CompilationSection)ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
                 return config;
             }
 
@@ -31,7 +33,8 @@ namespace HotGlue.Web
                    ?? new HotGlueConfiguration
                        {
                            ScriptPath = "Scripts\\",
-                           ScriptSharedPath = "Scripts\\Shared\\"
+                           ScriptSharedPath = "Scripts\\Shared\\",
+                           Debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug
                        };
         }
     }

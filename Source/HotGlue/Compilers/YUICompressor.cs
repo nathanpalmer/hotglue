@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Yahoo.Yui.Compressor;
 
 namespace HotGlue.Compilers
 {
-    public class JQueryTemplateCompiler : ICompile
+    public class YUICompressor : ICompile
     {
         public List<string> Extensions { get; private set; }
 
-        public JQueryTemplateCompiler()
+        public YUICompressor()
         {
-            Extensions = new List<string>(new[] { ".tmpl" });
+            Extensions = new List<string>(new[] { ".js" });
         }
 
         public bool Handles(string Extension)
@@ -22,10 +23,7 @@ namespace HotGlue.Compilers
 
         public string Compile(string Data)
         {
-            var content = Data.Replace("\r\n", "").Replace("\n", "").Replace("\"", "'");
-            return @"
-var template = jQuery.template(""" + content + @""");
-module.exports = (function(data){ return jQuery.tmpl(template, data); });";
+            return JavaScriptCompressor.Compress(Data);
         }
     }
 }

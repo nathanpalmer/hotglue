@@ -43,7 +43,10 @@ namespace HotGlue
             }
             else
             {
-                compilers = configuration.Compilers.Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type))).ToList();
+                compilers = configuration.Compilers
+                    .Where(c => string.IsNullOrWhiteSpace(c.Mode) || c.Mode.Equals(configuration.Debug ? "debug" : "release", StringComparison.OrdinalIgnoreCase))
+                    .Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type)))
+                    .ToList();
             }
 
             var package = new Package(root, compilers, generateScriptReference);
@@ -82,7 +85,16 @@ namespace HotGlue
 
         public string CompileDependency(Reference reference)
         {
-            return File.ReadAllText(reference.FullPath(_relativeRoot));
+            var item = new FileInfo(reference.FullPath(_relativeRoot));
+            var content = File.ReadAllText(reference.FullPath(_relativeRoot));
+            foreach(var compiler in _compilers)
+            {
+                if (compiler.Handles(item.Extension))
+                {
+                    content = compiler.Compile(content);
+                }
+            }
+            return content;
         }
 
         public string CompileModule(Reference reference)
@@ -94,17 +106,27 @@ namespace HotGlue
                 itemName = itemName.Replace(item.Extension, "");
             }
 
-            var compiler = _compilers.FirstOrDefault(c => c.Handles(item.Extension));
-            if (compiler == null) return null; // Just returning if there isn't a compiler for this handler. Could possibly handle this differently
+            var sb = new StringBuilder();
+            sb.AppendLine(@"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");
+            sb.AppendLine(File.ReadAllText(reference.FullPath(_relativeRoot)));
+            sb.Append("}");
 
-            return @"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {
-" + compiler.Compile(item) + @"
-}";
+            string content = sb.ToString();
+
+            foreach (var compiler in _compilers)
+            {
+                if (compiler.Handles(item.Extension))
+                {
+                    content = compiler.Compile(content);
+                }
+            }
+
+            return content;
         }
 
         public string CompileStitch()
         {
-            return @"
+            var content = @"
 if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
 (function(assets) {
   if (!this.require) {
@@ -157,6 +179,16 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
   }
   return this.require.define;
 }).call(this)(__hotglue_assets)";
+
+            foreach (var compiler in _compilers)
+            {
+                if (compiler.Handles(".js"))
+                {
+                    content = compiler.Compile(content);
+                }
+            }
+
+            return content;
         }
 
         public string References(IEnumerable<Reference> references)

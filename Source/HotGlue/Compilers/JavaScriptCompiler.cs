@@ -18,9 +18,9 @@ namespace HotGlue.Compilers
             return Extensions.Where(e => e == Extension).Any();
         }
 
-        public string Compile(FileInfo File)
+        public string Compile(string Data)
         {
-            return System.IO.File.ReadAllText(File.FullName);
+            return Data;
         }
     }
 }
