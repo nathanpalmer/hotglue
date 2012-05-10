@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>HotGlue Test</title>
+    <script src="Scripts/Shared/jquery-1.7.2.js"></script>
+    <script src="Scripts/Shared/jquery.tmpl.js"></script>
     <%= HotGlue.Script.Reference("/Scripts/Module2/app.js") %>
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
-    Test
-    </div>
+    <div id="container"></div>
     </form>
 </body>
 </html>

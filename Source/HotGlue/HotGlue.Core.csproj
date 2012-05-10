@@ -52,7 +52,6 @@
     <Compile Include="IFindReference.cs" />
     <Compile Include="IReferenceLocator.cs" />
     <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
-    <Compile Include="Compilers\JavaScriptCompiler.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Referencers\HTMLGenerateScriptReference.cs" />
     <Compile Include="ICompile.cs" />

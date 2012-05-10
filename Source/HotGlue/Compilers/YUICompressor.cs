@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using HotGlue.Model;
 using Yahoo.Yui.Compressor;
 
 namespace HotGlue.Compilers
@@ -21,9 +22,9 @@ namespace HotGlue.Compilers
             return Extensions.Where(e => e == Extension).Any();
         }
 
-        public string Compile(string Data)
+        public void Compile(ref Reference reference)
         {
-            return JavaScriptCompressor.Compress(Data);
+            reference.Content = JavaScriptCompressor.Compress(reference.Content);
         }
     }
 }

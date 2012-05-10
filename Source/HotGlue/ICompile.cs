@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using HotGlue.Model;
 
 namespace HotGlue
 {
@@ -7,6 +8,6 @@ namespace HotGlue
     {
         List<string> Extensions { get; }
         bool Handles(string Extension);
-        string Compile(string Data);
+        void Compile(ref Reference reference);
     }
 }

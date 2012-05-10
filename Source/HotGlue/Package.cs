@@ -33,12 +33,12 @@ namespace HotGlue
                 generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript));
             }
 
-            IEnumerable<ICompile> compilers;
+            IList<ICompile> compilers;
             if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
             {
                 compilers = new[]
                     {
-                        new JavaScriptCompiler()
+                        new JQueryTemplateCompiler()
                     };
             }
             else
@@ -85,43 +85,34 @@ namespace HotGlue
 
         public string CompileDependency(Reference reference)
         {
-            var item = new FileInfo(reference.FullPath(_relativeRoot));
-            var content = File.ReadAllText(reference.FullPath(_relativeRoot));
+            if (reference.Content == null)
+            {
+                reference.Content = File.ReadAllText(reference.FullPath(_relativeRoot));
+            }
             foreach(var compiler in _compilers)
             {
-                if (compiler.Handles(item.Extension))
+                if (compiler.Handles(reference.Extension))
                 {
-                    content = compiler.Compile(content);
+                    compiler.Compile(ref reference);
                 }
             }
-            return content;
+            return reference.Content;
         }
-
+        
         public string CompileModule(Reference reference)
         {
             var itemName = reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
-            var item = new FileInfo(reference.FullPath(_relativeRoot));
-            if (!string.IsNullOrWhiteSpace(item.Extension))
+            if (!string.IsNullOrWhiteSpace(reference.Extension))
             {
-                itemName = itemName.Replace(item.Extension, "");
+                itemName = itemName.Replace(reference.Extension, "");
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");
-            sb.AppendLine(File.ReadAllText(reference.FullPath(_relativeRoot)));
+            sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");
+            sb.Append(CompileDependency(reference));
             sb.Append("}");
 
-            string content = sb.ToString();
-
-            foreach (var compiler in _compilers)
-            {
-                if (compiler.Handles(item.Extension))
-                {
-                    content = compiler.Compile(content);
-                }
-            }
-
-            return content;
+            return sb.ToString();
         }
 
         public string CompileStitch()
@@ -131,7 +122,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
 (function(assets) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
-      name = name.replace(/.js/,'');
+      name = name.replace(/.js/,'').replace(/.tmpl/,'');
       var module = cache[name], path = expand(root, name), fn;
       if (module) {
         return module;
@@ -180,15 +171,8 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
   return this.require.define;
 }).call(this)(__hotglue_assets)";
 
-            foreach (var compiler in _compilers)
-            {
-                if (compiler.Handles(".js"))
-                {
-                    content = compiler.Compile(content);
-                }
-            }
-
-            return content;
+            
+            return CompileDependency(new Reference { Extension = ".js", Content = content });
         }
 
         public string References(IEnumerable<Reference> references)

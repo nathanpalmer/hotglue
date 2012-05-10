@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using PT = System.IO.Path;
@@ -8,9 +9,11 @@ namespace HotGlue.Model
 {
     public class Reference : IComparable
     {
-        public string Path { get; set; }
         public string Name { get; set; }
+        public string Path { get; set; }
         public TypeEnum Type { get; set; }
+        public string Extension { get; set; }
+        public string Content { get; set; }
 
         public string FullPath(string path)
         {

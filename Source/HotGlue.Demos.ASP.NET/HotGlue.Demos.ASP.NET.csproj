@@ -54,9 +54,12 @@
     <Content Include="Default.aspx" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module2\alert.js" />
+    <None Include="Scripts\Module2\data.tmpl" />
     <Content Include="Scripts\Module2\mod.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
+    <Content Include="Scripts\Shared\jquery-1.7.2.js" />
+    <Content Include="Scripts\Shared\jquery.tmpl.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

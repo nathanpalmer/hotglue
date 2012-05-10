@@ -12,7 +12,7 @@ namespace HotGlue.Tests
         public void Should_Generate_HTML_References()
         {
             // Arrange
-            var compilers = new[] { new JavaScriptCompiler() };
+            var compilers = new[] { new JQueryTemplateCompiler(),  };
             var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);

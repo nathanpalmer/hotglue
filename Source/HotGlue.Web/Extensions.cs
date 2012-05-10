@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 using HotGlue.Model;
@@ -66,18 +67,24 @@ namespace HotGlue
 
     public static class Extensions
     {
+        private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.\S+)(?:-module|-glue|-require)");
+
         public static Reference BuildReference(this HttpContext context, Reference.TypeEnum type)
         {
             var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath);
-            file = file.Substring(0, file.LastIndexOf(".js")+3);
             var relative = context.Server.MapPath(".") + "\\";
+
+            var match = FileNameRegex.Match(file);
+            var extension = match.Groups["extension"].Value;
+            file = match.Groups["file"].Value + extension;
             file = file.Replace(relative, "");
 
             return new Reference
             {
                 Path = relative,
                 Name = file,
-                Type = type
+                Type = type,
+                Extension = extension
             };
         }
     }
