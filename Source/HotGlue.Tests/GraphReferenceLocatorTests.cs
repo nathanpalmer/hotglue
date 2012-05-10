@@ -160,5 +160,28 @@ namespace HotGlue.Tests
             references.Count.ShouldBe(2);
             references[0].Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
+
+        [Test]
+        public void Order_Of_External_Dependencies_Should_Stay_The_Same_When_Taken_From_Shared()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(3);
+            // check in list
+            references.Contains(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            // check order
+            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
+            references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+
+        }
     }
 }
