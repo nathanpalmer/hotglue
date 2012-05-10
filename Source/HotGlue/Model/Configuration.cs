@@ -6,12 +6,18 @@ using System.Xml.Serialization;
 
 namespace HotGlue.Model
 {
+    [XmlRoot("hotglue", Namespace = "")]
     public class HotGlueConfiguration
     {
+        [XmlAttribute("debug")]
+        public bool Debug { get; set; }
+
+        [XmlElement("scriptPath")]
         public string ScriptPath { get; set; }
+        [XmlElement("scriptSharedPath")]
         public string ScriptSharedPath { get; set; }
 
-        [XmlArray("generate")]
+        [XmlElement("generate")]
         public string GenerateScript { get; set; }
 
         [XmlArray("compilers")]
@@ -29,6 +35,8 @@ namespace HotGlue.Model
         public string Type { get; set; }
         [XmlAttribute("extension")]
         public string Extension { get; set; }
+        [XmlAttribute("mode")]
+        public string Mode { get; set; }
     }
 
     public class HotGlueReference

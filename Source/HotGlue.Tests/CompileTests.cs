@@ -16,7 +16,7 @@ namespace HotGlue.Tests
         public void Should_Compile_Deps_Without_Wrapper()
         {
             // Arrange
-            var compilers = new[] { new JavaScriptCompiler() };
+            var compilers = new[] { new JQueryTemplateCompiler()  };
             var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
@@ -43,7 +43,7 @@ namespace HotGlue.Tests
         public void Should_Compile_Modules_With_Wrapper()
         {
             // Arrange
-            var compilers = new[] { new JavaScriptCompiler() };
+            var compilers = new[] { new JQueryTemplateCompiler() };
             var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
@@ -62,9 +62,7 @@ namespace HotGlue.Tests
             var result = package.Compile(references);
 
             // Assert
-            result.ShouldBe(@"if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {}; __hotglue_assets['module1'] = function(exports, require, module) {
-var j = 1;
-}
+            result.ShouldBe(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['module1.js'] = function(exports, require, module) {var j = 1;}
 ");
         }
     }

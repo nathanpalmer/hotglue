@@ -1,21 +1,17 @@
 using System.Globalization;
 using System.Web;
 using HotGlue.Compilers;
+using HotGlue.Model;
 
 namespace HotGlue.Web
 {
     public class HotGlueRequireHandler : IHttpHandler
     {
-        private ICompile[] _compilers;
-        private IGenerateScriptReference _generateScriptReference;
+        private HotGlueConfiguration _configuration;
 
         public HotGlueRequireHandler()
         {
-            _compilers = new[]
-                {
-                    new JavaScriptCompiler()
-                };
-            _generateScriptReference = new HTMLGenerateScriptReference();
+            _configuration = HotGlueConfigurationSection.Load();
         }
 
         public void ProcessRequest(HttpContext context)
@@ -23,7 +19,7 @@ namespace HotGlue.Web
             // find references
             var root = context.Server.MapPath("~");
 
-            var package = new Package(root, _compilers, _generateScriptReference);
+            var package = Package.Build(_configuration, root);
             var content = package.CompileStitch();
 
             context.Response.ContentType = "application/x-javascript";

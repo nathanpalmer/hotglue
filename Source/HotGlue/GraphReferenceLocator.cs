@@ -131,18 +131,18 @@ namespace HotGlue
             }
 
             Reference reference = null;
-            var currentFile = Path.Combine(currentPath, parentReference.Name);
-            if (File.Exists(currentFile))
+            var currentFile = new FileInfo(Path.Combine(currentPath, parentReference.Name));
+            if (currentFile.Exists)
             {
-                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type};
+                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type, Extension = currentFile.Extension };
             }
             else if (!String.IsNullOrWhiteSpace(sharedPath))
             {
-                var sharedFile = Path.Combine(sharedPath, parentReference.Name);
-                if (File.Exists(sharedFile))
+                var sharedFile = new FileInfo(Path.Combine(sharedPath, parentReference.Name));
+                if (sharedFile.Exists)
                 {
                     currentPath = sharedPath; // Once in shared, only look at shared for other models.
-                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Type = parentReference.Type };
+                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Type = parentReference.Type, Extension = sharedFile.Extension };
                 }
             }
 

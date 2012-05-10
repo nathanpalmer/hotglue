@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using HotGlue.Model;
 
 namespace HotGlue.Compilers
 {
@@ -17,14 +18,14 @@ namespace HotGlue.Compilers
 
         public bool Handles(string Extension)
         {
-            return Extensions.Where(e => e == Extension).Any();
+            return Extensions.Any(e => e == Extension);
         }
 
-        public string Compile(FileInfo File)
+        public void Compile(ref Reference reference)
         {
-            var content = System.IO.File.ReadAllText(File.FullName).Replace("\r\n", "").Replace("\n", "").Replace("\"", "'");
-            return @"
-var template = jQuery.template(""" + content + @""");
+            reference.Extension = ".js";
+            reference.Content = @"
+var template = jQuery.template(""" + reference.Content.Replace("\r\n", "").Replace("\n", "").Replace("\"", "'") + @""");
 module.exports = (function(data){ return jQuery.tmpl(template, data); });";
         }
     }
