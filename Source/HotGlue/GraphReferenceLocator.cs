@@ -72,8 +72,10 @@ namespace HotGlue
                     throw new StackOverflowException();
                 }
 
-                var noDependencies = results.Where(x => x.Value.Count(v => !processed.Contains(v)) == 0)
-                                            .OrderBy(x => x.Key).ToList();
+                var noDependencies = results
+                    .Where(x => x.Value.Count(v => !processed.Contains(v)) == 0)
+                    .ToList();
+
                 if (!noDependencies.Any())
                 {
                     throw new Exception("Unable to add order, there aren't any files that don't have a dependency");

@@ -1,4 +1,6 @@
-﻿//= require dep1.js
+﻿//= require jquery-1.7.2.js
+//= require jquery.tmpl.js
+//= require dep1.js
 
 var mod = require('mod.js');
 var template = require('data.tmpl');

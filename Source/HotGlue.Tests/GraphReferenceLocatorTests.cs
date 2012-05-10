@@ -178,9 +178,9 @@ namespace HotGlue.Tests
             references.Contains(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
             references.Contains(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
+            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
             references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
 
         }
     }
