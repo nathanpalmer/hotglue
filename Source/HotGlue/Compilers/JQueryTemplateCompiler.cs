@@ -23,9 +23,11 @@ namespace HotGlue.Compilers
 
         public void Compile(ref Reference reference)
         {
+            var name = reference.Name;
             reference.Extension = ".js";
             reference.Content = @"
-var template = jQuery.template(""" + reference.Content.Replace("\r\n", "").Replace("\n", "").Replace("\"", "'") + @""");
+var template = """ + reference.Content.Replace("\r\n", "").Replace("\n", "").Replace("\"", "'") + @""";
+jQuery.template(""" + name + @""", template);
 module.exports = (function(data){ return jQuery.tmpl(template, data); });";
         }
     }

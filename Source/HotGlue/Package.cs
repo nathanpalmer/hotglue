@@ -102,10 +102,6 @@ namespace HotGlue
         public string CompileModule(Reference reference)
         {
             var itemName = reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
-            if (!string.IsNullOrWhiteSpace(reference.Extension))
-            {
-                itemName = itemName.Replace(reference.Extension, "");
-            }
 
             var sb = new StringBuilder();
             sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");
@@ -122,7 +118,6 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
 (function(assets) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
-      name = name.replace(/.js/,'').replace(/.tmpl/,'');
       var module = cache[name], path = expand(root, name), fn;
       if (module) {
         return module;
