@@ -52,9 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\LAB.js" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module2\alert.js" />
     <None Include="Scripts\Module2\data.tmpl" />
+    <Content Include="Scripts\Module2\something2.js" />
+    <Content Include="Scripts\Module2\something1.js" />
     <Content Include="Scripts\Module2\mod.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />

@@ -188,7 +188,8 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                             {
                                 Name = "get.js-require",
                                 Type = Reference.TypeEnum.Dependency,
-                                Path = ""
+                                Path = "",
+                                Wait = true
                             }));
                         }
                         sw.AppendLine(_generateScriptReference.GenerateReference(reference));
@@ -202,7 +203,8 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                         {
                             Name = reference.Name + "-module",
                             Type = reference.Type,
-                            Path = reference.Path
+                            Path = reference.Path,
+                            Wait = reference.Wait
                         }));
                         break;
                     default:

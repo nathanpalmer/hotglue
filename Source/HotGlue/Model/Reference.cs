@@ -14,6 +14,7 @@ namespace HotGlue.Model
         public TypeEnum Type { get; set; }
         public string Extension { get; set; }
         public string Content { get; set; }
+        public bool Wait { get; set; }
 
         public string FullPath(string path)
         {

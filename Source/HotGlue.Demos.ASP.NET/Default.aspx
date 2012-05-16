@@ -5,7 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>HotGlue Test</title>
-    <%= HotGlue.Script.Reference("/Scripts/Module2/app.js") %>
+    <script src="Scripts/LAB.js"></script>
+    <script>
+        $LAB
+        <%= HotGlue.Script.Reference("/Scripts/Module2/app.js") %>;
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">

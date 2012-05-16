@@ -81,10 +81,16 @@ namespace HotGlue
                     throw new Exception("Unable to add order, there aren't any files that don't have a dependency");
                 }
 
-                foreach (var noDependency in noDependencies)
+                for (int index = 0; index < noDependencies.Count; index++)
                 {
+                    var noDependency = noDependencies[index];
+                    
                     processed.Add(noDependency.Key);
                     results.Remove(noDependency.Key);
+                    if (index == noDependencies.Count - 1)
+                    {
+                        noDependency.Key.Wait = true;
+                    }
                     yield return noDependency.Key;
                 }
             }
