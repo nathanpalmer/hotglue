@@ -77,5 +77,35 @@ var mod1 = require('module1.js');
             references.First().Name.ShouldBe("module1.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
         }
+
+        [Test]
+        public void Should_Parse_TripleSlashReference()
+        {
+            // Arrange
+            var referencer = new TripleSlashReference();
+
+            // Act
+            var references = referencer.Parse(@"
+/// <reference path=""test.js""/>
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("test.js");
+        }
+
+        [Test]
+        public void Should_Parse_TripleSlashWithSpaces()
+        {
+            // Arrange
+            var referencer = new TripleSlashReference();
+
+            // Act
+            var references = referencer.Parse(@"
+///      <reference      path=""test.js""      />       
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("test.js");
+        }
     }
 }
