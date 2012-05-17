@@ -60,7 +60,7 @@ namespace HotGlue
                 {
                     new Reference
                         {
-                            Path = "",
+                            Path = _configuration.ScriptPath,
                             Name = handlerName,
                             Type = Model.Reference.TypeEnum.App
                         }
