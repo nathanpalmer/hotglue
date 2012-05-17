@@ -184,7 +184,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                     case Reference.TypeEnum.App:
                         if (modules)
                         {
-                            sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                            sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, new Reference
                             {
                                 Name = "get.js-require",
                                 Type = Reference.TypeEnum.Dependency,
@@ -192,14 +192,14 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                                 Wait = true
                             }));
                         }
-                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
                         break;
                     case Reference.TypeEnum.Dependency:
-                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
                         break;
                     case Reference.TypeEnum.Module:
                         modules = true;
-                        sw.AppendLine(_generateScriptReference.GenerateReference(new Reference
+                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, new Reference
                         {
                             Name = reference.Name + "-module",
                             Type = reference.Type,

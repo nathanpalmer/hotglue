@@ -5,9 +5,9 @@ namespace HotGlue
 {
     public class HTMLGenerateScriptReference : IGenerateScriptReference
     {
-        public string GenerateReference(Reference reference)
+        public string GenerateReference(string root, Reference reference)
         {
-            return string.Format("<script src=\"{0}\"></script>", Path.Combine(reference.Path,reference.Name));
+            return string.Format("<script src=\"{0}\"></script>", reference.RelativePath(root, true));
         }
     }
 }

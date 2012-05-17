@@ -22,7 +22,7 @@ namespace HotGlue.Tests
                     new Reference
                         {
                             Path = "/Scripts/",
-                            Name = "dep1.js",
+                            Name = "depper1.js",
                             Type = Reference.TypeEnum.App
                         }
                 };
@@ -31,7 +31,7 @@ namespace HotGlue.Tests
             var result = package.References(references);
 
             // Assert
-            result.ShouldBe(@"<script src=""/Scripts/dep1.js""></script>
+            result.ShouldBe(@"<script src=""/Scripts/depper1.js""></script>
 ");
         }
     }
