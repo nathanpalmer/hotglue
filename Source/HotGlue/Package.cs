@@ -24,13 +24,13 @@ namespace HotGlue
         public static Package Build(HotGlueConfiguration configuration, string root)
         {
             IGenerateScriptReference generateScriptReference;
-            if (configuration == null || string.IsNullOrWhiteSpace(configuration.GenerateScript))
+            if (configuration == null || configuration.GenerateScript == null)
             {
                 generateScriptReference = new HTMLGenerateScriptReference();
             }
             else
             {
-                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript));
+                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript.Type));
             }
 
             IList<ICompile> compilers;

@@ -18,7 +18,7 @@ namespace HotGlue.Model
         public string ScriptSharedPath { get; set; }
 
         [XmlElement("generate")]
-        public string GenerateScript { get; set; }
+        public ObjectType GenerateScript { get; set; }
 
         [XmlArray("compilers")]
         [XmlArrayItem("compiler")]
@@ -29,17 +29,23 @@ namespace HotGlue.Model
         public HotGlueReference[] Referencers { get; set; }
     }
 
-    public class HotGlueCompiler
+    public class HotGlueCompiler : ObjectType
     {
-        [XmlAttribute("type")]
-        public string Type { get; set; }
         [XmlAttribute("extension")]
         public string Extension { get; set; }
         [XmlAttribute("mode")]
         public string Mode { get; set; }
     }
 
-    public class HotGlueReference
+    public class HotGlueReference : ObjectType
+    {
+    }
+
+    public class HotGlueGenerator : ObjectType
+    {
+    }
+
+    public class ObjectType
     {
         [XmlAttribute("type")]
         public string Type { get; set; }
