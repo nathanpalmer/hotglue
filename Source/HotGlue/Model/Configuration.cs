@@ -27,6 +27,12 @@ namespace HotGlue.Model
         [XmlArray("referencers")]
         [XmlArrayItem("reference")]
         public HotGlueReference[] Referencers { get; set; }
+
+        public HotGlueConfiguration()
+        {
+            ScriptPath = "Scripts";
+            ScriptSharedPath = "Scripts\\Shared";
+        }
     }
 
     public class HotGlueCompiler : ObjectType

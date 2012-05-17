@@ -67,6 +67,7 @@
     <Content Include="Scripts\circular_middle.js" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module3\app.js" />
+    <Content Include="Scripts\Module4\app.js" />
     <Content Include="Scripts\Shared\ext1.js" />
     <Content Include="Scripts\Shared\ext2.js" />
     <Content Include="Scripts\reference_forever.js" />

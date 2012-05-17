@@ -34,10 +34,13 @@ namespace HotGlue
             if (_debug)
             {
                 name = name.Replace("/", "\\");
-                name = name.StartsWith("\\") ? name.Substring(1) : name;
-                var file = Path.Combine(root, name.Replace("/", "\\"));
-                var relative = file.Substring(0, file.LastIndexOf("\\")) + "\\";
-                file = file.Substring(file.LastIndexOf("\\")+1);
+
+                string file = name.StartsWith("\\")
+                                  ? name.Substring(1)
+                                  : Path.Combine(_configuration.ScriptPath.Replace("/", "\\"), name);
+
+                var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal)) + "\\";
+                file = file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)+1);
 
                 var reference = new Reference
                 {

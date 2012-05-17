@@ -24,7 +24,8 @@ namespace HotGlue
                 _findReferences = new IFindReference[]
                     {
                         new SlashSlashEqualReference(),
-                        new RequireReference()
+                        new RequireReference(),
+                        new TripleSlashReference()
                     };
             }
             else

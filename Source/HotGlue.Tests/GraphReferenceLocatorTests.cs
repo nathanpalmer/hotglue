@@ -20,7 +20,8 @@ namespace HotGlue.Tests
                 Referencers = new HotGlueReference[]
                     {
                         new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
-                        new HotGlueReference { Type = typeof(RequireReference).FullName }
+                        new HotGlueReference { Type = typeof(RequireReference).FullName },
+                        new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
                     }
             };
 
@@ -182,6 +183,23 @@ namespace HotGlue.Tests
             references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
             references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
 
+        }
+
+        [Test]
+        public void Can_Parse_Relative_Paths_Within_References()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"};
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(3);
+            references.Contains(new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
+            references.Contains(new Reference {Name = "../Module1/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
+            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
         }
     }
 }
