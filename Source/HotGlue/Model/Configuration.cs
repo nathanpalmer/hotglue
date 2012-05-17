@@ -12,10 +12,21 @@ namespace HotGlue.Model
         [XmlAttribute("debug")]
         public bool Debug { get; set; }
 
+        private string _scriptPath;
         [XmlElement("scriptPath")]
-        public string ScriptPath { get; set; }
+        public string ScriptPath
+        {
+            get { return _scriptPath; }
+            set { _scriptPath = value.Reslash(); }
+        }
+
+        private string _scriptSharedPath;
         [XmlElement("scriptSharedPath")]
-        public string ScriptSharedPath { get; set; }
+        public string ScriptSharedPath
+        {
+            get { return _scriptSharedPath; }
+            set { _scriptSharedPath = value.Reslash(); }
+        }
 
         [XmlElement("generate")]
         public ObjectType GenerateScript { get; set; }

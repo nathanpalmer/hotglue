@@ -9,8 +9,20 @@ namespace HotGlue.Model
 {
     public class Reference : IComparable
     {
-        public string Name { get; set; }
-        public string Path { get; set; }
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value.Reslash(); }
+        }
+
+        private string _path;
+        public string Path
+        {
+            get { return _path; }
+            set { _path = value.Reslash(); }
+        }
+
         public TypeEnum Type { get; set; }
         public string Extension { get; set; }
         public string Content { get; set; }
@@ -18,11 +30,16 @@ namespace HotGlue.Model
 
         public string FullPath(string path)
         {
-            if (!string.IsNullOrWhiteSpace(path) || !string.IsNullOrWhiteSpace(Path))
+            path = !string.IsNullOrWhiteSpace(path) ? PT.GetFullPath(path.Reslash()) : "";
+
+            if (!string.IsNullOrWhiteSpace(Path))
             {
-                return PT.Combine(PT.Combine(PT.GetFullPath(path), Path.StartsWith("/") ? Path.Substring(1) : Path), Name.StartsWith("/") ? Name.Substring(1) : Name);
+                path = PT.Combine(path, Path.StartsWith("/") ? Path.Substring(1) : Path);
             }
-            return Name;
+
+            path = PT.Combine(path, Name.StartsWith("/") ? Name.Substring(1) : Name);
+            
+            return path;
         }
 
         public string RelativePath()
@@ -35,6 +52,17 @@ namespace HotGlue.Model
             Int64 version = Version(root);
             return PT.Combine(Path, Name).Replace("\\", "/")
                    + (includeVersion && version > 0 ? "?" + version : "");
+        }
+
+        public Int64 Version(string path)
+        {
+            var fullPath = RealFileName(FullPath(path));
+            var file = new FileInfo(fullPath);
+            if (file.Exists)
+            {
+                return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
+            }
+            return 0;
         }
 
         private string RealFileName(string path)
@@ -61,17 +89,6 @@ namespace HotGlue.Model
             return path;
         }
 
-        public Int64 Version(string path)
-        {
-            var fullPath = RealFileName(FullPath(path));
-            var file = new FileInfo(fullPath);
-            if (file.Exists)
-            {
-                return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
-            }
-            return 0;
-        }
-
         public override bool Equals(object obj)
         {
             var reference = obj as Reference;
@@ -94,7 +111,7 @@ namespace HotGlue.Model
 
         public int CompareTo(object obj)
         {
-            if (this.Equals(obj)) return 0;
+            if (Equals(obj)) return 0;
             return -1;
         }
 

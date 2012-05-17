@@ -48,9 +48,16 @@ namespace HotGlue.Tests
         }
 
         [Test]
-        public void Depedencies_At_Multiple_Levels_Should_Not_Be_Circular()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Depedencies_At_Multiple_Levels_Should_Not_Be_Circular(bool specifyRoot)
         {
             // Arrange
+            if (specifyRoot)
+            {
+                configuration.ScriptPath = "/Scripts/";
+                configuration.ScriptSharedPath = "/Scripts/Shared/";
+            }
             var locator = new GraphReferenceLocator(configuration);
             var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"};
 
