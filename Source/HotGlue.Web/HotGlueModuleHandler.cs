@@ -19,9 +19,10 @@ namespace HotGlue.Web
             // find references
             var root = context.Server.MapPath("~");
             var reference = context.BuildReference(Reference.TypeEnum.Module);
+            var name = context.Request.QueryString["name"];
 
             var package = Package.Build(_configuration, root);
-            var content = package.CompileModule(reference);
+            var content = package.CompileModule(reference, name);
 
             context.Response.ContentType = "application/x-javascript";
             context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));

@@ -7,7 +7,12 @@ namespace HotGlue
     {
         public string GenerateReference(string root, Reference reference)
         {
-            return string.Format(".script(\"{0}\"){1}", reference.RelativePath(root, true), reference.Wait ? ".wait()" : "");
+            var relativePath = reference.RelativePath(root, true);
+            var wait = reference.Wait ? ".wait()" : "";
+
+            return reference.Name.EndsWith("-module")
+                       ? string.Format(".script(\"{0}&name={2}\"){1}", relativePath, wait, reference.Name.Replace("-module", ""))
+                       : string.Format(".script(\"{0}\"){1}", relativePath, wait);
         }
     }
 }

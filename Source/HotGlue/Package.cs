@@ -99,14 +99,14 @@ namespace HotGlue
             return reference.Content;
         }
         
-        public string CompileModule(Reference reference)
+        public string CompileModule(Reference reference, string name = null)
         {
-            var itemName = reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
+            var itemName = name ?? reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
 
             var sb = new StringBuilder();
             sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");
             sb.Append(CompileDependency(reference));
-            sb.Append("}");
+            sb.Append("};");
 
             return sb.ToString();
         }
@@ -118,7 +118,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
 (function(assets) {
   if (!this.require) {
     var modules = {}, cache = {}, require = function(name, root) {
-      var module = cache[name], path = expand(root, name), fn;
+      var module = cache[name], path = name/*expand(root, name)*/, fn;
       if (module) {
         return module;
       } else if (fn = modules[path] || modules[path = expand(path, './index')]) {
