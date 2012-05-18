@@ -134,7 +134,7 @@ namespace HotGlue
         // recursive function
         private void Parse(String rootPath, String relativePath, String offsetPath, String sharedFolder, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
         {
-            String currentPath = Path.Combine(rootPath, sharedFolder.StartsWith("/") ? relativePath.Substring(1) : relativePath);
+            String currentPath = Path.Combine(rootPath, relativePath.StartsWith("/") ? relativePath.Substring(1) : relativePath);
             String sharedPath = null;
             if (!String.IsNullOrWhiteSpace(sharedFolder))
             {
