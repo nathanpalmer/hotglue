@@ -208,5 +208,29 @@ namespace HotGlue.Tests
             references.Contains(new Reference {Name = "../Module1/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
             references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
         }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Can_Parse_Relative_Paths_And_Their_Modules(bool specifyRoot)
+        {
+            // Arrange
+            if (specifyRoot)
+            {
+                configuration.ScriptPath = "/Scripts/";
+                configuration.ScriptSharedPath = "/Scripts/Shared/";
+            }
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(3);
+            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "../Module5/mod1.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "mod2.js", Path = configuration.ScriptPath + "Module6/../Module5" }).ShouldBe(true);
+        }
     }
 }

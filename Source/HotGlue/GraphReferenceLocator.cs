@@ -41,6 +41,8 @@ namespace HotGlue
                 throw new ArgumentNullException("reference");
             }
 
+            rootPath = rootPath.Reslash();
+
             // Ensure we have the root path separate from the reference
             var rootIndex = reference.Path.IndexOf(rootPath, StringComparison.OrdinalIgnoreCase);
             var relativePath = reference.Path;
@@ -125,12 +127,12 @@ namespace HotGlue
         private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String sharedFolder, String fileName)
         {
             var references = new Dictionary<Reference, IList<Reference>>();
-            Parse(rootPath, relativePath, sharedFolder, new Reference() { Name = fileName }, references);
+            Parse(rootPath, relativePath, "", sharedFolder, new Reference() { Name = fileName }, references);
             return references;
         }
 
         // recursive function
-        private void Parse(String rootPath, String relativePath, String sharedFolder, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
+        private void Parse(String rootPath, String relativePath, String offsetPath, String sharedFolder, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
         {
             String currentPath = Path.Combine(rootPath, sharedFolder.StartsWith("/") ? relativePath.Substring(1) : relativePath);
             String sharedPath = null;
@@ -140,10 +142,10 @@ namespace HotGlue
             }
 
             Reference reference = null;
-            var currentFile = new FileInfo(Path.Combine(currentPath, parentReference.Name));
+            var currentFile = new FileInfo(Path.Combine(Path.Combine(currentPath, offsetPath), parentReference.Name));
             if (currentFile.Exists)
             {
-                reference = new Reference() { Path = relativePath, Name = parentReference.Name, Type = parentReference.Type, Extension = currentFile.Extension };
+                reference = new Reference() { Path = Path.Combine(relativePath, offsetPath), Name = parentReference.Name, Type = parentReference.Type, Extension = currentFile.Extension };
             }
             else if (!String.IsNullOrWhiteSpace(sharedPath))
             {
@@ -161,10 +163,13 @@ namespace HotGlue
             }
 
             parentReference.Path = reference.Path;
+            var offset = parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal) > 0
+                             ? parentReference.Name.Substring(0, parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal))
+                             : offsetPath;
             var newReferences = HasReferences(rootPath, reference, references);
             foreach (var fileReference in newReferences)
             {
-                Parse(rootPath, relativePath, sharedFolder, fileReference, references);
+                Parse(rootPath, relativePath, offset, sharedFolder, fileReference, references);
             }
         }
 
@@ -194,6 +199,7 @@ namespace HotGlue
             var list = references[reference];
             foreach (var currentReference in currentReferences)
             {
+                currentReference.Name = currentReference.Name.Reslash();
                 if (!list.Contains(currentReference))
                 {
                     newReferences.Add(currentReference);

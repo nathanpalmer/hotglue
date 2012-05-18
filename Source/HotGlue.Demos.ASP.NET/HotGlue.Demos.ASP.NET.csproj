@@ -59,6 +59,9 @@
     <Content Include="Scripts\Module2\something2.js" />
     <Content Include="Scripts\Module2\something1.js" />
     <Content Include="Scripts\Module2\mod.js" />
+    <Content Include="Scripts\Module3\mod3.js" />
+    <Content Include="Scripts\Module3\mod2.js" />
+    <Content Include="Scripts\Module3\mod1.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
