@@ -34,6 +34,12 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>..\..\Libraries\YUICompressor.NET.1.7.1.0\lib\net35\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
+    <Reference Include="SassAndCoffee.Core">
+      <HintPath>..\..\Libraries\SassAndCoffee.Core.2.0.2.0\lib\net40-Client\SassAndCoffee.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SassAndCoffee.JavaScript">
+      <HintPath>..\..\Libraries\SassAndCoffee.JavaScript.2.0.2.0\lib\net40-Client\SassAndCoffee.JavaScript.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -47,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compilers\CoffeeScriptCompiler.cs" />
+    <Compile Include="Compilers\UglifyCompressor.cs" />
     <Compile Include="Compilers\YUICompressor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FindReferences\TripleSlashReference.cs" />

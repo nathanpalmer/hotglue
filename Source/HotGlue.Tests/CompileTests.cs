@@ -62,7 +62,7 @@ namespace HotGlue.Tests
             var result = package.Compile(references);
 
             // Assert
-            result.ShouldBe(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['module1.js'] = function(exports, require, module) {var j = 1;}
+            result.ShouldBe(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['module1.js'] = function(exports, require, module) {var j = 1;};
 ");
         }
     }

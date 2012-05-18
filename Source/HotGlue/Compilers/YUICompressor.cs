@@ -24,6 +24,7 @@ namespace HotGlue.Compilers
 
         public void Compile(ref Reference reference)
         {
+            if (string.IsNullOrWhiteSpace(reference.Content)) return;
             reference.Content = JavaScriptCompressor.Compress(reference.Content);
         }
     }

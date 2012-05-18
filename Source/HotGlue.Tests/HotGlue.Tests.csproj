@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoffeeScriptTests.cs" />
     <Compile Include="CompileTests.cs" />
     <Compile Include="FindReferenceTests.cs" />
     <Compile Include="GraphReferenceLocatorTests.cs" />

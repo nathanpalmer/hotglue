@@ -107,5 +107,20 @@ var mod1 = require('module1.js');
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("test.js");
         }
+
+        [Test]
+        public void Should_Find_CoffeeScript_Module()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse("mod4 = require('mod4.coffee')\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("mod4.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
     }
 }
