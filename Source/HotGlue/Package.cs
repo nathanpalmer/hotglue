@@ -72,6 +72,7 @@ namespace HotGlue
                         if (modules) sw.AppendLine(CompileStitch());
                         sw.AppendLine(CompileDependency(reference));
                         break;
+                    case Reference.TypeEnum.Library:
                     case Reference.TypeEnum.Dependency:
                         sw.AppendLine(CompileDependency(reference));
                         break;
