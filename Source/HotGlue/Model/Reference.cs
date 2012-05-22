@@ -119,6 +119,7 @@ namespace HotGlue.Model
         {
             App,
             Dependency,
+            Library,
             Module
         }
     }

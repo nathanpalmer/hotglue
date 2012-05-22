@@ -27,6 +27,22 @@ namespace HotGlue.Tests
         }
 
         [Test]
+        public void Can_Parse_Comment__Library_Reference()
+        {
+            // Arrange
+            var referencer = new SlashSlashEqualReference();
+
+            // Act
+            var references = referencer.Parse(@"
+//= library module1.js
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Library);
+        }
+
+        [Test]
         public void Can_Parse_Module_Reference()
         {
             // Arrange
@@ -107,6 +123,22 @@ var mod1 = require('module1.js').increment;
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("test.js");
+        }
+
+        [Test]
+        public void Should_Parse_TripleSlashReference_For_Libaries()
+        {
+            // Arrange
+            var referencer = new TripleSlashReference();
+
+            // Act
+            var references = referencer.Parse(@"
+/// <reference path=""test.js"" library/>
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("test.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Library);
         }
 
         [Test]

@@ -163,13 +163,21 @@ namespace HotGlue
             }
 
             parentReference.Path = reference.Path;
-            var offset = parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal) > 0
-                             ? parentReference.Name.Substring(0, parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal))
-                             : offsetPath;
-            var newReferences = HasReferences(rootPath, reference, references);
-            foreach (var fileReference in newReferences)
+
+            if (parentReference.Type == Reference.TypeEnum.Library)
             {
-                Parse(rootPath, relativePath, offset, sharedFolder, fileReference, references);
+                references.Add(reference, new List<Reference>());
+            }
+            else
+            {
+                var offset = parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal) > 0
+                                 ? parentReference.Name.Substring(0, parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal))
+                                 : offsetPath;
+                var newReferences = HasReferences(rootPath, reference, references);
+                foreach (var fileReference in newReferences)
+                {
+                    Parse(rootPath, relativePath, offset, sharedFolder, fileReference, references);
+                }
             }
         }
 

@@ -232,5 +232,21 @@ namespace HotGlue.Tests
             references.Contains(new Reference { Name = "../Module5/mod1.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
             references.Contains(new Reference { Name = "mod2.js", Path = configuration.ScriptPath + "Module6/../Module5" }).ShouldBe(true);
         }
+
+        [Test]
+        public void Should_Not_Parse_Library_References()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest1" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
+        }
     }
 }
