@@ -13,6 +13,7 @@ namespace HotGlue
         private readonly string _relativeRoot;
         private readonly IEnumerable<ICompile> _compilers;
         private readonly IGenerateScriptReference _generateScriptReference;
+        private static string _scriptPath;
 
         public Package(string relativeRoot, IEnumerable<ICompile> compilers, IGenerateScriptReference generateScriptReference)
         {
@@ -49,6 +50,8 @@ namespace HotGlue
                     .Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type)))
                     .ToList();
             }
+
+            _scriptPath = configuration.ScriptPath;
 
             var package = new Package(root, compilers, generateScriptReference);
             return package;
@@ -189,7 +192,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                             {
                                 Name = "get.js-require",
                                 Type = Reference.TypeEnum.Dependency,
-                                Path = "",
+                                Path = _scriptPath,
                                 Wait = true
                             }));
                         }
