@@ -55,6 +55,9 @@
     <None Include="Scripts\CoffeeModule1\mod5.coffee" />
     <None Include="Scripts\CoffeeModule1\mod4.coffee" />
     <Content Include="Scripts\CoffeeModule1\spine.js" />
+    <Content Include="Scripts\CommonJS\increment.js" />
+    <Content Include="Scripts\CommonJS\math.js" />
+    <Content Include="Scripts\CommonJS\program.js" />
     <Content Include="Scripts\LAB.js" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module2\alert.js" />

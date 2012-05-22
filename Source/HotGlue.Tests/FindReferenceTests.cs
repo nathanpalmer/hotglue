@@ -79,6 +79,22 @@ var mod1 = require('module1.js');
         }
 
         [Test]
+        public void Should_Parse_Reference_That_Pulls_SubObject()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var mod1 = require('module1.js').increment;
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
         public void Should_Parse_TripleSlashReference()
         {
             // Arrange
