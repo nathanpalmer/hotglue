@@ -198,6 +198,7 @@ if (typeof(__hotglue_assets) === 'undefined') __hotglue_assets = {};
                         }
                         sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
                         break;
+                    case Reference.TypeEnum.Library:
                     case Reference.TypeEnum.Dependency:
                         sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
                         break;
