@@ -36,9 +36,10 @@ namespace HotGlue
             IList<ICompile> compilers;
             if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
             {
-                compilers = new[]
+                compilers = new ICompile[]
                     {
-                        new JQueryTemplateCompiler()
+                        new JQueryTemplateCompiler(),
+                        new CoffeeScriptCompiler()
                     };
             }
             else
