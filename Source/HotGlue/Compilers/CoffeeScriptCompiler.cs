@@ -34,7 +34,20 @@ namespace HotGlue.Compilers
         public void Compile(ref Reference reference)
         {
             reference.Extension = ".js";
-            reference.Content = _compiler.Compile(reference.Content);
+            try
+            {
+                reference.Content = _compiler.Compile(reference.Content);
+            }
+            catch (Exception ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach(var line in ex.Message.Split(new[]{"\n"}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    sb.AppendLine(string.Format("console.error(\"{0}\");", line));
+                }
+                reference.Content = sb.ToString();
+            }
+            
         }
     }
 }
