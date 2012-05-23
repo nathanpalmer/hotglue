@@ -166,7 +166,10 @@ namespace HotGlue
 
             if (parentReference.Type == Reference.TypeEnum.Library)
             {
-                references.Add(reference, new List<Reference>());
+                if (!references.ContainsKey(reference))
+                {
+                    references.Add(reference, new List<Reference>());   
+                }
             }
             else
             {

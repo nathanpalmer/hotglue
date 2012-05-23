@@ -248,5 +248,22 @@ namespace HotGlue.Tests
             references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
             references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
         }
+
+        [Test]
+        public void More_Than_One_Library_Only_Adds_Once()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest2" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(3);
+            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "app2.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
+        }
     }
 }
