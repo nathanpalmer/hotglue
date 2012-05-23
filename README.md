@@ -99,7 +99,7 @@ HotGlue is separated into services that provide the functionality you see here.
 ### TripleSlashReference
 
        /// <reference path="dep.js"/>
-       /// <reference paht="jquery.js" library/>
+       /// <reference path="jquery.js" library/>
        
 ### SlashSlashReference
   
@@ -118,7 +118,7 @@ HotGlue is separated into services that provide the functionality you see here.
 ## Referencers
 *Interface: IGenerateScriptReference*
 
-### HTMlGenerateScriptReference
+### HTMLGenerateScriptReference
  
        <script src="module.js"/>
        
