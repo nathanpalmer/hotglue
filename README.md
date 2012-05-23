@@ -14,7 +14,7 @@ In your main JavaScript file you reference others.
 
 **app.js**
 
-    /// <reference path="log.js"
+    /// <reference path="log.js"/>
 
     log('Logging works everywhere, thanks Paul Irish!');    
     
@@ -94,22 +94,27 @@ HotGlue is separated into services that provide the functionality you see here.
 ## Find References
 *Interface: IFindReference*
 
+*Using the keyword 'library' will include the file, but the file will not be parsed for additional references.*
+
 ### TripleSlashReference
 
        /// <reference path="dep.js"/>
+       /// <reference paht="jquery.js" library/>
        
 ### SlashSlashReference
- 
+  
        //= require dep.js
+       //= library jquery.js
       
    OR
       
        #= require dep.js 
+       #= library jquery.js
        
 ### RequireReference
  
        var module = require('module.js');
-   
+
 ## Referencers
 *Interface: IGenerateScriptReference*
 
@@ -175,8 +180,16 @@ The default configuration of HotGlue should work for MOST cases. If it doesn't y
 
 Add the hotglue section to Web.config.
 
-	<configuration>  		<configSections>    		<section name="hotglue" type="HotGlue.Web.HotGlueConfigurationSection, HotGlue.Web"/>	    </configSections>	    …	</configuration>
-Then throw in some config! In all of these cases you can omit a section and the default will be used. You do NOT have to override all in order to make a small change.	<hotglue>
+	<configuration>
+  		<configSections>
+    		<section name="hotglue" type="HotGlue.Web.HotGlueConfigurationSection, HotGlue.Web"/>
+	    </configSections>
+	    …
+	</configuration>
+
+Then throw in some config! In all of these cases you can omit a section and the default will be used. You do NOT have to override all in order to make a small change.
+
+	<hotglue>
 		<!-- Where it looks for JavaScript files -->
 		<scriptPath>/Scripts</scriptPath>
 
@@ -187,13 +200,20 @@ Add the hotglue section to Web.config.
 		<generate type="HotGlue.HTMLGenerateScriptReference, HotGlue.Core"/>
 		
 		<!-- Compilers that each file runs through -->
-        <compilers>        	<compiler extension=".tmpl" type="HotGlue.Compilers.JQueryTemplateCompiler, HotGlue.Core"/>      		<compiler extension=".coffee" type="HotGlue.Compilers.CoffeeScriptCompiler, HotGlue.Core"/>      		<compiler extension=".js" type="HotGlue.Compilers.UglifyCompressor, HotGlue.Core" mode="release"/>      		<compiler extension=".js" type="HotGlue.Compilers.YUICompressor, HotGlue.Core" mode="release"/>	    </compilers>
-	    <!-- References that are used to find references -->
+        <compilers>
+        	<compiler extension=".tmpl" type="HotGlue.Compilers.JQueryTemplateCompiler, HotGlue.Core"/>
+      		<compiler extension=".coffee" type="HotGlue.Compilers.CoffeeScriptCompiler, HotGlue.Core"/>
+      		<compiler extension=".js" type="HotGlue.Compilers.UglifyCompressor, HotGlue.Core" mode="release"/>
+      		<compiler extension=".js" type="HotGlue.Compilers.YUICompressor, HotGlue.Core" mode="release"/>
+	    </compilers>
+
+	    <!-- References that are used to find references -->
 		<referencers>
 			<reference type="HotGlue.RequireReference, HotGlue.Core"/>
 			<reference type="HotGlue.SlashSlashEqualReference, HotGlue.Core"/>
 			<reference type="HotGlue.TripleSlashReference, HotGlue.Core"/>
-		</referencers>	</hotglue>
+		</referencers>
+	</hotglue>
 
 # Install
 
@@ -201,4 +221,18 @@ You need to reference HotGlue.Core and HotGlue.Web. Then add the http handlers t
 
 **Web.config**
 
-	<system.web>        <compilation debug="true" targetFramework="4.0"/>        <httpHandlers>            <add type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>            <add type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>            <add type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>        </httpHandlers>    </system.web>    <system.webServer>        <handlers>            <add name="HotGlue" type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>            <add name="HotGlueModule" type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>            <add name="HotGlueRequire" type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>        </handlers>    </system.webServer>
+	<system.web>
+        <compilation debug="true" targetFramework="4.0"/>
+        <httpHandlers>
+            <add type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>
+            <add type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>
+            <add type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>
+        </httpHandlers>
+    </system.web>
+    <system.webServer>
+        <handlers>
+            <add name="HotGlue" type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>
+            <add name="HotGlueModule" type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>
+            <add name="HotGlueRequire" type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>
+        </handlers>
+    </system.webServer>
