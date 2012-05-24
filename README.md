@@ -45,7 +45,7 @@ When working with smaller more modular JavaScript files this can easily lead to 
 
 # Modules
 
-HotGlue also supports, and recommends, the use of [Common-JS style modules](wiki.commonjs.org/wiki/Modules/1.1). This is taken from their examples and works out of the box with HotGlue (you need to use .js on the refs.)
+HotGlue also supports, and recommends, the use of [Common-JS style modules](http://wiki.commonjs.org/wiki/Modules/1.1). This is taken from their examples and works out of the box with HotGlue (you need to use .js on the refs.)
 
 **program.js**
 
