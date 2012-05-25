@@ -170,5 +170,35 @@ var mod1 = require('module1.js').increment;
             references.First().Name.ShouldBe("mod4.coffee");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
         }
+
+        [Test]
+        public void Should_Find_CoffeeScript_Dependency()
+        {
+            // Arrange
+            var referencer = new SlashSlashEqualReference();
+
+            // Act
+            var references = referencer.Parse("#= require 'mod4.coffee'\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("mod4.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
+        }
+
+        [Test]
+        public void Should_Find_CoffeeScript_Library()
+        {
+            // Arrange
+            var referencer = new SlashSlashEqualReference();
+
+            // Act
+            var references = referencer.Parse("#= library 'mod4.coffee'\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("mod4.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Library);
+        }
     }
 }
