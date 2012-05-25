@@ -188,12 +188,8 @@ namespace HotGlue
         {
             if (references.ContainsKey(reference))
             {
-                var existing = references.Keys.Single(x => x.Equals(reference));
-                if ((existing.Type == Reference.TypeEnum.Module && (reference.Type == Reference.TypeEnum.App || reference.Type == Reference.TypeEnum.Dependency) ||
-                    (existing.Type == Reference.TypeEnum.App || existing.Type == Reference.TypeEnum.Dependency) && reference.Type == Reference.TypeEnum.Module))
-                {
-                    throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", Path.Combine(reference.Path,reference.Name)));
-                }
+                // Duplicates within the different files with different types
+                CheckForDuplicateReference(reference, references.Keys);
                 return new List<Reference>(); // already parsed file
             }
 
@@ -216,9 +212,24 @@ namespace HotGlue
                     newReferences.Add(currentReference);
                     references[reference].Add(currentReference);
                 }
+                else
+                {
+                    // Duplicates within the same file with different types
+                    CheckForDuplicateReference(currentReference, newReferences);
+                }
             }
 
             return newReferences;
+        }
+
+        private void CheckForDuplicateReference(Reference reference, IEnumerable<Reference> references)
+        {
+            var existing = references.Single(x => x.Equals(reference));
+            if ((existing.Type == Reference.TypeEnum.Module && (reference.Type == Reference.TypeEnum.App || reference.Type == Reference.TypeEnum.Dependency) ||
+                (existing.Type == Reference.TypeEnum.App || existing.Type == Reference.TypeEnum.Dependency) && reference.Type == Reference.TypeEnum.Module))
+            {
+                throw new Exception(String.Format("A different require reference was found for the file: '{0}'. You can only have //=requires or var variable = require('') for all references to the same file.", Path.Combine(reference.Path ?? "", reference.Name)));
+            }
         }
     }
 }

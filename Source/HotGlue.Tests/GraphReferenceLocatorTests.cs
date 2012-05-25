@@ -265,5 +265,37 @@ namespace HotGlue.Tests
             references.Contains(new Reference { Name = "app2.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
             references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
         }
+
+        [Test]
+        [ExpectedException(ExpectedMessage = "A different require reference was found for the file", MatchType = MessageMatch.Contains)]
+        public void Detect_Multiple_Different_Require_Types_For_Same_Reference_In_Same_File()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference() { Name = "reference.js", Path = configuration.ScriptPath + "Exception4"};
+
+            var references = locator.Load(root, reference);
+            foreach (var reference1 in references)
+            {
+                // Assert
+                Assert.Fail("Expected different require type type exception");
+            }
+        }
+
+        [Test]
+        public void Ignore_Multiple_Same_Require_Types_For_Same_Reference_In_Same_File()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module9" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "module.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
+        }
     }
 }
