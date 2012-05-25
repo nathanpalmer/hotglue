@@ -63,9 +63,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\circular_begin.js" />
-    <Content Include="Scripts\circular_end.js" />
-    <Content Include="Scripts\circular_middle.js" />
+    <Content Include="Scripts\Compile1\dep1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Compile2\module1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Exception1\circular_begin.js" />
+    <Content Include="Scripts\Exception1\circular_end.js" />
+    <Content Include="Scripts\Exception1\circular_middle.js" />
+    <Content Include="Scripts\Exception4\reference.js" />
     <Content Include="Scripts\LibraryTest1\app.js" />
     <Content Include="Scripts\LibraryTest1\something.js" />
     <Content Include="Scripts\LibraryTest1\library.js" />
@@ -79,24 +86,33 @@
     <Content Include="Scripts\Module5\mod2.js" />
     <Content Include="Scripts\Module5\mod1.js" />
     <Content Include="Scripts\Module6\app.js" />
-    <Content Include="Scripts\Shared\ext1.js" />
-    <Content Include="Scripts\Shared\ext2.js" />
-    <Content Include="Scripts\reference_forever.js" />
-    <Content Include="Scripts\graph_test.js" />
-    <Content Include="Scripts\module1.js">
+    <Content Include="Scripts\Exception4\reference_same.js" />
+    <Content Include="Scripts\Module8\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\dep1.js">
+    <Content Include="Scripts\Module8\graph_test.js" />
+    <Content Include="Scripts\Module8\module1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Shared\ext1.js" />
+    <Content Include="Scripts\Shared\ext2.js" />
+    <Content Include="Scripts\Exception3\reference_forever.js" />
+    <Content Include="Scripts\Module7\graph_test.js" />
+    <Content Include="Scripts\Module7\module1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Module7\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Module1\mod.js" />
-    <Content Include="Scripts\reference.js" />
-    <Content Include="Scripts\reference_module.js" />
-    <Content Include="Scripts\reference_multiple.js" />
-    <Content Include="Scripts\reference_require.js" />
+    <Content Include="Scripts\Exception2\reference.js" />
+    <Content Include="Scripts\Exception2\reference_module.js" />
+    <Content Include="Scripts\Exception2\reference_multiple.js" />
+    <Content Include="Scripts\Exception2\reference_require.js" />
     <Content Include="Scripts\Shared\dep1.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

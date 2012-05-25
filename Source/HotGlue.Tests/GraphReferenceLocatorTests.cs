@@ -30,7 +30,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath};
+            var reference = new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath + "Module8"};
 
             // Act
             var references = locator.Load(root, reference).ToList();
@@ -38,13 +38,13 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             // check in list
-            references.Contains(new Reference() {Name = "dep1.js", Path = configuration.ScriptPath}).ShouldBe(true);
-            references.Contains(new Reference() {Name = "module1.js", Path = configuration.ScriptPath}).ShouldBe(true);
-            references.Contains(new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references.Contains(new Reference() { Name = "dep1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "module1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "graph_test.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptPath}).ShouldBe(true);
-            references[1].Equals(new Reference() {Name = "module1.js", Path = configuration.ScriptPath}).ShouldBe(true);
-            references[2].Equals(new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath}).ShouldBe(true);
+            references[0].Equals(new Reference() { Name = "dep1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
+            references[1].Equals(new Reference() { Name = "module1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
+            references[2].Equals(new Reference() { Name = "graph_test.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "circular_begin.js", Path = configuration.ScriptPath};
+            var reference = new Reference() {Name = "circular_begin.js", Path = configuration.ScriptPath + "Exception1"};
 
             var references = locator.Load(root, reference).ToList();
             foreach (var reference1 in references)
@@ -98,7 +98,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "reference.js", Path = configuration.ScriptPath};
+            var reference = new Reference() {Name = "reference.js", Path = configuration.ScriptPath + "Exception2"};
 
             var references = locator.Load(root, reference);
             foreach (var reference1 in references)
@@ -114,7 +114,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "reference_forever.js", Path = configuration.ScriptPath};
+            var reference = new Reference() {Name = "reference_forever.js", Path = configuration.ScriptPath + "Exception3"};
 
             // Act
             var references = locator.Load(root, reference).ToList();
