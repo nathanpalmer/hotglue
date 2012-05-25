@@ -70,7 +70,7 @@ namespace HotGlue
 
     public static class Extensions
     {
-        private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.\S+)(?:-module|-glue|-require)");
+        private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.(.+(?=(-module|-glue|-require))|.+))");
 
         public static Reference BuildReference(this HttpContext context, Reference.TypeEnum type)
         {
