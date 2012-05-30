@@ -25,7 +25,7 @@ namespace HotGlue
             _locator = new GraphReferenceLocator(_configuration);
         }
 
-        public static string Reference(string name)
+        public static HtmlString Reference(string name)
         {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
@@ -51,12 +51,12 @@ namespace HotGlue
 
                 var references = _locator.Load(root, reference);
 
-                return package.References(references);
+                return new HtmlString(package.References(references));
             }
 
             var handlerName = name + "-glue";
 
-            return package.References(new[]
+            return new HtmlString(package.References(new[]
                 {
                     new Reference
                         {
@@ -64,7 +64,7 @@ namespace HotGlue
                             Name = handlerName,
                             Type = Model.Reference.TypeEnum.App
                         }
-                });
+                }));
         }
     }
 

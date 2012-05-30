@@ -217,6 +217,8 @@ Then throw in some config! In all of these cases you can omit a section and the 
 
 # Install
 
+Run Build.bat to update all required Nuget packages and compile. 
+
 You need to reference HotGlue.Core and HotGlue.Web. Then add the http handlers to your Web.config.
 
 **Web.config**
