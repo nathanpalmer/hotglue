@@ -4,6 +4,7 @@
 *.user
 *.suo
 
+[Bb]uild
 [Ll]ibraries
 [Bb]in
 [Oo]bj
