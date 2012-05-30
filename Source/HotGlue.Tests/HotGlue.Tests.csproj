@@ -49,6 +49,7 @@
     <Compile Include="CoffeeScriptTests.cs" />
     <Compile Include="CompileTests.cs" />
     <Compile Include="Console\ArgumentsTests.cs" />
+    <Compile Include="Console\ProgramTests.cs" />
     <Compile Include="FindReferenceTests.cs" />
     <Compile Include="GraphReferenceLocatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

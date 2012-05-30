@@ -70,7 +70,6 @@ namespace HotGlue.Tests.Console
         public void Parse_should_error_on_extra_params()
         {
             var infile = "foo.js";
-            var infile2 = "baz.js";
             var outfile = "bar.js";
             var crap = "misplaced";
             var input = new[] { infile, "-o", outfile, crap };
