@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="UsageHelp" xml:space="preserve">
-    <value>Usage: hotglue infile.js [infile2.js [infile3.js]] [-o[utfile] outfile.js]</value>
+    <value>Usage: hotglue infile.js [-o[utfile] outfile.js]</value>
     <comment>Displayed to user when command line options incorrectly entered.</comment>
   </data>
 </root>

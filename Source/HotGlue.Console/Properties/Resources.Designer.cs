@@ -61,7 +61,7 @@ namespace HotGlue.Console.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usage: hotglue infile.js [infile2.js [infile3.js]] [-o[utfile] outfile.js].
+        ///   Looks up a localized string similar to Usage: hotglue infile.js [-o[utfile] outfile.js].
         /// </summary>
         internal static string UsageHelp {
             get {
