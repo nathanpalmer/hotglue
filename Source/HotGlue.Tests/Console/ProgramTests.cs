@@ -31,7 +31,7 @@ namespace HotGlue.Tests.Console
             var firstFilename = "foo.coffee";
             var input = new Arguments
             {
-                InFilenames = new [] { firstFilename, "ignore.this" },
+                InFilename = firstFilename,
                 OutFilename = null
             };
 

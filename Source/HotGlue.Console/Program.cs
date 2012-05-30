@@ -27,7 +27,7 @@ namespace HotGlue.Console
 
         static int Run(Arguments arguments)
         {
-            var allScripts = Concatenator.CompileAll(arguments.InFilenames);
+            var allScripts = Concatenator.Compile(arguments.InFilename);
             File.WriteAllText(OutputFileName(arguments), allScripts, Encoding.UTF8);
             return 0;
         }
@@ -38,12 +38,11 @@ namespace HotGlue.Console
             {
                 return arguments.OutFilename;
             }
-            var firstInFile = arguments.InFilenames.FirstOrDefault();
-            if (string.IsNullOrEmpty(firstInFile))
+            if (string.IsNullOrEmpty(arguments.InFilename))
             {
                 throw new ArgumentException("You must supply either OutFilename or at least one InFilename");
             }
-            return Path.ChangeExtension(firstInFile, ".all.js");
+            return Path.ChangeExtension(arguments.InFilename, ".all.js");
         }
     }
 }

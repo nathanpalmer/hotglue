@@ -7,10 +7,9 @@ namespace HotGlue.Console
 {
     public class Concatenator
     {
-        public static string CompileAll(IEnumerable<string> inFilenames)
+        public static string Compile(string inFilename)
         {
-            var result = new StringBuilder();
-            return result.ToString();
+            return inFilename;
         }
     }
 }

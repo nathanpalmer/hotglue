@@ -29,8 +29,7 @@ namespace HotGlue.Tests.Console
 
             var actual = Arguments.Parse(input);
 
-            actual.InFilenames.ShouldNotBeEmpty();
-            actual.InFilenames.First().ShouldBe(infile);
+            actual.InFilename.ShouldBe(infile);
             actual.Error.ShouldBe(null);
         }
 
@@ -43,25 +42,7 @@ namespace HotGlue.Tests.Console
 
             var actual = Arguments.Parse(input);
 
-            actual.InFilenames.ShouldNotBeEmpty();
-            actual.InFilenames.First().ShouldBe(infile);
-            actual.OutFilename.ShouldBe(outfile);
-            actual.Error.ShouldBe(null);
-        }
-
-        [Test]
-        public void Parse_should_handle_multiple_infilenames()
-        {
-            var infile = "foo.js";
-            var infile2 = "baz.js";
-            var outfile = "bar.js";
-            var input = new[] { infile, infile2, "-o", outfile };
-
-            var actual = Arguments.Parse(input);
-
-            actual.InFilenames.ShouldNotBeEmpty();
-            actual.InFilenames.ShouldContain(infile);
-            actual.InFilenames.ShouldContain(infile2);
+            actual.InFilename.ShouldBe(infile);
             actual.OutFilename.ShouldBe(outfile);
             actual.Error.ShouldBe(null);
         }

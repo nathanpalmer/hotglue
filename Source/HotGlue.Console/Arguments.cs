@@ -8,7 +8,7 @@ namespace HotGlue.Console
     internal class Arguments
     {
         public String Error { get; set; }
-        public IEnumerable<String> InFilenames { get; set; }
+        public String InFilename { get; set; }
         public String OutFilename { get; set; }
 
         private enum SwitchType
@@ -21,7 +21,7 @@ namespace HotGlue.Console
         private enum ParseState
         {
             Start,
-            Infiles,
+            GotInfile,
             ExpectOutfile,
             GotOutFile
         }
@@ -33,7 +33,7 @@ namespace HotGlue.Console
                 throw new ArgumentNullException("args");
             }
 
-            var infiles = new List<string>();
+            string infile = null;
             var state = ParseState.Start; 
             string outfile = null;
 
@@ -46,8 +46,8 @@ namespace HotGlue.Console
                         switch (switchType)
                         {
                             case SwitchType.None:
-                                infiles.Add(arg);
-                                state = ParseState.Infiles;
+                                infile = arg;
+                                state = ParseState.GotInfile;
                                 break;
                             case SwitchType.OutFilename:
                             case SwitchType.Unknown:
@@ -56,12 +56,11 @@ namespace HotGlue.Console
                                 throw new InvalidOperationException("Unknown SwitchType: " + switchType.ToString());
                         }
                         break;
-                    case ParseState.Infiles:
+                    case ParseState.GotInfile:
                         switch (switchType)
                         {
                             case SwitchType.None:
-                                infiles.Add(arg);
-                                break;
+                                return UsageHelp();
                             case SwitchType.OutFilename:
                                 state = ParseState.ExpectOutfile;
                                 break;
@@ -101,7 +100,7 @@ namespace HotGlue.Console
 
             return new Arguments
                        {
-                           InFilenames = infiles,
+                           InFilename = infile,
                            OutFilename = outfile
                        };
         }
