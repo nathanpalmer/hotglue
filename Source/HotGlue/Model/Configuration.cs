@@ -44,6 +44,21 @@ namespace HotGlue.Model
             ScriptPath = "Scripts";
             ScriptSharedPath = "Scripts\\Shared";
         }
+
+        public static HotGlueConfiguration Default()
+        {
+            return new HotGlueConfiguration()
+            {
+                ScriptPath = "Scripts\\",
+                ScriptSharedPath = "Scripts\\Shared\\",
+                Referencers = new HotGlueReference[]
+                    {
+                        new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
+                        new HotGlueReference { Type = typeof(RequireReference).FullName },
+                        new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
+                    }
+            };
+        }
     }
 
     public class HotGlueCompiler : ObjectType

@@ -13,17 +13,7 @@ namespace HotGlue.Tests
     {
         private string root = "..\\..\\";
 
-        private HotGlueConfiguration configuration = new HotGlueConfiguration()
-            {
-                ScriptPath = "Scripts\\",
-                ScriptSharedPath = "Scripts\\Shared\\",
-                Referencers = new HotGlueReference[]
-                    {
-                        new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
-                        new HotGlueReference { Type = typeof(RequireReference).FullName },
-                        new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
-                    }
-            };
+        private HotGlueConfiguration configuration = HotGlueConfiguration.Default();
 
         [Test]
         public void Parse_And_Retrun_Reference()

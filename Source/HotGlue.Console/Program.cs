@@ -14,22 +14,34 @@ namespace HotGlue.Console
             var arguments = Arguments.Parse(args);
             if (!string.IsNullOrEmpty(arguments.Error))
             {
-                System.Console.Error.WriteLine(arguments.Error);
+                PromptIfDebugging();
                 return -1;
             }
             var result = Run(arguments);
-            if (Debugger.IsAttached)
-            {
-                System.Console.ReadLine();
-            }
+            PromptIfDebugging();
             return result;
         }
 
         static int Run(Arguments arguments)
         {
-            var allScripts = Concatenator.Compile(arguments.InFilename);
+            if (arguments == null)
+            {
+                throw new ArgumentNullException("arguments");
+            }
+            var root = Path.GetDirectoryName(Path.GetFullPath(arguments.InFilename));
+            var filename = Path.GetFileName(arguments.InFilename);
+            var allScripts = Concatenator.Compile(filename, root);
             File.WriteAllText(OutputFileName(arguments), allScripts, Encoding.UTF8);
             return 0;
+        }
+
+        private static void PromptIfDebugging()
+        {
+            if (Debugger.IsAttached)
+            {
+                System.Console.WriteLine("All done; press Enter to quit.");
+                System.Console.ReadLine();
+            }
         }
 
         internal static string OutputFileName(Arguments arguments)
