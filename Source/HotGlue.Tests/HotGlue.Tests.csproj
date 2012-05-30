@@ -102,6 +102,9 @@
     </Content>
     <Content Include="Scripts\Module9\app.js" />
     <Content Include="Scripts\Module9\module.js" />
+    <Content Include="Scripts\Path1\app.js" />
+    <Content Include="Scripts\Path1\Sub\library.js" />
+    <Content Include="Scripts\Path1\Sub\module.js" />
     <Content Include="Scripts\Shared\ext1.js" />
     <Content Include="Scripts\Shared\ext2.js" />
     <Content Include="Scripts\Exception3\reference_forever.js" />
