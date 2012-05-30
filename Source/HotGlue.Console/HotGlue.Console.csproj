@@ -55,7 +55,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HotGlue\HotGlue.Core.csproj">
+    <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
       <Name>HotGlue.Core</Name>
     </ProjectReference>

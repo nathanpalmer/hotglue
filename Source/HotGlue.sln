@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Core", "HotGlue\HotGlue.Core.csproj", "{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Core", "HotGlue.Core\HotGlue.Core.csproj", "{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Web", "HotGlue.Web\HotGlue.Web.csproj", "{51E7E82B-809E-4822-A938-F0249F7B4E0D}"
 EndProject
