@@ -49,9 +49,7 @@ namespace HotGlue.Model
         {
             return new HotGlueConfiguration()
             {
-                ScriptPath = "Scripts\\",
-                ScriptSharedPath = "Scripts\\Shared\\",
-                Referencers = new HotGlueReference[]
+               Referencers = new HotGlueReference[]
                     {
                         new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
                         new HotGlueReference { Type = typeof(RequireReference).FullName },

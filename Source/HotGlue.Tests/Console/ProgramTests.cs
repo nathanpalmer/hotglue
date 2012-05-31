@@ -30,14 +30,37 @@ namespace HotGlue.Tests.Console
         {
             var firstFilename = "foo.coffee";
             var input = new Arguments
-            {
-                InFilename = firstFilename,
-                OutFilename = null
-            };
+                            {
+                                InFilename = firstFilename,
+                                OutFilename = null
+                            };
 
             var actual = Program.OutputFileName(input);
 
             actual.ShouldBe("foo.all.js");
         }
+
+        [Test]
+        public void FindScriptFolderPath_finds_path()
+        {
+            var input = @"C:\Foo\Bar\Scripts\Baz\main.coffee";
+            var expected = @"C:\Foo\Bar\Scripts";
+
+            var actual = Program.FindScriptFolderPath(input, "scripts");
+
+            actual.ShouldBe(expected);
+        }
+
+        [Test]
+        public void FindScriptFolderPath_finds_direct_parent_path()
+        {
+            var input = @"C:\Foo\Bar\Scripts\main.coffee";
+            var expected = @"C:\Foo\Bar\Scripts";
+
+            var actual = Program.FindScriptFolderPath(input, "scripts");
+
+            actual.ShouldBe(expected);
+        }
+
     }
 }

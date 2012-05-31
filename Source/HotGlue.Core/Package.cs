@@ -106,7 +106,20 @@ namespace HotGlue
         
         public string CompileModule(Reference reference, string name = null)
         {
-            var itemName = name ?? reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
+            var itemName = name;
+            if (string.IsNullOrEmpty(itemName))
+            {
+                if (string.IsNullOrEmpty((reference.Name)))
+                {
+                    throw new InvalidOperationException("Either name or reference.Name is required here.");
+                }
+                itemName = reference.Name.ToLower();
+                if (!string.IsNullOrEmpty(reference.Path))
+                {
+                    itemName = itemName.Replace(reference.Path, "");
+                }
+                itemName = itemName.Replace("\\", "/");
+            }
 
             var sb = new StringBuilder();
             sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = function(exports, require, module) {");

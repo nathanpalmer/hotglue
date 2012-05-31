@@ -28,11 +28,34 @@ namespace HotGlue.Console
             {
                 throw new ArgumentNullException("arguments");
             }
-            var root = Path.GetDirectoryName(Path.GetFullPath(arguments.InFilename));
-            var filename = Path.GetFileName(arguments.InFilename);
-            var allScripts = Concatenator.Compile(filename, root);
-            File.WriteAllText(OutputFileName(arguments), allScripts, Encoding.UTF8);
-            return 0;
+            try
+            {
+                var infileWithPath = Path.GetFullPath(arguments.InFilename);
+                var root = Path.GetDirectoryName(infileWithPath);
+                var scriptPath = FindScriptFolderPath(infileWithPath, arguments.ScriptPath);
+                if (string.IsNullOrEmpty(scriptPath))
+                {
+                    System.Console.Error.WriteLine("Could not find script folder '{0}' in path '{1}'.", 
+                        arguments.ScriptPath,  // 0
+                        infileWithPath         // 1
+                        );
+                    return -1;
+                }
+                var sharedPath = Path.Combine(scriptPath, arguments.SharedFolderName);
+                var filename = Path.GetFileName(infileWithPath);
+                var allScripts = Concatenator.Compile(filename, root, sharedPath);
+                File.WriteAllText(OutputFileName(arguments), allScripts, Encoding.UTF8);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                System.Console.Error.WriteLine(ex.Message);
+                if (Debugger.IsAttached)
+                {
+                    System.Console.Error.WriteLine(ex.StackTrace);
+                }
+                return -1;
+            }
         }
 
         private static void PromptIfDebugging()
@@ -55,6 +78,30 @@ namespace HotGlue.Console
                 throw new ArgumentException("You must supply either OutFilename or at least one InFilename");
             }
             return Path.ChangeExtension(arguments.InFilename, ".all.js");
+        }
+
+        internal static String FindScriptFolderPath(String fullFilePath, String scriptFolderName)
+        {
+            if (string.IsNullOrEmpty(fullFilePath))
+            {
+                throw new ArgumentNullException("fullFilePath");
+            }
+            if (string.IsNullOrEmpty(scriptFolderName))
+            {
+                throw new ArgumentNullException("scriptFolderName");
+            }
+            String current = fullFilePath;
+            while (!string.IsNullOrEmpty(current))
+            {
+                var dirName = Path.GetDirectoryName(current);
+                var fileName = Path.GetFileName(dirName);
+                if (string.Equals(scriptFolderName, fileName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return dirName;
+                }
+                current = dirName;
+            }
+            return null;
         }
     }
 }
