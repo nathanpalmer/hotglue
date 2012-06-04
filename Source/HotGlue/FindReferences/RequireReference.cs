@@ -13,14 +13,14 @@ namespace HotGlue
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
-        public IEnumerable<Reference> Parse(string fileText)
+        public IEnumerable<RelativeReference> Parse(string fileText)
         {
             if (string.IsNullOrWhiteSpace(fileText)) yield break;
 
             var matches = ReferenceVariableRegex.Matches(fileText)
                 .Cast<Match>()
                 .Where(m => !String.IsNullOrWhiteSpace(m.Groups["path"].Value))
-                .Select(m => new Reference(m.Groups["path"].Value) {Type = Reference.TypeEnum.Module});
+                .Select(m => new RelativeReference(m.Groups["path"].Value) { Type = Reference.TypeEnum.Module });
 
             foreach (var match in matches)
             {

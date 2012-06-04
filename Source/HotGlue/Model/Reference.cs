@@ -28,16 +28,7 @@ namespace HotGlue.Model
             get { return _path; }
             set { _path = value.Reslash(); }
         }
-
-        /// <summary>
-        /// The full system directory path to the file
-        /// </summary>
-        public string SystemPath { get; private set; }
-        /// <summary>
-        /// The text after require referenced in the file
-        /// </summary>
-        public string ReferenceName { get; private set; }
-
+        
         /// <summary>
         /// The type of file usage when referenced
         /// </summary>
@@ -57,37 +48,7 @@ namespace HotGlue.Model
 
         public Reference()
         {
-
-        }
-
-        public Reference(string referenceName)
-        {
-            if (String.IsNullOrWhiteSpace(referenceName))
-            {
-                throw new ArgumentNullException("referenceName");
-            }
-            // Not resolving with System.File because reference could be anything
-            Name = System.IO.Path.GetFileName(referenceName);
-            var index = Name.LastIndexOf(".");
-            if (index > 0)
-            {
-                Extension = Name.Substring(index);
-            }
-            ReferenceName = referenceName;
-        }
-
-        public Reference(DirectoryInfo rootDirectory, FileInfo systemFile, string referenceName)
-        {
-            SystemPath = systemFile.DirectoryName;
-            Name = systemFile.Name;
-            Extension = systemFile.Extension;
-            ReferenceName = referenceName;
-            var index = SystemPath.IndexOf(rootDirectory.FullName, StringComparison.OrdinalIgnoreCase);
-            if (index < 0)
-            {
-                throw new Exception(String.Format("System file '{0}' was not contained in the root directory '{1}'.", rootDirectory, systemFile));
-            }
-            Path = SystemPath.Substring(index + rootDirectory.FullName.Length); // should be the full relative path
+            
         }
 
         public string FullPath(string path)
@@ -184,11 +145,64 @@ namespace HotGlue.Model
             Library,
             Module
         }
+    }
+
+    public class RelativeReference : Reference
+    {
+        /// <summary>
+        /// The text after require referenced in the file
+        /// </summary>
+        public string ReferenceName { get; private set; }
+
+        public RelativeReference(string referenceName)
+        {
+            if (String.IsNullOrWhiteSpace(referenceName))
+            {
+                throw new ArgumentNullException("referenceName");
+            }
+            // Not resolving with System.File because reference could be anything
+            Name = System.IO.Path.GetFileName(referenceName);
+            var index = Name.LastIndexOf(".");
+            if (index > 0)
+            {
+                Extension = Name.Substring(index);
+            }
+            ReferenceName = referenceName;
+        }
 
         internal void UpdateFromSystemReference(Reference systemReference)
         {
             this.Path = systemReference.Path;
-            this.SystemPath = systemReference.SystemPath;
+        }
+    }
+
+    public class SystemReference : Reference
+    {
+        /// <summary>
+        /// The various alternate reference names
+        /// </summary>
+        public IList<string> ReferenceNames { get; private set; }
+        
+        /// <summary>
+        /// The full system directory path to the file
+        /// </summary>
+        public string SystemPath { get; private set; }
+        
+        public SystemReference(DirectoryInfo rootDirectory, FileInfo systemFile, string referenceName)
+        {
+            SystemPath = systemFile.DirectoryName;
+            Name = systemFile.Name;
+            Extension = systemFile.Extension;
+            ReferenceNames = new List<string>()
+            {
+                referenceName
+            };
+            var index = SystemPath.IndexOf(rootDirectory.FullName, StringComparison.OrdinalIgnoreCase);
+            if (index < 0)
+            {
+                throw new Exception(String.Format("System file '{0}' was not contained in the root directory '{1}'.", rootDirectory, systemFile));
+            }
+            Path = SystemPath.Substring(index + rootDirectory.FullName.Length); // should be the full relative path
         }
     }
 }

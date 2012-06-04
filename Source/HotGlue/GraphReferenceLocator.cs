@@ -100,8 +100,9 @@ namespace HotGlue
             }
         }
 
-        private void CheckForCircularReferences(Dictionary<Reference, IList<Reference>> references)
+        private void CheckForCircularReferences(Dictionary<SystemReference, IList<RelativeReference>> references)
         {
+            var baseReferences = references.ToDictionary(k => (Reference) k.Key, v => (IList<Reference>)v.Value.Cast<Reference>().ToList());
             // Check for circular reference, if there are any, loading order won't work.
             Action<Reference, KeyValuePair<Reference, IList<Reference>>> compareChildren = null;
             compareChildren = (reference, list) =>
@@ -112,40 +113,40 @@ namespace HotGlue
                         {
                             throw new Exception(String.Format("Circular reference detected between file '{0}' and '{1}'", Path.Combine(reference.Path, reference.Name), Path.Combine(list.Key.Path, list.Key.Name)));
                         }
-                        if (references.ContainsKey(childReference))
+                        if (baseReferences.ContainsKey(childReference))
                         {
-                            compareChildren(reference, references.Single(x => x.Key.Equals(childReference)));
+                            compareChildren(reference, baseReferences.Single(x => x.Key.Equals(childReference)));
                         }
                     }
                 };
 
-            foreach (var root in references.Where(root => root.Value.Any()))
+            foreach (var root in baseReferences.Where(root => root.Value.Any()))
             {
-                compareChildren(root.Key, root);
+                compareChildren(root.Key, new KeyValuePair<Reference, IList<Reference>>(root.Key, root.Value.Cast<Reference>().ToList()));
             }
         }
 
-        private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String fileName)
+        private Dictionary<SystemReference, IList<RelativeReference>> Parse(String rootPath, String relativePath, String fileName)
         {
             var rootDirectory = new DirectoryInfo(rootPath);
             if (!rootDirectory.Exists)
             {
                 throw new DirectoryNotFoundException(String.Format("The rootPath '{0}' passed in doesn't exist or can't resolve.", rootPath));
             }
-            var references = new Dictionary<Reference, IList<Reference>>();
-            Parse(rootDirectory, relativePath, new Reference(fileName) { Type = Reference.TypeEnum.App }, references);
+            var references = new Dictionary<SystemReference, IList<RelativeReference>>();
+            Parse(rootDirectory, relativePath, new RelativeReference(fileName) { Type = Reference.TypeEnum.App }, references);
             return references;
         }
 
         // recursive function
-        private void Parse(DirectoryInfo rootDirectory, String relativePath, Reference relativeReference, Dictionary<Reference, IList<Reference>> references)
+        private void Parse(DirectoryInfo rootDirectory, String relativePath, RelativeReference relativeReference, Dictionary<SystemReference, IList<RelativeReference>> references)
         {
             String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
-            Reference systemReference = null;
+            SystemReference systemReference = null;
             var fileReference = new FileInfo(Path.Combine(currentPath, relativeReference.ReferenceName));
             if (fileReference.Exists)
             {
-                systemReference = new Reference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
+                systemReference = new SystemReference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
             }
 
             if (systemReference == null)
@@ -159,7 +160,7 @@ namespace HotGlue
             {
                 if (!references.ContainsKey(systemReference))
                 {
-                    references.Add(systemReference, new List<Reference>());   
+                    references.Add(systemReference, new List<RelativeReference>());   
                 }
                 return;
             }
@@ -171,19 +172,19 @@ namespace HotGlue
             }
         }
 
-        private IList<Reference> GetReferences(DirectoryInfo rootDirectory, Reference reference, Dictionary<Reference, IList<Reference>> references)
+        private IList<RelativeReference> GetReferences(DirectoryInfo rootDirectory, SystemReference reference, Dictionary<SystemReference, IList<RelativeReference>> references)
         {
             if (references.ContainsKey(reference))
             {
                 // Duplicates within the different files with different types
                 CheckForDuplicateReference(reference, references.Keys);
-                return new List<Reference>(); // already parsed file
+                return new List<RelativeReference>(); // already parsed file
             }
 
-            references.Add(reference, new List<Reference>());
+            references.Add(reference, new List<RelativeReference>());
 
             var text = File.ReadAllText(reference.FullPath(rootDirectory.FullName));
-            var currentReferences = new List<Reference>();
+            var currentReferences = new List<RelativeReference>();
             foreach (var findReference in _findReferences)
             {
                 currentReferences.AddRange(findReference.Parse(text));
