@@ -123,6 +123,8 @@
     <Content Include="Scripts\Exception2\reference_module.js" />
     <Content Include="Scripts\Exception2\reference_multiple.js" />
     <Content Include="Scripts\Exception2\reference_require.js" />
+    <Content Include="Scripts\Path2\app.js" />
+    <Content Include="Scripts\Path2\module.js" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
