@@ -54,7 +54,7 @@ namespace HotGlue.Tests
             // Arrange
             if (specifyRoot)
             {
-                configuration.ScriptPath = "/Scripts/";
+                configuration.ScriptPath = "Scripts/";
             }
             var locator = new GraphReferenceLocator(configuration);
             var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"};
@@ -203,8 +203,8 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             references.Contains(new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "../Module4-Relative/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptPath + "Module4/../Module4-Relative"}).ShouldBe(true);
+            references.Contains(new Reference {Name = "mod.js", Path = configuration.ScriptPath + "Module4-Relative"}).ShouldBe(true);
+            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptPath + "Module4-Relative"}).ShouldBe(true);
         }
 
         [Test]
@@ -215,7 +215,7 @@ namespace HotGlue.Tests
             // Arrange
             if (specifyRoot)
             {
-                configuration.ScriptPath = "/Scripts/";
+                configuration.ScriptPath = "Scripts/";
             }
             var locator = new GraphReferenceLocator(configuration);
             var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" };
@@ -226,8 +226,8 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "../Module5/mod1.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "mod2.js", Path = configuration.ScriptPath + "Module6/../Module5" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "mod1.js", Path = configuration.ScriptPath + "Module5" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "mod2.js", Path = configuration.ScriptPath + "Module5" }).ShouldBe(true);
         }
 
         [Test]
@@ -294,5 +294,40 @@ namespace HotGlue.Tests
             references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
             references.Contains(new Reference { Name = "module.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
         }
+
+        [Test]
+        public void Multiple_Files_With_Same_Name_Different_Locations_Get_Added()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module10" };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(4);
+            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module10" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "dep1.js", Path = configuration.ScriptPath + "Module10/sub1" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "dep1.js", Path = configuration.ScriptPath + "Module10/sub2" }).ShouldBe(true);
+            references.Contains(new Reference { Name = "dep1.js", Path = configuration.ScriptPath + "Module10/sub3" }).ShouldBe(true);
+        }
+
+        //[Test]
+        //public void Ignore_Multiple_Same_Require_Types_For_Same_Reference_In_Same_File1()
+        //{
+        //    // Arrange
+        //    var locator = new GraphReferenceLocator(configuration);
+        //    var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Path1" };
+
+        //    // Act
+        //    var references = locator.Load(root, reference).ToList();
+
+        //    // Assert
+        //    references.Count.ShouldBe(3);
+        //    references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Path1" }).ShouldBe(true);
+        //    references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "Path1" + "\\Sub" }).ShouldBe(true);
+        //    references.Contains(new Reference { Name = "module.js", Path = configuration.ScriptPath + "Path1" + "\\Sub" }).ShouldBe(true);
+        //}
     }
 }

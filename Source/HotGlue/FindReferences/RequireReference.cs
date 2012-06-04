@@ -19,8 +19,8 @@ namespace HotGlue
 
             var matches = ReferenceVariableRegex.Matches(fileText)
                 .Cast<Match>()
-                .Select(m => new Reference() {Name = m.Groups["path"].Value, Type = Reference.TypeEnum.Module})
-                .Where(m => !String.IsNullOrWhiteSpace(m.Name));
+                .Where(m => !String.IsNullOrWhiteSpace(m.Groups["path"].Value))
+                .Select(m => new Reference(m.Groups["path"].Value) {Type = Reference.TypeEnum.Module});
 
             foreach (var match in matches)
             {

@@ -42,17 +42,18 @@ namespace HotGlue
             }
 
             rootPath = rootPath.Reslash();
-
             // Ensure we have the root path separate from the reference
             var rootIndex = reference.Path.IndexOf(rootPath, StringComparison.OrdinalIgnoreCase);
             var relativePath = reference.Path;
             if (rootIndex >= 0)
             {
                 relativePath = relativePath.Substring(rootIndex+rootPath.Length);
-                if (relativePath.Length > 1 && relativePath.StartsWith("/"))
-                {
-                    relativePath = relativePath.Substring(1);
-                }
+            }
+
+            // Clean relative path so path.combine works
+            if (relativePath.StartsWith("/"))
+            {
+                relativePath = relativePath.Substring(1);
             }
 
             var results = Parse(rootPath, relativePath, reference.Name);
@@ -126,50 +127,51 @@ namespace HotGlue
 
         private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String fileName)
         {
+            var rootDirectory = new DirectoryInfo(rootPath);
+            if (!rootDirectory.Exists)
+            {
+                throw new DirectoryNotFoundException(String.Format("The rootPath '{0}' passed in doesn't exist or can't resolve.", rootPath));
+            }
             var references = new Dictionary<Reference, IList<Reference>>();
-            Parse(rootPath, relativePath, "", new Reference() { Name = fileName }, references);
+            Parse(rootDirectory, relativePath, new Reference(fileName) { Type = Reference.TypeEnum.App }, references);
             return references;
         }
 
         // recursive function
-        private void Parse(String rootPath, String relativePath, String offsetPath, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
+        private void Parse(DirectoryInfo rootDirectory, String relativePath, Reference relativeReference, Dictionary<Reference, IList<Reference>> references)
         {
-            String currentPath = Path.Combine(rootPath, relativePath.StartsWith("/") ? relativePath.Substring(1) : relativePath);
-            Reference reference = null;
-            var currentFile = new FileInfo(Path.Combine(Path.Combine(currentPath, offsetPath), parentReference.Name));
-            if (currentFile.Exists)
+            String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
+            Reference systemReference = null;
+            var fileReference = new FileInfo(Path.Combine(currentPath, relativeReference.ReferenceName));
+            if (fileReference.Exists)
             {
-                reference = new Reference() { Path = Path.Combine(relativePath, offsetPath), Name = parentReference.Name, Type = parentReference.Type, Extension = currentFile.Extension };
+                systemReference = new Reference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
             }
 
-            if (reference == null)
+            if (systemReference == null)
             {
-                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in either the current path: '{1}'.", parentReference.Name, currentPath));
+                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in the current path: '{1}'.", relativeReference.Name, currentPath));
             }
 
-            parentReference.Path = reference.Path;
-
-            if (parentReference.Type == Reference.TypeEnum.Library)
+            relativeReference.UpdateFromSystemReference(systemReference);
+            // We check for library references here rather than below, because we have the actual file path now
+            if (relativeReference.Type == Reference.TypeEnum.Library)
             {
-                if (!references.ContainsKey(reference))
+                if (!references.ContainsKey(systemReference))
                 {
-                    references.Add(reference, new List<Reference>());   
+                    references.Add(systemReference, new List<Reference>());   
                 }
+                return;
             }
-            else
+
+            var newRelativeReferences = GetReferences(rootDirectory, systemReference, references);
+            foreach (var reference in newRelativeReferences)
             {
-                var offset = parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal) > 0
-                                 ? parentReference.Name.Substring(0, parentReference.Name.Reslash().LastIndexOf("/", StringComparison.Ordinal))
-                                 : offsetPath;
-                var newReferences = HasReferences(rootPath, reference, references);
-                foreach (var fileReference in newReferences)
-                {
-                    Parse(rootPath, relativePath, offset, fileReference, references);
-                }
+                Parse(rootDirectory, systemReference.Path, reference, references);
             }
         }
 
-        private IList<Reference> HasReferences(string rootPath, Reference reference, Dictionary<Reference, IList<Reference>> references)
+        private IList<Reference> GetReferences(DirectoryInfo rootDirectory, Reference reference, Dictionary<Reference, IList<Reference>> references)
         {
             if (references.ContainsKey(reference))
             {
@@ -180,31 +182,30 @@ namespace HotGlue
 
             references.Add(reference, new List<Reference>());
 
-            var text = File.ReadAllText(reference.FullPath(rootPath));
+            var text = File.ReadAllText(reference.FullPath(rootDirectory.FullName));
             var currentReferences = new List<Reference>();
             foreach (var findReference in _findReferences)
             {
                 currentReferences.AddRange(findReference.Parse(text));
             }
 
-            var newReferences = new List<Reference>();
             var list = references[reference];
             foreach (var currentReference in currentReferences)
             {
-                currentReference.Name = currentReference.Name.Reslash();
-                if (!list.Contains(currentReference))
+                // find any duplicate references for the same type in the file and remove.
+                // look off the full referenced name and not the internal equals name
+                if (!list.Any(x => x.ReferenceName.Equals(currentReference.ReferenceName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    newReferences.Add(currentReference);
-                    references[reference].Add(currentReference);
+                    list.Add(currentReference);
                 }
                 else
                 {
                     // Duplicates within the same file with different types
-                    CheckForDuplicateReference(currentReference, newReferences);
+                    CheckForDuplicateReference(currentReference, list);
                 }
             }
 
-            return newReferences;
+            return list;
         }
 
         private void CheckForDuplicateReference(Reference reference, IEnumerable<Reference> references)

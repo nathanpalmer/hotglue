@@ -80,6 +80,10 @@
     <Content Include="Scripts\LibraryTest2\app2.js" />
     <Content Include="Scripts\LibraryTest2\library.js" />
     <Content Include="Scripts\LibraryTest2\something.js" />
+    <Content Include="Scripts\Module10\app.js" />
+    <Content Include="Scripts\Module10\sub1\dep1.js" />
+    <Content Include="Scripts\Module10\sub2\dep1.js" />
+    <Content Include="Scripts\Module10\sub3\dep1.js" />
     <Content Include="Scripts\Module1\dep1.js" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module2\dep1.js" />
