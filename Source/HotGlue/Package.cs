@@ -88,11 +88,12 @@ namespace HotGlue
             return sw.ToString();
         }
 
-        public string CompileDependency(Reference reference)
+        public string CompileDependency<T>(T reference) where T : Reference
         {
-            if (reference.Content == null)
+            if (reference.Content == null && reference is SystemReference)
             {
-                reference.Content = File.ReadAllText(reference.FullPath(_relativeRoot));
+                var systemReference = reference as SystemReference;
+                reference.Content = File.ReadAllText(systemReference.FullPath);
             }
             foreach(var compiler in _compilers)
             {

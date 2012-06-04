@@ -42,8 +42,10 @@ namespace HotGlue
                 var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal)) + "\\";
                 file = file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)+1);
 
-                var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(Path.Combine(root, relative), file)), file)
+                var reference = new Reference
                                 {
+                                    Path = relative,
+                                    Name = file,
                                     Type = Model.Reference.TypeEnum.App
                                 };
 

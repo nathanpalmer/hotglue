@@ -21,10 +21,10 @@ namespace HotGlue.Tests
             var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
-
+            var root = new DirectoryInfo(".");
             var references = new[]
                 {
-                    new SystemReference(new DirectoryInfo("C:/Root"), new FileInfo("C:/Root/Scripts/Compile1/dep1.js"), "dep1.js")
+                    new SystemReference(root, new FileInfo(Path.Combine(root.FullName,"Scripts/Compile1/dep1.js")), "dep1.js")
                     {
                         Type = Reference.TypeEnum.Dependency
                     }
@@ -46,10 +46,10 @@ namespace HotGlue.Tests
             var referencer = new HTMLGenerateScriptReference();
 
             var package = new Package(".", compilers, referencer);
-
+            var root = new DirectoryInfo(".");
             var references = new[]
                 {
-                    new SystemReference(new DirectoryInfo("C:/Root"), new FileInfo("C:/Root/Scripts/Compile2/module1.js"), "module1.js")
+                    new SystemReference(root, new FileInfo(Path.Combine(root.FullName, "Scripts/Compile2/module1.js")), "module1.js")
                     {
                         Type = Reference.TypeEnum.Module
                     }

@@ -195,17 +195,31 @@ namespace HotGlue.Model
         /// The full system directory path to the file
         /// </summary>
         public string SystemPath { get; private set; }
+
+        public new string FullPath
+        {
+            get
+            {
+                var relativePathIndex = SystemPath.IndexOf(Path, StringComparison.Ordinal);
+                var path = Path.StartsWith("/") ? Path.Substring(1) : Path;
+                if (relativePathIndex >= 0)
+                {
+                    return PT.Combine(PT.Combine(SystemPath.Substring(0, relativePathIndex), path), Name);
+                }
+                return PT.Combine(PT.Combine(SystemPath, path), Name);
+            }
+        }
         
         public SystemReference(DirectoryInfo rootDirectory, FileInfo systemFile, string referenceName)
         {
-            SystemPath = systemFile.DirectoryName;
+            SystemPath = systemFile.DirectoryName.Reslash();
             Name = systemFile.Name;
             Extension = systemFile.Extension;
             ReferenceNames = new List<string>()
             {
                 referenceName
             };
-            var index = SystemPath.IndexOf(rootDirectory.FullName, StringComparison.OrdinalIgnoreCase);
+            var index = SystemPath.IndexOf(rootDirectory.FullName.Reslash(), StringComparison.OrdinalIgnoreCase);
             if (index < 0)
             {
                 throw new Exception(String.Format("System file '{0}' was not contained in the root directory '{1}'.", systemFile, rootDirectory));
