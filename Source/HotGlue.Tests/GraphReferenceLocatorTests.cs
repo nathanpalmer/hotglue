@@ -312,22 +312,5 @@ namespace HotGlue.Tests
             references.Contains(new Reference { Name = "dep1.js", Path = configuration.ScriptPath + "Module10/sub2" }).ShouldBe(true);
             references.Contains(new Reference { Name = "dep1.js", Path = configuration.ScriptPath + "Module10/sub3" }).ShouldBe(true);
         }
-
-        //[Test]
-        //public void Ignore_Multiple_Same_Require_Types_For_Same_Reference_In_Same_File1()
-        //{
-        //    // Arrange
-        //    var locator = new GraphReferenceLocator(configuration);
-        //    var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Path1" };
-
-        //    // Act
-        //    var references = locator.Load(root, reference).ToList();
-
-        //    // Assert
-        //    references.Count.ShouldBe(3);
-        //    references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Path1" }).ShouldBe(true);
-        //    references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "Path1" + "\\Sub" }).ShouldBe(true);
-        //    references.Contains(new Reference { Name = "module.js", Path = configuration.ScriptPath + "Path1" + "\\Sub" }).ShouldBe(true);
-        //}
     }
 }

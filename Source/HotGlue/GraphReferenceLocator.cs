@@ -178,6 +178,12 @@ namespace HotGlue
             {
                 // Duplicates within the different files with different types
                 CheckForDuplicateReference(reference, references.Keys);
+                // if its not a duplicate reference type, but has a different reference name, add it to the collection
+                var existing = references.Single(x => x.Key.Equals(reference));
+                if (!existing.Key.ReferenceNames.Contains(reference.ReferenceNames.Single()))
+                {
+                    existing.Key.ReferenceNames.Add(reference.ReferenceNames.Single());
+                }
                 return new List<RelativeReference>(); // already parsed file
             }
 
