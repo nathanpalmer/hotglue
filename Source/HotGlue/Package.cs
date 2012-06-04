@@ -136,23 +136,24 @@ namespace HotGlue
                     case Reference.TypeEnum.App:
                         if (modules)
                         {
-                            sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, new SystemReference(new DirectoryInfo(_relativeRoot), new FileInfo(_relativeRoot + _scriptPath + "/get.js-require"), "get.js-require")
-                            {
-                                Type = Reference.TypeEnum.Dependency,
-                                Wait = true
-                            }));
+                            var systemReference = new SystemReference(new DirectoryInfo(_relativeRoot), new FileInfo(_relativeRoot + _scriptPath + "/get.js-require"), "get.js-require")
+                                                  {
+                                                      Type = Reference.TypeEnum.Dependency,
+                                                      Wait = true
+                                                  };
+                            sw.AppendLine(_generateScriptReference.GenerateReference(systemReference));
                         }
-                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
+                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
                         break;
                     case Reference.TypeEnum.Library:
                     case Reference.TypeEnum.Dependency:
-                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, reference));
+                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
                         break;
                     case Reference.TypeEnum.Module:
                         modules = true;
                         var clone = reference.Clone();
                         clone.Name = reference.Name + "-module";
-                        sw.AppendLine(_generateScriptReference.GenerateReference(_relativeRoot, clone));
+                        sw.AppendLine(_generateScriptReference.GenerateReference(clone));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

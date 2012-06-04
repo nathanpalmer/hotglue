@@ -5,9 +5,9 @@ namespace HotGlue
 {
     public class LABjsScriptReference : IGenerateScriptReference
     {
-        public string GenerateReference(string root, SystemReference reference)
+        public string GenerateReference(SystemReference reference)
         {
-            var relativePath = reference.RelativePath(root, true);
+            var relativePath = reference.RelativePath(true);
             var wait = reference.Wait ? ".wait()" : "";
 
             return reference.Name.EndsWith("-module")

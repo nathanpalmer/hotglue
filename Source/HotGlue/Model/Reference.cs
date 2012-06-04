@@ -196,18 +196,32 @@ namespace HotGlue.Model
         /// </summary>
         public string SystemPath { get; private set; }
 
-        public new string FullPath
+        private string Root
         {
             get
             {
                 var relativePathIndex = SystemPath.IndexOf(Path, StringComparison.Ordinal);
-                var path = Path.StartsWith("/") ? Path.Substring(1) : Path;
-                if (relativePathIndex >= 0)
-                {
-                    return PT.Combine(PT.Combine(SystemPath.Substring(0, relativePathIndex), path), Name);
-                }
-                return PT.Combine(PT.Combine(SystemPath, path), Name);
+                return relativePathIndex >= 0 ? SystemPath.Substring(0, relativePathIndex) : SystemPath;
             }
+        }
+
+        public new string FullPath
+        {
+            get
+            {
+                var path = Path.StartsWith("/") ? Path.Substring(1) : Path;
+                return PT.Combine(PT.Combine(Root, path), Name);
+            }
+        }
+
+        public new string RelativePath()
+        {
+            return RelativePath(false);
+        }
+
+        public string RelativePath(bool includeVersion)
+        {
+            return base.RelativePath(Root, includeVersion);
         }
         
         public SystemReference(DirectoryInfo rootDirectory, FileInfo systemFile, string referenceName)
