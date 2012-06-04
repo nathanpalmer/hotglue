@@ -55,7 +55,7 @@ namespace HotGlue
                 }
             }
 
-            var results = Parse(rootPath, relativePath, _config.ScriptSharedPath, reference.Name);
+            var results = Parse(rootPath, relativePath, reference.Name);
 
             if (!results.Any())
             {
@@ -124,42 +124,27 @@ namespace HotGlue
             }
         }
 
-        private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String sharedFolder, String fileName)
+        private Dictionary<Reference, IList<Reference>> Parse(String rootPath, String relativePath, String fileName)
         {
             var references = new Dictionary<Reference, IList<Reference>>();
-            Parse(rootPath, relativePath, "", sharedFolder, new Reference() { Name = fileName }, references);
+            Parse(rootPath, relativePath, "", new Reference() { Name = fileName }, references);
             return references;
         }
 
         // recursive function
-        private void Parse(String rootPath, String relativePath, String offsetPath, String sharedFolder, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
+        private void Parse(String rootPath, String relativePath, String offsetPath, Reference parentReference, Dictionary<Reference, IList<Reference>> references)
         {
             String currentPath = Path.Combine(rootPath, relativePath.StartsWith("/") ? relativePath.Substring(1) : relativePath);
-            String sharedPath = null;
-            if (!String.IsNullOrWhiteSpace(sharedFolder))
-            {
-                sharedPath = Path.Combine(rootPath, sharedFolder.StartsWith("/") ? sharedFolder.Substring(1) : sharedFolder);
-            }
-
             Reference reference = null;
             var currentFile = new FileInfo(Path.Combine(Path.Combine(currentPath, offsetPath), parentReference.Name));
             if (currentFile.Exists)
             {
                 reference = new Reference() { Path = Path.Combine(relativePath, offsetPath), Name = parentReference.Name, Type = parentReference.Type, Extension = currentFile.Extension };
             }
-            else if (!String.IsNullOrWhiteSpace(sharedPath))
-            {
-                var sharedFile = new FileInfo(Path.Combine(sharedPath, parentReference.Name));
-                if (sharedFile.Exists)
-                {
-                    currentPath = sharedPath; // Once in shared, only look at shared for other models.
-                    reference = new Reference() { Path = sharedFolder, Name = parentReference.Name, Type = parentReference.Type, Extension = sharedFile.Extension };
-                }
-            }
 
             if (reference == null)
             {
-                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in either the current path: '{1}', or the shared path: '{2}'.", parentReference.Name, currentPath, sharedPath));
+                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in either the current path: '{1}'.", parentReference.Name, currentPath));
             }
 
             parentReference.Path = reference.Path;
@@ -179,7 +164,7 @@ namespace HotGlue
                 var newReferences = HasReferences(rootPath, reference, references);
                 foreach (var fileReference in newReferences)
                 {
-                    Parse(rootPath, relativePath, offset, sharedFolder, fileReference, references);
+                    Parse(rootPath, relativePath, offset, fileReference, references);
                 }
             }
         }

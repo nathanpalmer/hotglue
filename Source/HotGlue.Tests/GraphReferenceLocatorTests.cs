@@ -16,7 +16,6 @@ namespace HotGlue.Tests
         private HotGlueConfiguration configuration = new HotGlueConfiguration()
             {
                 ScriptPath = "Scripts\\",
-                ScriptSharedPath = "Scripts\\Shared\\",
                 Referencers = new HotGlueReference[]
                     {
                         new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
@@ -56,7 +55,6 @@ namespace HotGlue.Tests
             if (specifyRoot)
             {
                 configuration.ScriptPath = "/Scripts/";
-                configuration.ScriptSharedPath = "/Scripts/Shared/";
             }
             var locator = new GraphReferenceLocator(configuration);
             var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"};
@@ -67,11 +65,11 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             // check in list
-            references.Contains(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
+            references.Contains(new Reference() { Name = "dep1.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             references.Contains(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             references.Contains(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
+            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             references[1].Equals(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
             references[2].Equals(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
         }
@@ -135,7 +133,7 @@ namespace HotGlue.Tests
 
             // Assert
             references.Count.ShouldBe(2);
-            references[0].Path.ShouldBe(configuration.ScriptSharedPath);
+            references[0].Path.ShouldBe(configuration.ScriptPath + "Module2");
             references[1].Path.ShouldBe(configuration.ScriptPath + "Module2");
         }
 
@@ -183,11 +181,11 @@ namespace HotGlue.Tests
             references.Count.ShouldBe(3);
             // check in list
             references.Contains(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "ext1.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
+            references.Contains(new Reference() { Name = "ext2.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
             // check order
-            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
+            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
+            references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
             references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
 
         }
@@ -205,8 +203,8 @@ namespace HotGlue.Tests
             // Assert
             references.Count.ShouldBe(3);
             references.Contains(new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "../Module1/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
+            references.Contains(new Reference {Name = "../Module4-Relative/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
+            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptPath + "Module4/../Module4-Relative"}).ShouldBe(true);
         }
 
         [Test]
@@ -218,7 +216,6 @@ namespace HotGlue.Tests
             if (specifyRoot)
             {
                 configuration.ScriptPath = "/Scripts/";
-                configuration.ScriptSharedPath = "/Scripts/Shared/";
             }
             var locator = new GraphReferenceLocator(configuration);
             var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" };
