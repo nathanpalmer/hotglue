@@ -1,4 +1,4 @@
-﻿//= require jquery-1.7.2.js
+﻿//= require ../shared/jquery-1.7.2.js
 
 Something.Message = "Test";
 

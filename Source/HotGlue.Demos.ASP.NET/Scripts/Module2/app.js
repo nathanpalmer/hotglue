@@ -1,6 +1,6 @@
-﻿//= require jquery-1.7.2.js
-//= require jquery.tmpl.js
-//= require dep1.js
+﻿//= require ../shared/jquery-1.7.2.js
+//= require ../shared/jquery.tmpl.js
+//= require ../shared/dep1.js
 var mod1 = require('../module3/mod1.js');
 var coffeemod = require('../coffeemodule1/mod4.coffee');
 

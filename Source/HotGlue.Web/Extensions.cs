@@ -42,29 +42,22 @@ namespace HotGlue
                 var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal)) + "\\";
                 file = file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)+1);
 
-                var reference = new Reference
-                {
-                    Path = relative,
-                    Name = file,
-                    Type = Model.Reference.TypeEnum.App
-                };
+                var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(Path.Combine(root, relative), file)), file)
+                                {
+                                    Type = Model.Reference.TypeEnum.App
+                                };
 
                 var references = _locator.Load(root, reference);
 
                 return new HtmlString(package.References(references));
             }
 
-            var handlerName = name + "-glue";
+            var appName = name + "-glue";
+            var appDirectory = new DirectoryInfo(context.Server.MapPath("."));
+            var appFile = new FileInfo(Path.Combine(context.Server.MapPath("~") + _configuration.ScriptPath, appName));
+            var appReference = new SystemReference(appDirectory, appFile, appName) {Type = Model.Reference.TypeEnum.App};
 
-            return new HtmlString(package.References(new[]
-                {
-                    new Reference
-                        {
-                            Path = _configuration.ScriptPath,
-                            Name = handlerName,
-                            Type = Model.Reference.TypeEnum.App
-                        }
-                }));
+            return new HtmlString(package.References(new[] {appReference}));
         }
     }
 
@@ -72,23 +65,22 @@ namespace HotGlue
     {
         private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.(.+(?=(-module|-glue|-require))|.+))");
 
-        public static Reference BuildReference(this HttpContext context, Reference.TypeEnum type)
+        public static SystemReference BuildReference(this HttpContext context, Reference.TypeEnum type)
         {
-            var file = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath);
-            var relative = context.Server.MapPath(".") + "\\";
+            var fullPath = context.Server.MapPath(context.Request.AppRelativeCurrentExecutionFilePath);
+            var name = Path.GetFileName(fullPath);
+            var directory = Path.GetDirectoryName(fullPath);
 
-            var match = FileNameRegex.Match(file);
-            var extension = match.Groups["extension"].Value;
-            file = match.Groups["file"].Value + extension;
-            file = file.Replace(relative, "");
+            var match = FileNameRegex.Match(name);
+            name = match.Groups["file"].Value + match.Groups["extension"].Value;
 
-            return new Reference
+            var reference = new SystemReference(new DirectoryInfo(context.Server.MapPath("~")), new FileInfo(Path.Combine(directory, name)), name);
+            var keys = context.Request.QueryString["name"] ?? "";
+            foreach(var key in keys.Split(','))
             {
-                Path = relative,
-                Name = file,
-                Type = type,
-                Extension = extension
-            };
+                reference.ReferenceNames.Add(key);
+            }
+            return reference;
         }
     }
 }

@@ -138,6 +138,14 @@ namespace HotGlue.Model
             return -1;
         }
 
+        public SystemReference ToSystemReference(string rootPath)
+        {
+            return new SystemReference(new DirectoryInfo(rootPath), new FileInfo(FullPath(rootPath)), Name)
+                   {
+                       Type = Type
+                   };
+        }
+
         public enum TypeEnum
         {
             App,
@@ -200,9 +208,26 @@ namespace HotGlue.Model
             var index = SystemPath.IndexOf(rootDirectory.FullName, StringComparison.OrdinalIgnoreCase);
             if (index < 0)
             {
-                throw new Exception(String.Format("System file '{0}' was not contained in the root directory '{1}'.", rootDirectory, systemFile));
+                throw new Exception(String.Format("System file '{0}' was not contained in the root directory '{1}'.", systemFile, rootDirectory));
             }
             Path = SystemPath.Substring(index + rootDirectory.FullName.Length); // should be the full relative path
+        }
+
+        private SystemReference() {}
+
+        public SystemReference Clone()
+        {
+            var clone = new SystemReference
+                        {
+                            ReferenceNames = ReferenceNames,
+                            SystemPath = SystemPath,
+                            Name = Name,
+                            Extension = Extension,
+                            Path = Path,
+                            Type = Type,
+                            Wait = Wait
+                        };
+            return clone;
         }
     }
 }

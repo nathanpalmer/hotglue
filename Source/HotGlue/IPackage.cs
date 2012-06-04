@@ -5,10 +5,10 @@ namespace HotGlue
 {
     public interface IPackage
     {
-        string Compile(IEnumerable<Reference> references);
-        string References(IEnumerable<Reference> references);
+        string Compile(IEnumerable<SystemReference> references);
+        string References(IEnumerable<SystemReference> references);
         string CompileDependency(Reference reference);
-        string CompileModule(Reference reference, string name = null);
+        string CompileModule(SystemReference reference);
         string CompileStitch();
     }
 }

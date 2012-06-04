@@ -1,4 +1,4 @@
-﻿//= require dep1.js
+﻿//= require ../shared/dep1.js
 
 var alertFactory = require('alert.js');
 

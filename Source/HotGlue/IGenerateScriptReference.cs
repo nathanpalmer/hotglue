@@ -4,6 +4,6 @@ namespace HotGlue
 {
     public interface IGenerateScriptReference
     {
-        string GenerateReference(string root, Reference reference);
+        string GenerateReference(string root, SystemReference reference);
     }
 }

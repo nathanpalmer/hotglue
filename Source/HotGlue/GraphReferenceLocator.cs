@@ -34,7 +34,7 @@ namespace HotGlue
             }
         }
 
-        public IEnumerable<Reference> Load(string rootPath, Reference reference)
+        public IEnumerable<SystemReference> Load(string rootPath, Reference reference)
         {
             if (reference == null)
             {
@@ -60,7 +60,7 @@ namespace HotGlue
 
             if (!results.Any())
             {
-                yield return reference;
+                yield return reference.ToSystemReference(rootPath);
             }
 
             CheckForCircularReferences(results);
@@ -134,12 +134,12 @@ namespace HotGlue
                 throw new DirectoryNotFoundException(String.Format("The rootPath '{0}' passed in doesn't exist or can't resolve.", rootPath));
             }
             var references = new Dictionary<SystemReference, IList<RelativeReference>>();
-            Parse(rootDirectory, relativePath, new RelativeReference(fileName) { Type = Reference.TypeEnum.App }, references);
+            Parse(rootDirectory, relativePath, new RelativeReference(fileName) { Type = Reference.TypeEnum.App }, ref references);
             return references;
         }
 
         // recursive function
-        private void Parse(DirectoryInfo rootDirectory, String relativePath, RelativeReference relativeReference, Dictionary<SystemReference, IList<RelativeReference>> references)
+        private void Parse(DirectoryInfo rootDirectory, String relativePath, RelativeReference relativeReference, ref Dictionary<SystemReference, IList<RelativeReference>> references)
         {
             String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
             SystemReference systemReference = null;
@@ -165,14 +165,14 @@ namespace HotGlue
                 return;
             }
 
-            var newRelativeReferences = GetReferences(rootDirectory, systemReference, references);
+            var newRelativeReferences = GetReferences(rootDirectory, systemReference, ref references);
             foreach (var reference in newRelativeReferences)
             {
-                Parse(rootDirectory, systemReference.Path, reference, references);
+                Parse(rootDirectory, systemReference.Path, reference, ref references);
             }
         }
 
-        private IList<RelativeReference> GetReferences(DirectoryInfo rootDirectory, SystemReference reference, Dictionary<SystemReference, IList<RelativeReference>> references)
+        private IList<RelativeReference> GetReferences(DirectoryInfo rootDirectory, SystemReference reference, ref Dictionary<SystemReference, IList<RelativeReference>> references)
         {
             if (references.ContainsKey(reference))
             {
