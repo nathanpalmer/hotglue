@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using HotGlue.Model;
@@ -8,30 +9,27 @@ namespace HotGlue.Console
 {
     public class Concatenator
     {
-        public static string Compile(string inFilename, string root, string sharedScriptPath)
+        public static string Compile(string rootPath, string filePath, string fileName)
         {
-            if (string.IsNullOrEmpty(inFilename))
+            if (string.IsNullOrEmpty(rootPath))
             {
-                throw new ArgumentNullException("inFilename");
+                throw new ArgumentNullException("rootPath");
             }
-            if (string.IsNullOrEmpty(root))
+            if (string.IsNullOrEmpty(filePath))
             {
-                throw new ArgumentNullException("root");
+                throw new ArgumentNullException("filePath");
             }
-            if (string.IsNullOrEmpty(sharedScriptPath))
+            if (string.IsNullOrEmpty(fileName))
             {
-                throw new ArgumentNullException("sharedScriptPath");
+                throw new ArgumentNullException("fileName");
             }
             var config = HotGlueConfiguration.Default();
-            config.ScriptSharedPath = sharedScriptPath;
             var locator = new GraphReferenceLocator(config);
-            var reference = new Reference
-                                {
-                                    Name = inFilename,
-                                    Path = root
-                                };
-            var references = locator.Load(root, reference);
-            var package = Package.Build(config, root);
+            var directoryInfo = new DirectoryInfo(rootPath);
+            var fileInfo = new FileInfo(Path.Combine(filePath, fileName));
+            var reference = new SystemReference(directoryInfo, fileInfo, fileName);
+            var references = locator.Load(rootPath, reference);
+            var package = Package.Build(config, rootPath);
             return package.Compile(references);
         }
     }

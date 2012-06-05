@@ -11,7 +11,7 @@
             var fn;
             
             if (module) {
-                return module.item;
+                return module;
             } else if (fn = modules[key]) {
                 module = { id: key, exports: {} };
                 try {

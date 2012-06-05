@@ -44,7 +44,7 @@ namespace HotGlue.Tests.Console
         public void FindScriptFolderPath_finds_path()
         {
             var input = @"C:\Foo\Bar\Scripts\Baz\main.coffee";
-            var expected = @"C:\Foo\Bar\Scripts";
+            var expected = @"C:\Foo\Bar";
 
             var actual = Program.FindScriptFolderPath(input, "scripts");
 
@@ -55,7 +55,7 @@ namespace HotGlue.Tests.Console
         public void FindScriptFolderPath_finds_direct_parent_path()
         {
             var input = @"C:\Foo\Bar\Scripts\main.coffee";
-            var expected = @"C:\Foo\Bar\Scripts";
+            var expected = @"C:\Foo\Bar";
 
             var actual = Program.FindScriptFolderPath(input, "scripts");
 

@@ -11,9 +11,7 @@ namespace HotGlue.Console
         public String InFilename { get; set; }
         public String OutFilename { get; set; }
         public String ScriptPath { get { return "Scripts"; } } // this could be configurable in the future. 
-        public String SharedFolderName { get { return "shared"; } } // this could be configurable in the future. 
-
-
+        
         private enum SwitchType
         {
             None,

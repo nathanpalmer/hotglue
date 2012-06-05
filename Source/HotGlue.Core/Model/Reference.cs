@@ -26,7 +26,15 @@ namespace HotGlue.Model
         public string Path
         {
             get { return _path; }
-            protected set { _path = value.Reslash(); }
+            protected set 
+            { 
+                _path = value.Reslash();
+                // Clean relative path so path.combine works
+                if (_path.StartsWith("/"))
+                {
+                    _path = _path.Substring(1);
+                }
+            }
         }
         
         /// <summary>

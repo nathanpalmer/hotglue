@@ -49,13 +49,7 @@ namespace HotGlue
             {
                 relativePath = relativePath.Substring(rootIndex+rootPath.Length);
             }
-
-            // Clean relative path so path.combine works
-            if (relativePath.StartsWith("/"))
-            {
-                relativePath = relativePath.Substring(1);
-            }
-
+            
             var results = Parse(rootPath, relativePath, reference.Name);
 
             if (!results.Any())

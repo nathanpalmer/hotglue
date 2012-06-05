@@ -1,6 +1,6 @@
 @echo off
 
-.\Tools\Nuget.exe install .\Source\HotGlue\packages.config -OutputDirectory .\Libraries\
+.\Tools\Nuget.exe install .\Source\HotGlue.Core\packages.config -OutputDirectory .\Libraries\
 .\Tools\Nuget.exe install .\Source\HotGlue.Tests\packages.config -OutputDirectory .\Libraries\
   
 rmdir Build /q/s 

@@ -31,7 +31,7 @@ namespace HotGlue.Console
             try
             {
                 var infileWithPath = Path.GetFullPath(arguments.InFilename);
-                var root = Path.GetDirectoryName(infileWithPath);
+                var fullPath = Path.GetDirectoryName(infileWithPath);
                 var scriptPath = FindScriptFolderPath(infileWithPath, arguments.ScriptPath);
                 if (string.IsNullOrEmpty(scriptPath))
                 {
@@ -41,9 +41,8 @@ namespace HotGlue.Console
                         );
                     return -1;
                 }
-                var sharedPath = Path.Combine(scriptPath, arguments.SharedFolderName);
                 var filename = Path.GetFileName(infileWithPath);
-                var allScripts = Concatenator.Compile(filename, root, sharedPath);
+                var allScripts = Concatenator.Compile(scriptPath, fullPath, filename);
                 File.WriteAllText(OutputFileName(arguments), allScripts, Encoding.UTF8);
                 return 0;
             }
@@ -97,7 +96,7 @@ namespace HotGlue.Console
                 var fileName = Path.GetFileName(dirName);
                 if (string.Equals(scriptFolderName, fileName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return dirName;
+                    return Path.GetDirectoryName(dirName);
                 }
                 current = dirName;
             }
