@@ -6,6 +6,6 @@ namespace HotGlue
 {
     public interface IReferenceLocator
     {
-        IEnumerable<SystemReference> Load(string relativePath, Reference reference);
+        IEnumerable<SystemReference> Load(string relativePath, SystemReference reference);
     }
 }

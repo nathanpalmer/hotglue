@@ -29,21 +29,16 @@ namespace HotGlue
 
             if (_debug)
             {
-                name = name.Replace("/", "\\");
+                name = name.Reslash();
 
-                string file = name.StartsWith("\\")
+                string file = name.StartsWith("/")
                                   ? name.Substring(1)
-                                  : Path.Combine(_configuration.ScriptPath.Replace("/", "\\"), name);
+                                  : Path.Combine(_configuration.ScriptPath.Reslash(), name).Reslash();
+                file = file.StartsWith("/") ? file.Substring(1) : file;
 
-                var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal));
-                file = file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)+1);
+                name = file.Substring(file.LastIndexOf("/", StringComparison.Ordinal)+1);
 
-                var reference = new Reference
-                                {
-                                    Path = relative,
-                                    Name = file,
-                                    Type = Model.Reference.TypeEnum.App
-                                };
+                var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(root, file)), name);
 
                 var references = _locator.Load(root, reference);
 

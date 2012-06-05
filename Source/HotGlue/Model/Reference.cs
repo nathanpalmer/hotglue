@@ -16,7 +16,7 @@ namespace HotGlue.Model
         public string Name
         {
             get { return _name; }
-            set { _name = value.Reslash(); }
+            protected set { _name = value.Reslash(); }
         }
 
         private string _path;
@@ -26,7 +26,7 @@ namespace HotGlue.Model
         public string Path
         {
             get { return _path; }
-            set { _path = value.Reslash(); }
+            protected set { _path = value.Reslash(); }
         }
         
         /// <summary>
@@ -45,25 +45,6 @@ namespace HotGlue.Model
         /// If the file loading needs to wait on this dependency before continuing
         /// </summary>
         public bool Wait { get; set; }
-
-        public Reference()
-        {
-            
-        }
-
-        public string FullPath(string path)
-        {
-            path = !string.IsNullOrWhiteSpace(path) ? PT.GetFullPath(path.Reslash()) : "";
-
-            if (!string.IsNullOrWhiteSpace(Path))
-            {
-                path = PT.Combine(path, Path.StartsWith("/") ? Path.Substring(1) : Path);
-            }
-
-            path = PT.Combine(path, Name.StartsWith("/") ? Name.Substring(1) : Name);
-            
-            return path;
-        }
 
         public override bool Equals(object obj)
         {
@@ -89,14 +70,6 @@ namespace HotGlue.Model
         {
             if (Equals(obj)) return 0;
             return -1;
-        }
-
-        public SystemReference ToSystemReference(string rootPath)
-        {
-            return new SystemReference(new DirectoryInfo(rootPath), new FileInfo(FullPath(rootPath)), Name)
-                   {
-                       Type = Type
-                   };
         }
 
         public enum TypeEnum
@@ -158,7 +131,7 @@ namespace HotGlue.Model
             }
         }
 
-        public new string FullPath
+        public string FullPath
         {
             get
             {
@@ -174,21 +147,24 @@ namespace HotGlue.Model
 
         public string RelativePath(string root, bool includeVersion)
         {
-            Int64 version = Version(root);
+            Int64 version = Version;
             return "/"
                    + PT.Combine(Path, Name).Replace("\\", "/")
                    + (includeVersion && version > 0 ? "?" + version : "");
         }
 
-        public Int64 Version(string path)
+        public Int64 Version
         {
-            var fullPath = RealFileName(FullPath(path));
-            var file = new FileInfo(fullPath);
-            if (file.Exists)
+            get
             {
-                return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
+                var fullPath = RealFileName(FullPath);
+                var file = new FileInfo(fullPath);
+                if (file.Exists)
+                {
+                    return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
+                }
+                return 0;
             }
-            return 0;
         }
 
         private string RealFileName(string path)
@@ -234,13 +210,13 @@ namespace HotGlue.Model
 
         private SystemReference() {}
 
-        public SystemReference Clone()
+        public SystemReference Clone(string suffix)
         {
             var clone = new SystemReference
                         {
                             ReferenceNames = ReferenceNames,
                             SystemPath = SystemPath,
-                            Name = Name,
+                            Name = Name + suffix,
                             Extension = Extension,
                             Path = Path,
                             Type = Type,

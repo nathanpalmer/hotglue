@@ -151,8 +151,7 @@ namespace HotGlue
                         break;
                     case Reference.TypeEnum.Module:
                         modules = true;
-                        var clone = reference.Clone();
-                        clone.Name = reference.Name + "-module";
+                        var clone = reference.Clone("-module");
                         sw.AppendLine(_generateScriptReference.GenerateReference(clone));
                         break;
                     default:

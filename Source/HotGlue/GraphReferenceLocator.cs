@@ -34,7 +34,7 @@ namespace HotGlue
             }
         }
 
-        public IEnumerable<SystemReference> Load(string rootPath, Reference reference)
+        public IEnumerable<SystemReference> Load(string rootPath, SystemReference reference)
         {
             if (reference == null)
             {
@@ -60,7 +60,7 @@ namespace HotGlue
 
             if (!results.Any())
             {
-                yield return reference.ToSystemReference(rootPath);
+                yield return reference;//.ToSystemReference(rootPath);
             }
 
             CheckForCircularReferences(results);
@@ -189,7 +189,7 @@ namespace HotGlue
 
             references.Add(reference, new List<RelativeReference>());
 
-            var text = File.ReadAllText(reference.FullPath(rootDirectory.FullName));
+            var text = File.ReadAllText(reference.FullPath);
             var currentReferences = new List<RelativeReference>();
             foreach (var findReference in _findReferences)
             {
