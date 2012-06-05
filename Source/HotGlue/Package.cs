@@ -107,7 +107,7 @@ namespace HotGlue
         
         public string CompileModule(SystemReference reference)
         {
-            var itemName = reference.Name.ToLower().Replace(reference.Path, "").Replace("\\", "/");
+            var itemName = reference.Path.ToLower() + "/" + reference.Name.ToLower().Replace("\\", "/");
 
             var sb = new StringBuilder();
             sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = { keys: [ '" + String.Join(",", reference.ReferenceNames).Replace(",","','") + "' ], item: function(exports, require, module) {");

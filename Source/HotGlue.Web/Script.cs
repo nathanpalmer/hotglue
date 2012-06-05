@@ -35,7 +35,7 @@ namespace HotGlue
                                   ? name.Substring(1)
                                   : Path.Combine(_configuration.ScriptPath.Replace("/", "\\"), name);
 
-                var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal)) + "\\";
+                var relative = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal));
                 file = file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)+1);
 
                 var reference = new Reference

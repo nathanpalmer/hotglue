@@ -65,53 +65,6 @@ namespace HotGlue.Model
             return path;
         }
 
-        public string RelativePath()
-        {
-            return RelativePath("", false);
-        }
-
-        public string RelativePath(string root, bool includeVersion)
-        {
-            Int64 version = Version(root);
-            return PT.Combine(Path, Name).Replace("\\", "/")
-                   + (includeVersion && version > 0 ? "?" + version : "");
-        }
-
-        public Int64 Version(string path)
-        {
-            var fullPath = RealFileName(FullPath(path));
-            var file = new FileInfo(fullPath);
-            if (file.Exists)
-            {
-                return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
-            }
-            return 0;
-        }
-
-        private string RealFileName(string path)
-        {
-            Func<string, string[], int, int> lastIndexOf = null;
-            lastIndexOf = (p,v,i) =>
-                {
-                    var index = p.LastIndexOf(v[i], StringComparison.Ordinal);
-                    if (index > 0) return index;
-
-                    if (i < v.Length - 1)
-                    {
-                        return lastIndexOf(p, v, ++i);
-                    }
-
-                    return 0;
-                };
-
-            var extensionIndex = lastIndexOf(path, new[] { "-module", "-require", "-glue" }, 0);
-            if (extensionIndex > 0)
-            {
-                path = path.Substring(0, extensionIndex);
-            }
-            return path;
-        }
-
         public override bool Equals(object obj)
         {
             var reference = obj as Reference;
@@ -214,14 +167,52 @@ namespace HotGlue.Model
             }
         }
 
-        public new string RelativePath()
-        {
-            return RelativePath(false);
-        }
-
         public string RelativePath(bool includeVersion)
         {
-            return base.RelativePath(Root, includeVersion);
+            return RelativePath(Root, includeVersion);
+        }
+
+        public string RelativePath(string root, bool includeVersion)
+        {
+            Int64 version = Version(root);
+            return "/"
+                   + PT.Combine(Path, Name).Replace("\\", "/")
+                   + (includeVersion && version > 0 ? "?" + version : "");
+        }
+
+        public Int64 Version(string path)
+        {
+            var fullPath = RealFileName(FullPath(path));
+            var file = new FileInfo(fullPath);
+            if (file.Exists)
+            {
+                return Convert.ToInt64(file.LastWriteTime.ToString("yyyyMMddHHmm"));
+            }
+            return 0;
+        }
+
+        private string RealFileName(string path)
+        {
+            Func<string, string[], int, int> lastIndexOf = null;
+            lastIndexOf = (p, v, i) =>
+            {
+                var index = p.LastIndexOf(v[i], StringComparison.Ordinal);
+                if (index > 0) return index;
+
+                if (i < v.Length - 1)
+                {
+                    return lastIndexOf(p, v, ++i);
+                }
+
+                return 0;
+            };
+
+            var extensionIndex = lastIndexOf(path, new[] { "-module", "-require", "-glue" }, 0);
+            if (extensionIndex > 0)
+            {
+                path = path.Substring(0, extensionIndex);
+            }
+            return path;
         }
         
         public SystemReference(DirectoryInfo rootDirectory, FileInfo systemFile, string referenceName)

@@ -20,7 +20,7 @@ namespace HotGlue.Tests
 
             var references = new[]
                 {
-                    new SystemReference(new DirectoryInfo("C:/Root"), new FileInfo("C:/Root/Scripts/depper1.js"), "depper1.js")
+                    new SystemReference(new DirectoryInfo("C:/Root/"), new FileInfo("C:/Root/Scripts/depper1.js"), "depper1.js")
                     {
                         Type = Reference.TypeEnum.App
                     }
