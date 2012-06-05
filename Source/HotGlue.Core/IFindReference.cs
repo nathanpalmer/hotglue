@@ -6,6 +6,6 @@ namespace HotGlue
 {
     public interface IFindReference
     {
-        IEnumerable<Reference> Parse(String fileText);
+        IEnumerable<RelativeReference> Parse(String fileText);
     }
 }

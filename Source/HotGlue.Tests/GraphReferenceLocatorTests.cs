@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using HotGlue.Model;
@@ -9,32 +10,42 @@ using Shouldly;
 namespace HotGlue.Tests
 {
     [TestFixture]
-    public class GraphReferenceLocatorTests
+    public class GraphReferenceLocatorTests : TestBase
     {
         private string root = "..\\..\\";
 
-        private HotGlueConfiguration configuration = HotGlueConfiguration.Default();
+        public GraphReferenceLocatorTests()
+        {
+            configuration = new HotGlueConfiguration()
+            {
+                ScriptPath = "Scripts\\",
+                Referencers = new HotGlueReference[]
+                    {
+                        new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
+                        new HotGlueReference { Type = typeof(RequireReference).FullName },
+                        new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
+                    }
+            };
+        }
 
         [Test]
-        public void Parse_And_Retrun_Reference()
+        public void Parse_And_Return_Reference()
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "graph_test.js", Path = configuration.ScriptPath + "Module8"};
+            var reference = BuildReference("Module8", "graph_test.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module8", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module8", "module1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module8", "graph_test.js", Reference.TypeEnum.App)
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            // check in list
-            references.Contains(new Reference() { Name = "dep1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "module1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "graph_test.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
-            // check order
-            references[0].Equals(new Reference() { Name = "dep1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
-            references[1].Equals(new Reference() { Name = "module1.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
-            references[2].Equals(new Reference() { Name = "graph_test.js", Path = configuration.ScriptPath + "Module8" }).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -45,25 +56,22 @@ namespace HotGlue.Tests
             // Arrange
             if (specifyRoot)
             {
-                configuration.ScriptPath = "/Scripts/";
-                configuration.ScriptSharedPath = "/Scripts/Shared/";
+                configuration.ScriptPath = "Scripts/";
             }
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"};
+            var reference = BuildReference("Module1", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new []
+                                  {
+                                      BuildReference("Module1", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module1", "mod.js", Reference.TypeEnum.Module),
+                                      BuildReference("Module1", "app.js", Reference.TypeEnum.App)
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            // check in list
-            references.Contains(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
-            references.Contains(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
-            references.Contains(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
-            // check order
-            references[0].Equals(new Reference() {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
-            references[1].Equals(new Reference() {Name = "mod.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
-            references[2].Equals(new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module1"}).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -72,10 +80,10 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "circular_begin.js", Path = configuration.ScriptPath + "Exception1"};
+            var reference = BuildReference("Exception1", "circular_begin.js", Reference.TypeEnum.App);
 
             var references = locator.Load(root, reference).ToList();
-            foreach (var reference1 in references)
+            foreach (var r in references)
             {
                 // Assert
                 Assert.Fail("Expected circular reference detected exception");
@@ -88,10 +96,10 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "reference.js", Path = configuration.ScriptPath + "Exception2"};
+            var reference = BuildReference("Exception2", "reference.js", Reference.TypeEnum.App);
 
             var references = locator.Load(root, reference);
-            foreach (var reference1 in references)
+            foreach (var r in references)
             {
                 // Assert
                 Assert.Fail("Expected different require type type exception");
@@ -104,7 +112,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "reference_forever.js", Path = configuration.ScriptPath + "Exception3"};
+            var reference = BuildReference("Exception3", "reference_forever.js", Reference.TypeEnum.App);
 
             // Act
             var references = locator.Load(root, reference).ToList();
@@ -118,15 +126,18 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() {Name = "app.js", Path = configuration.ScriptPath + "Module2"};
+            var reference = BuildReference("Module2", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module2", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module2", "app.js", Reference.TypeEnum.App)
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(2);
-            references[0].Path.ShouldBe(configuration.ScriptSharedPath);
-            references[1].Path.ShouldBe(configuration.ScriptPath + "Module2");
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -134,14 +145,18 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module2" };
+            var reference = BuildReference("Module2", "app.js", Reference.TypeEnum.App);
+            var matchReference = new[]
+                                 {
+                                     BuildReference("Module2", "dep1.js", Reference.TypeEnum.Dependency),
+                                     reference
+                                 };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(2);
-            references[1].Type.ShouldBe(Reference.TypeEnum.App);
+            ShouldMatch(matchReference, references);
         }
 
         [Test]
@@ -149,14 +164,18 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module2" };
+            var reference = BuildReference("Module2", "app.js", Reference.TypeEnum.App);
+            var matchReference = new[]
+                                 {
+                                     BuildReference("Module2", "dep1.js", Reference.TypeEnum.Dependency),
+                                     reference
+                                 };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(2);
-            references[0].Type.ShouldBe(Reference.TypeEnum.Dependency);
+            ShouldMatch(matchReference, references);
         }
 
         [Test]
@@ -164,22 +183,19 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" };
+            var reference = BuildReference("Module3", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module3", "ext2.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module3", "ext1.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            // check in list
-            references.Contains(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references.Contains(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            // check order
-            references[0].Equals(new Reference() { Name = "ext2.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references[1].Equals(new Reference() { Name = "ext1.js", Path = configuration.ScriptSharedPath }).ShouldBe(true);
-            references[2].Equals(new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module3" }).ShouldBe(true);
-
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -187,16 +203,19 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"};
+            var reference = BuildReference("Module4", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module4-Relative", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module4-Relative", "mod.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            references.Contains(new Reference {Name = "app.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "../Module1/mod.js", Path = configuration.ScriptPath + "Module4"}).ShouldBe(true);
-            references.Contains(new Reference {Name = "dep1.js", Path = configuration.ScriptSharedPath}).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -207,20 +226,22 @@ namespace HotGlue.Tests
             // Arrange
             if (specifyRoot)
             {
-                configuration.ScriptPath = "/Scripts/";
-                configuration.ScriptSharedPath = "/Scripts/Shared/";
+                configuration.ScriptPath = "Scripts/";
             }
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" };
+            var reference = BuildReference("Module6", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module5", "mod2.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module5", "mod1.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "../Module5/mod1.js", Path = configuration.ScriptPath + "Module6" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "mod2.js", Path = configuration.ScriptPath + "Module6/../Module5" }).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -228,15 +249,18 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest1" };
+            var reference = BuildReference("LibraryTest1", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("LibraryTest1", "library.js", Reference.TypeEnum.Library),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(2);
-            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest1" }).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -244,16 +268,22 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest2" };
+            var reference = BuildReference("LibraryTest2", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      //TODO: Original unit test didn't have this either but 
+                                      //TODO  library.js requires something.js
+                                      //BuildReference("LibraryTest2", "something.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("LibraryTest2", "library.js", Reference.TypeEnum.Library),
+                                      BuildReference("LibraryTest2", "app2.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(3);
-            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "app2.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "library.js", Path = configuration.ScriptPath + "LibraryTest2" }).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
         }
 
         [Test]
@@ -262,10 +292,10 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() { Name = "reference.js", Path = configuration.ScriptPath + "Exception4"};
+            var reference = BuildReference("Exception4", "reference.js", Reference.TypeEnum.App);
 
             var references = locator.Load(root, reference);
-            foreach (var reference1 in references)
+            foreach (var r in references)
             {
                 // Assert
                 Assert.Fail("Expected different require type type exception");
@@ -277,15 +307,113 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = new Reference() { Name = "app.js", Path = configuration.ScriptPath + "Module9" };
+            var reference = BuildReference("Module9", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module9", "module.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            ShouldMatch(matchReferences, references);
+        }
+
+        [Test]
+        public void Multiple_Files_With_Same_Name_Different_Locations_Get_Added()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("Module10", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Module10/sub1", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module10/sub2", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("Module10/sub3", "dep1.js", Reference.TypeEnum.Module),
+                                      reference
+                                  };
 
             // Act
             var references = locator.Load(root, reference).ToList();
 
             // Assert
-            references.Count.ShouldBe(2);
-            references.Contains(new Reference { Name = "app.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
-            references.Contains(new Reference { Name = "module.js", Path = configuration.ScriptPath + "Module9" }).ShouldBe(true);
+            ShouldMatch(matchReferences, references);
+        }
+
+        [Test]
+        public void Ignore_Multiple_References_In_Different_Relative_Paths()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("Path1", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Path1\\Sub", "library.js", Reference.TypeEnum.Library),
+                                      BuildReference("Path1\\Sub", "module.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            ShouldMatch(matchReferences, references);
+        }
+
+        [Test]
+        public void Duplicate_Relative_References_In_Same_File_Not_Found_Until_System_Duplicate_Check()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("Path2", "app.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("Path2", "module.js", Reference.TypeEnum.Dependency),
+                                      reference
+                                  };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            ShouldMatch(matchReferences, references);
+        }
+    }
+
+    public class TestBase
+    {
+        protected HotGlueConfiguration configuration;
+
+        public SystemReference BuildReference(string path, string name, Reference.TypeEnum type)
+        {
+            var root = new DirectoryInfo("../../");
+            var reference = new SystemReference(root, new FileInfo(Path.Combine(root.FullName, configuration.ScriptPath + path + "/" + name)), name)
+            {
+                Type = type
+            };
+            return reference;
+        }
+
+        public void ShouldMatch(Reference good, Reference generated)
+        {
+            generated.Name.ShouldBe(good.Name);
+            generated.Path.ShouldBe(good.Path);
+            generated.Type.ShouldBe(good.Type);
+        }
+
+        public void ShouldMatch(SystemReference[] good, List<SystemReference> generated)
+        {
+            generated.Count.ShouldBe(good.Length);
+            
+            // check in list
+            for (int index = 0; index < good.Length; index++)
+            {
+                var reference = good[index];
+
+                generated.Contains(reference).ShouldBe(true);
+                ShouldMatch(reference, generated[index]);
+            }
         }
     }
 }

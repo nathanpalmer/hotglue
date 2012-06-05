@@ -8,6 +8,6 @@ namespace HotGlue
     {
         List<string> Extensions { get; }
         bool Handles(string Extension);
-        void Compile(ref Reference reference);
+        void Compile<T>(ref T reference) where T : Reference;
     }
 }

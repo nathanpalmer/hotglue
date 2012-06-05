@@ -1,3 +1,4 @@
+using System.IO;
 using HotGlue.Compilers;
 using HotGlue.Model;
 using NUnit.Framework;
@@ -19,12 +20,10 @@ namespace HotGlue.Tests
 
             var references = new[]
                 {
-                    new Reference
-                        {
-                            Path = "/Scripts/",
-                            Name = "depper1.js",
-                            Type = Reference.TypeEnum.App
-                        }
+                    new SystemReference(new DirectoryInfo("C:/Root/"), new FileInfo("C:/Root/Scripts/depper1.js"), "depper1.js")
+                    {
+                        Type = Reference.TypeEnum.App
+                    }
                 };
 
             // Act

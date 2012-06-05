@@ -22,7 +22,7 @@ namespace HotGlue.Compilers
             return Extensions.Where(e => e == Extension).Any();
         }
 
-        public void Compile(ref Reference reference)
+        public void Compile<T>(ref T reference) where T : Reference
         {
             if (string.IsNullOrWhiteSpace(reference.Content)) return;
             reference.Content = JavaScriptCompressor.Compress(reference.Content);

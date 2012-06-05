@@ -1,3 +1,3 @@
-﻿/// <reference path="../Module1/mod.js"/>
+﻿/// <reference path="../Module4-Relative/mod.js"/>
 
 var j = 1;

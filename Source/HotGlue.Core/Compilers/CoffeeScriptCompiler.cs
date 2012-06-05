@@ -31,7 +31,7 @@ namespace HotGlue.Compilers
             return Extensions.Any(e => e == Extension);
         }
 
-        public void Compile(ref Reference reference)
+        public void Compile<T>(ref T reference) where T : Reference
         {
             reference.Extension = ".js";
             try

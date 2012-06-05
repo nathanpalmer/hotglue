@@ -69,6 +69,10 @@
     <Content Include="Scripts\Module3\mod3.js" />
     <Content Include="Scripts\Module3\mod2.js" />
     <Content Include="Scripts\Module3\mod1.js" />
+    <Content Include="Scripts\Module5\app.js" />
+    <Content Include="Scripts\Module5\controllers\controller.js" />
+    <Content Include="Scripts\Module5\models.js" />
+    <Content Include="Scripts\Module5\models\model.js" />
     <Content Include="Scripts\Shared\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
@@ -101,6 +105,7 @@
       <Name>HotGlue.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

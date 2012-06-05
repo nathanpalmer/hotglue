@@ -1,0 +1,1 @@
+﻿var model = require('models/model.js');

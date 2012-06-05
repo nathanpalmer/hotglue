@@ -20,14 +20,6 @@ namespace HotGlue.Model
             set { _scriptPath = value.Reslash(); }
         }
 
-        private string _scriptSharedPath;
-        [XmlElement("scriptSharedPath")]
-        public string ScriptSharedPath
-        {
-            get { return _scriptSharedPath; }
-            set { _scriptSharedPath = value.Reslash(); }
-        }
-
         [XmlElement("generate")]
         public ObjectType GenerateScript { get; set; }
 
@@ -42,7 +34,6 @@ namespace HotGlue.Model
         public HotGlueConfiguration()
         {
             ScriptPath = "Scripts";
-            ScriptSharedPath = "Scripts\\Shared";
         }
 
         public static HotGlueConfiguration Default()

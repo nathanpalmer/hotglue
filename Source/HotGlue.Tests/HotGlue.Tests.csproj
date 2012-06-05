@@ -86,8 +86,18 @@
     <Content Include="Scripts\LibraryTest2\app2.js" />
     <Content Include="Scripts\LibraryTest2\library.js" />
     <Content Include="Scripts\LibraryTest2\something.js" />
+    <Content Include="Scripts\Module10\app.js" />
+    <Content Include="Scripts\Module10\sub1\dep1.js" />
+    <Content Include="Scripts\Module10\sub2\dep1.js" />
+    <Content Include="Scripts\Module10\sub3\dep1.js" />
+    <Content Include="Scripts\Module1\dep1.js" />
     <Content Include="Scripts\Module2\app.js" />
+    <Content Include="Scripts\Module2\dep1.js" />
     <Content Include="Scripts\Module3\app.js" />
+    <Content Include="Scripts\Module3\ext1.js" />
+    <Content Include="Scripts\Module3\ext2.js" />
+    <Content Include="Scripts\Module4-Relative\dep1.js" />
+    <Content Include="Scripts\Module4-Relative\mod.js" />
     <Content Include="Scripts\Module4\app.js" />
     <Content Include="Scripts\Module5\mod2.js" />
     <Content Include="Scripts\Module5\mod1.js" />
@@ -105,8 +115,6 @@
     <Content Include="Scripts\Path1\app.js" />
     <Content Include="Scripts\Path1\Sub\library.js" />
     <Content Include="Scripts\Path1\Sub\module.js" />
-    <Content Include="Scripts\Shared\ext1.js" />
-    <Content Include="Scripts\Shared\ext2.js" />
     <Content Include="Scripts\Exception3\reference_forever.js" />
     <Content Include="Scripts\Module7\graph_test.js" />
     <Content Include="Scripts\Module7\module1.js">
@@ -121,7 +129,8 @@
     <Content Include="Scripts\Exception2\reference_module.js" />
     <Content Include="Scripts\Exception2\reference_multiple.js" />
     <Content Include="Scripts\Exception2\reference_require.js" />
-    <Content Include="Scripts\Shared\dep1.js" />
+    <Content Include="Scripts\Path2\app.js" />
+    <Content Include="Scripts\Path2\module.js" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

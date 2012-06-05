@@ -33,7 +33,6 @@ namespace HotGlue.Web
                    ?? new HotGlueConfiguration
                        {
                            ScriptPath = "Scripts\\",
-                           ScriptSharedPath = "Scripts\\Shared\\",
                            Debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug
                        };
         }
