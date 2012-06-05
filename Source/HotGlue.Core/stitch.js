@@ -13,15 +13,15 @@
             if (module) {
                 return module.item;
             } else if (fn = modules[key]) {
-                module = { id: name, exports: {} };
+                module = { id: key, exports: {} };
                 try {
-                    cache[name] = module.exports;
+                    cache[key] = module.exports;
                     fn(module.exports, function (name) {
                         return require(name);
                     }, module);
-                    return cache[name] = module.exports;
+                    return cache[key] = module.exports;
                 } catch (err) {
-                    delete cache[name];
+                    delete cache[key];
                     throw err;
                 }
             } else {
