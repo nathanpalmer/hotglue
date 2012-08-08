@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -24,6 +25,14 @@ namespace HotGlue.Web
 
         public void ProcessRequest(HttpContext context)
         {
+            context.Response.ContentType = "application/x-javascript";
+
+            if (File.Exists(context.Request.PhysicalPath))
+            {
+                context.Response.TransmitFile(context.Request.PhysicalPath);
+                return;
+            }
+
             // find references
             var root = context.Server.MapPath("~");
             var reference = context.BuildReference(Reference.TypeEnum.App);
@@ -32,7 +41,6 @@ namespace HotGlue.Web
             var package = Package.Build(_configuration, root);
             var content = package.Compile(references);
 
-            context.Response.ContentType = "application/x-javascript";
             context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
             context.Response.Write(content);
         }
