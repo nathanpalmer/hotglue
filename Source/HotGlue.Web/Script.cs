@@ -46,7 +46,7 @@ namespace HotGlue
             }
 
             var appName = name + "-glue";
-            var appDirectory = new DirectoryInfo(context.Server.MapPath("."));
+            var appDirectory = new DirectoryInfo(context.Server.MapPath("~"));
             var appFile = new FileInfo(Path.Combine(context.Server.MapPath("~") + _configuration.ScriptPath, appName));
             var appReference = new SystemReference(appDirectory, appFile, appName) {Type = Model.Reference.TypeEnum.App};
 
