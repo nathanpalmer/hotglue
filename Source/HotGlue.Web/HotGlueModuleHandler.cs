@@ -30,23 +30,12 @@ namespace HotGlue.Web
             // find references
             var root = context.Server.MapPath("~");
             var reference = context.BuildReference(Reference.TypeEnum.Module);
-            var file = new FileInfo(reference.FullPath);
 
-            dynamic cached = _cache.Get(file.FullName);
-            if (cached != null && cached.File.LastWriteTimeUtc.Equals(file.LastWriteTimeUtc))
-            {
-                context.Response.AddHeader("Content-Length", cached.Content.Length.ToString(CultureInfo.InvariantCulture));
-                context.Response.Write(cached.Content);
-                return;
-            }
-
-            var package = Package.Build(_configuration, root);
+            var package = Package.Build(_configuration, root, _cache);
             var content = package.CompileModule(reference);
 
             context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
             context.Response.Write(content);
-
-            _cache.Set(file.FullName, new { File = file, Content = content });
         }
 
         public bool IsReusable

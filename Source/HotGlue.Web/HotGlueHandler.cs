@@ -16,11 +16,13 @@ namespace HotGlue.Web
     {
         private IReferenceLocator _locator;
         private HotGlueConfiguration _configuration;
+        private HttpContextCache _cache;
 
         public HotGlueHandler()
         {
             _configuration = HotGlueConfigurationSection.Load();
             _locator = new GraphReferenceLocator(_configuration);
+            _cache = new HttpContextCache();
         }
 
         public void ProcessRequest(HttpContext context)
@@ -38,7 +40,7 @@ namespace HotGlue.Web
             var reference = context.BuildReference(Reference.TypeEnum.App);
             var references = _locator.Load(root, reference);
 
-            var package = Package.Build(_configuration, root);
+            var package = Package.Build(_configuration, root, _cache);
             var content = package.Compile(references);
 
             context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));

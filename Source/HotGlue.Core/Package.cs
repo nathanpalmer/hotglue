@@ -14,6 +14,7 @@ namespace HotGlue
         private readonly IEnumerable<ICompile> _compilers;
         private readonly IGenerateScriptReference _generateScriptReference;
         private static string _scriptPath;
+        private static IFileCache _cache;
 
         public Package(string relativeRoot, IEnumerable<ICompile> compilers, IGenerateScriptReference generateScriptReference)
         {
@@ -22,7 +23,7 @@ namespace HotGlue
             _generateScriptReference = generateScriptReference;
         }
 
-        public static Package Build(HotGlueConfiguration configuration, string root)
+        public static Package Build(HotGlueConfiguration configuration, string root, IFileCache cache)
         {
             IGenerateScriptReference generateScriptReference;
             if (configuration == null || configuration.GenerateScript == null)
@@ -52,6 +53,7 @@ namespace HotGlue
             }
 
             _scriptPath = configuration.ScriptPath;
+            _cache = cache;
 
             var package = new Package(root, compilers, generateScriptReference);
             return package;
@@ -90,11 +92,26 @@ namespace HotGlue
 
         public string CompileDependency<T>(T reference) where T : Reference
         {
+            var cacheKey = reference.Path + "/" + reference.Name;
+            DateTime lastWriteTimeUtc = (reference is SystemReference)
+                ? new FileInfo((reference as SystemReference).FullPath).LastWriteTimeUtc
+                : new DateTime(); // Cached forever
+
+            if (_cache != null)
+            {
+                dynamic cached = _cache.Get(cacheKey);
+                if (cached != null && cached.LastWriteTimeUtc.Equals(lastWriteTimeUtc))
+                {
+                    return cached.Content;
+                }
+            }
+
             if (reference.Content == null && reference is SystemReference)
             {
                 var systemReference = reference as SystemReference;
                 reference.Content = File.ReadAllText(systemReference.FullPath);
             }
+
             foreach(var compiler in _compilers)
             {
                 if (compiler.Handles(reference.Extension))
@@ -102,6 +119,12 @@ namespace HotGlue
                     compiler.Compile(ref reference);
                 }
             }
+
+            if (_cache != null)
+            {
+                _cache.Set(cacheKey, new { LastWriteTimeUtc = lastWriteTimeUtc, Content = reference.Content });
+            }
+
             return reference.Content;
         }
         

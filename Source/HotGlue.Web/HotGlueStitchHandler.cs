@@ -30,22 +30,12 @@ namespace HotGlue.Web
             // find references
             var root = context.Server.MapPath("~");
 
-            dynamic cached = _cache.Get("get.js-require");
-            if (cached != null)
-            {
-                context.Response.AddHeader("Content-Length", cached.Content.Length.ToString(CultureInfo.InvariantCulture));
-                context.Response.Write(cached.Content);
-                return;
-            }
-
             // We should pretty much never hit this after the first request
-            var package = Package.Build(_configuration, root);
+            var package = Package.Build(_configuration, root, _cache);
             var content = package.CompileStitch();
 
             context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
             context.Response.Write(content);
-
-            _cache.Set("get.js-require", new { Content = content });
         }
 
         public bool IsReusable

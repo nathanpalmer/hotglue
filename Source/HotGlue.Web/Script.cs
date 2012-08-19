@@ -25,7 +25,7 @@ namespace HotGlue
         {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
-            var package = Package.Build(_configuration, root);
+            var package = Package.Build(_configuration, root, null);
 
             if (_debug)
             {
