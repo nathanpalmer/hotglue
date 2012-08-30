@@ -29,7 +29,7 @@ namespace HotGlue.Console
             var fileInfo = new FileInfo(Path.Combine(filePath, fileName));
             var reference = new SystemReference(directoryInfo, fileInfo, fileName);
             var references = locator.Load(rootPath, reference);
-            var package = Package.Build(config, rootPath);
+            var package = Package.Build(config, rootPath, null);
             return package.Compile(references);
         }
     }
