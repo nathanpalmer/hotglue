@@ -9,7 +9,7 @@ namespace HotGlue
     public class RequireReference : IFindReference
     {
         private static readonly Regex ReferenceVariableRegex = new Regex(
-            @"^\s*(?:var\s+)?(?<variable>\S+)\s*=\s*require\((""|')?(?<path>.+?)(""|')?\)\S*;?\s*$",
+            @"^\s*(?!//|#|/\*)(?:var\s+)?(?<variable>\S+)\s*(=|:){1}\s*require\((""|')?(?<path>.+?)(""|')?\)\S*;?\s*$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 

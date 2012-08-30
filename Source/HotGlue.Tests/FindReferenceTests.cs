@@ -11,6 +11,7 @@ namespace HotGlue.Tests
     [TestFixture]
     public class FindReferenceTests
     {
+        #region Javascript
         [Test]
         public void Can_Parse_Comment_Reference()
         {
@@ -24,6 +25,7 @@ namespace HotGlue.Tests
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
 
         [Test]
@@ -56,6 +58,7 @@ var mod = require('module1.js');
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
         }
 
         [Test]
@@ -95,6 +98,42 @@ var mod1 = require('module1.js');
         }
 
         [Test]
+        public void Should_Not_Parse_Commented_With_Spaces_Reference()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var mod1 = require('module1.js');
+  //   var mod2 = require('module2.js');
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Not_Parse_Commented_With_Space_Reference()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var mod1 = require('module1.js');
+  //var mod2 = require('module2.js');
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
         public void Should_Parse_Reference_That_Pulls_SubObject()
         {
             // Arrange
@@ -103,6 +142,43 @@ var mod1 = require('module1.js');
             // Act
             var references = referencer.Parse(@"
 var mod1 = require('module1.js').increment;
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Parse_Object_Initialize_Reference()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var someObject = {
+        mod1: require('module1.js')
+};
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Not_Parse_Object_Initialize_Comment_Reference()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var someObject = {
+        mod1: require('module1.js')
+        //mod2: require('module2.js')
+};
 ");
             // Assert
             references.Count().ShouldBe(1);
@@ -123,6 +199,7 @@ var mod1 = require('module1.js').increment;
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("test.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
 
         [Test]
@@ -154,8 +231,11 @@ var mod1 = require('module1.js').increment;
             // Assert
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("test.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
+        #endregion
 
+        #region Coffee Script
         [Test]
         public void Should_Find_CoffeeScript_Module()
         {
@@ -200,5 +280,112 @@ var mod1 = require('module1.js').increment;
             references.First().Name.ShouldBe("mod4.coffee");
             references.First().Type.ShouldBe(Reference.TypeEnum.Library);
         }
+
+        [Test]
+        public void Should_Not_Parse_Commented_Reference_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+mod1 = require('module1.js')
+#mod2 = require('module2.js')
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+        [Test]
+        public void Should_Not_Parse_Commented_Reference_With_Spaces_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+mod1 = require('module1.js')
+  #   mod2 = require('module2.js')
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Not_Parse_Commented_Reference_With_Space_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+mod1 = require('module1.js')
+   #mod2 = require('module2.js')
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Parse_Object_Initialize_Reference_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+someObject = 
+    mod1: require('module1.js')
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Parse_Object_Initialize_Class_Reference_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+someObject:
+    mod1: require('module1.js')
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+
+        [Test]
+        public void Should_Not_Parse_Object_Initialize_Comment_Reference_Coffe_Script()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+someObject:
+    mod1: require('module1.js')
+    #mod2: require('module2.js')
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+        #endregion
     }
 }
