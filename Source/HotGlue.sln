@@ -1,25 +1,25 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Core", "HotGlue.Core\HotGlue.Core.csproj", "{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Web", "HotGlue.Web\HotGlue.Web.csproj", "{51E7E82B-809E-4822-A938-F0249F7B4E0D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Tests", "HotGlue.Tests\HotGlue.Tests.csproj", "{FDEA7E3D-818B-43B5-88EF-3048AAA54269}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9. Tests", "9. Tests", "{22F2B4BF-1911-49F3-B95D-5DDF9085EB65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Main", "0. Main", "{AA48A0DF-8F6C-41E5-A5CC-BC502C8D0FF5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Web", "1. Web", "{B41A61AA-9F9B-4A22-A6CD-9689F1C84ACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Demos.ASP.NET", "HotGlue.Demos.ASP.NET\HotGlue.Demos.ASP.NET.csproj", "{810ECA9C-A320-48C2-9322-7808D607A566}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB3183C8-6600-473C-8B8B-E158C15B1CDC}"
 	ProjectSection(SolutionItems) = preProject
 		..\Build.bat = ..\Build.bat
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Core", "HotGlue.Core\HotGlue.Core.csproj", "{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Web", "HotGlue.Web\HotGlue.Web.csproj", "{51E7E82B-809E-4822-A938-F0249F7B4E0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Tests", "HotGlue.Tests\HotGlue.Tests.csproj", "{FDEA7E3D-818B-43B5-88EF-3048AAA54269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Demos.ASP.NET", "HotGlue.Demos.ASP.NET\HotGlue.Demos.ASP.NET.csproj", "{810ECA9C-A320-48C2-9322-7808D607A566}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Console", "HotGlue.Console\HotGlue.Console.csproj", "{D66E6030-2FA2-4845-9D9E-DAFB9C6BD115}"
 EndProject
@@ -88,10 +88,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FDEA7E3D-818B-43B5-88EF-3048AAA54269} = {22F2B4BF-1911-49F3-B95D-5DDF9085EB65}
+		{810ECA9C-A320-48C2-9322-7808D607A566} = {22F2B4BF-1911-49F3-B95D-5DDF9085EB65}
 		{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99} = {AA48A0DF-8F6C-41E5-A5CC-BC502C8D0FF5}
 		{D66E6030-2FA2-4845-9D9E-DAFB9C6BD115} = {AA48A0DF-8F6C-41E5-A5CC-BC502C8D0FF5}
 		{51E7E82B-809E-4822-A938-F0249F7B4E0D} = {B41A61AA-9F9B-4A22-A6CD-9689F1C84ACB}
-		{FDEA7E3D-818B-43B5-88EF-3048AAA54269} = {22F2B4BF-1911-49F3-B95D-5DDF9085EB65}
-		{810ECA9C-A320-48C2-9322-7808D607A566} = {22F2B4BF-1911-49F3-B95D-5DDF9085EB65}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
