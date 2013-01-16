@@ -129,7 +129,22 @@ namespace HotGlue
             }
             var references = new Dictionary<SystemReference, IList<RelativeReference>>();
             Parse(rootDirectory, relativePath, new RelativeReference(fileName) { Type = Reference.TypeEnum.App }, ref references);
+            AddAbsoluteReferences(references);
             return references;
+        }
+
+        private void AddAbsoluteReferences(IDictionary<SystemReference, IList<RelativeReference>> references)
+        {
+            foreach (var systemReference in references)
+            {
+                
+                var absoluteReference = systemReference.Key.RelativePath(false);
+                if (!systemReference.Key.ReferenceNames.Contains(absoluteReference,
+                                                                 StringComparer.InvariantCultureIgnoreCase))
+                {
+                    systemReference.Key.ReferenceNames.Add(absoluteReference);
+                }
+            }
         }
 
         // recursive function
@@ -137,7 +152,12 @@ namespace HotGlue
         {
             String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
             SystemReference systemReference = null;
-            var fileReference = new FileInfo(Path.Combine(currentPath, relativeReference.ReferenceName));
+            var referenceIsAbsolutePath =
+                !string.IsNullOrEmpty(relativeReference.ReferenceName) && (relativeReference.ReferenceName[0] == '/');
+            var filePath = referenceIsAbsolutePath
+                               ? Path.Combine(rootDirectory.FullName, relativeReference.ReferenceName.Substring(1))
+                               : Path.Combine(currentPath, relativeReference.ReferenceName);
+            var fileReference = new FileInfo(filePath);
             if (fileReference.Exists)
             {
                 systemReference = new SystemReference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
@@ -145,7 +165,7 @@ namespace HotGlue
 
             if (systemReference == null)
             {
-                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in the current path: '{1}'.", relativeReference.Name, currentPath));
+                throw new FileNotFoundException(String.Format("Unable to find the file: '{0}' in the current path: '{1}'.", relativeReference.Name, filePath));
             }
 
             relativeReference.UpdateFromSystemReference(systemReference);

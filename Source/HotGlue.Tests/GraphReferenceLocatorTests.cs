@@ -91,6 +91,22 @@ namespace HotGlue.Tests
         }
 
         [Test]
+        [ExpectedException(typeof(FileNotFoundException), ExpectedMessage = "Unable to find the file:", MatchType = MessageMatch.Contains)]
+        public void Detect_Missing_Reference()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("ExceptionMissingFile", "app.js", Reference.TypeEnum.App);
+
+            var references = locator.Load(root, reference);
+            foreach (var r in references)
+            {
+                // Assert
+                Assert.Fail("Expected file not found exception");
+            }
+        }
+
+        [Test]
         [ExpectedException(ExpectedMessage = "A different require reference was found for the file", MatchType = MessageMatch.Contains)]
         public void Detect_Multiple_Require_Types_For_Same_Reference()
         {
@@ -219,6 +235,21 @@ namespace HotGlue.Tests
         }
 
         [Test]
+        public void Can_Find_Absolute_References()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("AbsoluteReference", "app.js", Reference.TypeEnum.App);
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references.ShouldContain(r => r.Name.Equals("mod.js", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        [Test]
         [TestCase(false)]
         [TestCase(true)]
         public void Can_Parse_Relative_Paths_And_Their_Modules(bool specifyRoot)
@@ -242,6 +273,22 @@ namespace HotGlue.Tests
 
             // Assert
             ShouldMatch(matchReferences, references);
+        }
+
+        [Test]
+        public void Should_Add_Absolute_Reference()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("Module4", "app.js", Reference.TypeEnum.App);
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            ShouldContainExactlyOne(references, "/Scripts/Module4/app.js");
+            ShouldContainExactlyOne(references, "/Scripts/Module4-Relative/dep1.js");
+            ShouldContainExactlyOne(references, "/Scripts/Module4-Relative/mod.js");
         }
 
         [Test]
@@ -393,6 +440,14 @@ namespace HotGlue.Tests
                 Type = type
             };
             return reference;
+        }
+
+        public void ShouldContainExactlyOne(IList<SystemReference> generated, string path)
+        {
+            var references =
+                generated.Where(r => r.ReferenceNames.Contains(path, StringComparer.InvariantCultureIgnoreCase));
+            references.Count().ShouldBe(1);
+            references.Single().ReferenceNames.Count(rn => rn.Equals(path, StringComparison.InvariantCultureIgnoreCase)).ShouldBe(1);
         }
 
         public void ShouldMatch(Reference good, Reference generated)

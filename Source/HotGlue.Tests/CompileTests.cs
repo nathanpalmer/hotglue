@@ -34,8 +34,8 @@ namespace HotGlue.Tests
             var result = package.Compile(references);
 
             // Assert
-            result.ShouldBe(@"var j = 1;
-");
+            var expected = @"var j = 1;";
+            result.ShouldStartWith(expected);
         }
 
         [Test]
@@ -59,8 +59,7 @@ namespace HotGlue.Tests
             var result = package.Compile(references);
 
             // Assert
-            result.ShouldBe(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['scripts/compile2/module1.js'] = { keys: [ 'module1.js' ], item: function(exports, require, module) {var j = 1;}};
-");
+            result.ShouldStartWith(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['scripts/compile2/module1.js'] = { keys: [ 'module1.js' ], item: function(exports, require, module) {var j = 1;}};");
         }
     }
 }

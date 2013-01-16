@@ -69,6 +69,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\AbsoluteReference\app.js" />
+    <Content Include="Scripts\AbsoluteReference\mod.js" />
     <Content Include="Scripts\Compile1\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -79,6 +81,7 @@
     <Content Include="Scripts\Exception1\circular_end.js" />
     <Content Include="Scripts\Exception1\circular_middle.js" />
     <Content Include="Scripts\Exception4\reference.js" />
+    <Content Include="Scripts\ExceptionMissingFile\app.js" />
     <Content Include="Scripts\LibraryTest1\app.js" />
     <Content Include="Scripts\LibraryTest1\something.js" />
     <Content Include="Scripts\LibraryTest1\library.js" />
