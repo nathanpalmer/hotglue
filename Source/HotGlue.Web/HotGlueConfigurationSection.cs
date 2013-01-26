@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web.Configuration;
 using System.Xml;
@@ -29,12 +30,11 @@ namespace HotGlue.Web
 
         public static HotGlueConfiguration Load()
         {
-            return (HotGlueConfiguration) ConfigurationManager.GetSection("hotglue")
-                   ?? new HotGlueConfiguration
-                       {
-                           ScriptPath = "Scripts\\",
-                           Debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug
-                       };
+            var configuration = HotGlueConfiguration.Load();
+
+            configuration.Debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
+
+            return configuration;
         }
     }
 }

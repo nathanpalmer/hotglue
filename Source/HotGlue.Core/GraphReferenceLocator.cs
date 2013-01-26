@@ -8,18 +8,18 @@ namespace HotGlue
 {
     public class GraphReferenceLocator : IReferenceLocator
     {
-        private readonly HotGlueConfiguration _config;
+        private readonly HotGlueConfiguration _configuration;
         private IFindReference[] _findReferences;
 
-        public GraphReferenceLocator(HotGlueConfiguration config)
+        public GraphReferenceLocator(HotGlueConfiguration configuration)
         {
-            if (config == null)
+            if (configuration == null)
             {
-                throw new ArgumentNullException("config");
+                throw new ArgumentNullException("configuration");
             }
-            _config = config;
+            _configuration = configuration;
 
-            if (_config.Referencers == null || _config.Referencers.Length == 0)
+            if (_configuration.Referencers == null || _configuration.Referencers.Length == 0)
             {
                 _findReferences = new IFindReference[]
                     {
@@ -30,7 +30,9 @@ namespace HotGlue
             }
             else
             {
-                _findReferences = _config.Referencers.Select(referencer => (IFindReference)Activator.CreateInstance(Type.GetType(referencer.Type))).ToArray();
+                _findReferences = _configuration.Referencers
+                                         .Select(r => (IFindReference) Activator.CreateInstance(Type.GetType(r.Type)))
+                                         .ToArray();
             }
         }
 

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace HotGlue.Model
@@ -40,13 +44,94 @@ namespace HotGlue.Model
         {
             return new HotGlueConfiguration()
             {
-               Referencers = new HotGlueReference[]
+               Referencers = new []
                     {
                         new HotGlueReference { Type = typeof(SlashSlashEqualReference).FullName }, 
                         new HotGlueReference { Type = typeof(RequireReference).FullName },
                         new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
                     }
             };
+        }
+
+        public static HotGlueConfiguration Load()
+        {
+            var section = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
+            if (section != null) return section;
+
+            var configuration = new HotGlueConfiguration
+            {
+                ScriptPath = "Scripts\\"
+            };
+
+            var assemblies = GetAssemblies();
+
+            // Find Compiler
+            configuration.Compilers = assemblies.SelectMany(a => a.GetTypes())
+                                                .Where(t => typeof (ICompile).IsAssignableFrom(t) &&
+                                                            typeof (ICompile) != t)
+                                                .Select(t => new HotGlueCompiler
+                                                    {
+                                                        Type = t.FullName,
+                                                        //TODO: Not sure we're actually using these extensions anywhere
+                                                        //Extension = String.Join(",", ((ICompile) Activator.CreateInstance(t)).Extensions)
+                                                    })
+                                                .ToArray();
+
+            // Script Generator
+            var generate = assemblies.SelectMany(a => a.GetTypes())
+                                     .Where(t => typeof (IGenerateScriptReference).IsAssignableFrom(t) &&
+                                                 typeof (IGenerateScriptReference) != t &&
+                                                 typeof (HTMLGenerateScriptReference) != t)
+                                     .Select(t => new HotGlueGenerator
+                                         {
+                                             Type = t.FullName
+                                         })
+                                     .FirstOrDefault();
+            if (generate != null)
+            {
+                configuration.GenerateScript = generate;
+            }
+
+            // Find Referencers
+            configuration.Referencers = assemblies.SelectMany(a => a.GetTypes())
+                                                  .Where(t => typeof (IFindReference).IsAssignableFrom(t) &&
+                                                              typeof (IFindReference) != t)
+                                                  .Select(t => new HotGlueReference
+                                                      {
+                                                          Type = t.FullName
+                                                      })
+                                                  .ToArray();
+
+            // Find Compressors
+            //TODO: Right now there isn't a way to scan for compressors because they are just compilers
+
+            return configuration;
+        }
+
+        public static List<Assembly> GetAssemblies()
+        {
+            var folder = new DirectoryInfo(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(typeof(ICompile).Assembly.CodeBase).Path)));
+
+            List<Assembly> assemblies = new List<Assembly>();
+
+            var files = folder.GetFiles()
+                              .Where(x => new[] {".exe", ".dll"}.Contains(x.Extension));
+
+            foreach (var file in files)
+            {
+                AssemblyName name = new AssemblyName() { Name = System.IO.Path.GetFileNameWithoutExtension(file.Name) };
+                try
+                {
+                    var asm = Assembly.Load(name);
+                    assemblies.Add(asm);
+                }
+                catch
+                {
+                    // ignore exceptions here...
+                }
+            }
+
+            return assemblies;
         }
     }
 

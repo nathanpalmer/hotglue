@@ -37,17 +37,14 @@ namespace HotGlue
             IList<ICompile> compilers;
             if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
             {
-                compilers = new ICompile[]
-                    {
-                        //new CoffeeScriptCompiler()
-                    };
+                compilers = new ICompile[] {};
             }
             else
             {
                 compilers = configuration.Compilers
-                    .Where(c => string.IsNullOrWhiteSpace(c.Mode) || c.Mode.Equals(configuration.Debug ? "debug" : "release", StringComparison.OrdinalIgnoreCase))
-                    .Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type)))
-                    .ToList();
+                                         .Where(c => string.IsNullOrWhiteSpace(c.Mode) || c.Mode.Equals(configuration.Debug ? "debug" : "release", StringComparison.OrdinalIgnoreCase))
+                                         .Select(compiler => (ICompile) Activator.CreateInstance(Type.GetType(compiler.Type)))
+                                         .ToList();
             }
 
             _scriptPath = configuration.ScriptPath;
