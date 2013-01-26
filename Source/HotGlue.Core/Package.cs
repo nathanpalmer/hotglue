@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HotGlue.Compilers;
 using HotGlue.Model;
 
 namespace HotGlue
@@ -40,8 +39,7 @@ namespace HotGlue
             {
                 compilers = new ICompile[]
                     {
-                        new JQueryTemplateCompiler(),
-                        new CoffeeScriptCompiler()
+                        //new CoffeeScriptCompiler()
                     };
             }
             else

@@ -6,6 +6,12 @@ using HotGlue.Model;
 
 namespace HotGlue
 {
+    /// <summary>
+    /// Finds references in the format of
+    /// 
+    ///    /// <reference path="test.js"/>           OR
+    ///    /// <reference path="test.js" library/>
+    /// </summary>
     public class TripleSlashReference : IFindReference
     {
         static readonly Regex ReferenceCommentRegex = new Regex(

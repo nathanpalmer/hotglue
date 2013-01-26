@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</ProjectGuid>
+    <ProjectGuid>{805B213B-EFCF-4317-9EEF-7CAC0BAE9F40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HotGlue</RootNamespace>
-    <AssemblyName>HotGlue.Core</AssemblyName>
+    <RootNamespace>HotGlue.Compressors</RootNamespace>
+    <AssemblyName>HotGlue.Compressor.YUI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,44 +31,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EcmaScript.NET">
+      <HintPath>..\..\Libraries\EcmaScript.Net.1.0.1.0\lib\net20\EcmaScript.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="EcmaScript.NET.modified">
+      <HintPath>..\..\Libraries\YUICompressor.NET.1.7.1.0\lib\net35\EcmaScript.NET.modified.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\Libraries\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Yahoo.Yui.Compressor">
+      <HintPath>..\..\Libraries\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FindReferences\TripleSlashReference.cs" />
-    <Compile Include="GraphReferenceLocator.cs" />
-    <Compile Include="IFileCache.cs" />
-    <Compile Include="IFindReference.cs" />
-    <Compile Include="IReferenceLocator.cs" />
-    <Compile Include="Model\Configuration.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Referencers\HTMLGenerateScriptReference.cs" />
-    <Compile Include="ICompile.cs" />
-    <Compile Include="IPackage.cs" />
-    <Compile Include="IGenerateScriptReference.cs" />
-    <Compile Include="Model\Reference.cs" />
-    <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FindReferences\RequireReference.cs" />
-    <Compile Include="FindReferences\SlashSlashEqualReference.cs" />
+    <Compile Include="YUICompressor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="stitch.js" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
+      <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
+      <Name>HotGlue.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

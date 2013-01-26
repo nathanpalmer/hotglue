@@ -59,13 +59,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HotGlue.Console\HotGlue.Console.csproj">
-      <Project>{D66E6030-2FA2-4845-9D9E-DAFB9C6BD115}</Project>
-      <Name>HotGlue.Console</Name>
+    <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
+      <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
+      <Name>HotGlue.Compiler.CoffeeScript</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
       <Name>HotGlue.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.jQuery\HotGlue.Template.jQuery.csproj">
+      <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
+      <Name>HotGlue.Template.jQuery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue\HotGlue.Console.csproj">
+      <Project>{d66e6030-2fa2-4845-9d9e-dafb9c6bd115}</Project>
+      <Name>HotGlue.Console</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

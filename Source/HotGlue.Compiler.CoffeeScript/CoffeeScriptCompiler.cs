@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EcmaScript.NET;
 using HotGlue.Model;
 using SassAndCoffee.Core;
 using SassAndCoffee.Core.Caching;
