@@ -71,9 +71,9 @@
       <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
       <Name>HotGlue.Template.jQuery</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HotGlue\HotGlue.Console.csproj">
+    <ProjectReference Include="..\HotGlue\HotGlue.csproj">
       <Project>{d66e6030-2fa2-4845-9d9e-dafb9c6bd115}</Project>
-      <Name>HotGlue.Console</Name>
+      <Name>HotGlue</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
