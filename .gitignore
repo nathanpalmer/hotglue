@@ -3,6 +3,7 @@
 *.pdb
 *.user
 *.suo
+TestResult.xml
 
 [Bb]uild
 [Ll]ibraries

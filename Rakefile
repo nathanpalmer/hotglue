@@ -20,3 +20,9 @@ task :update_nuget do
     sh "#{tools}NuGet.exe i #{filepath} -o #{libraries}"
   }
 end
+
+desc "Test"
+nunit :test => :build do |nunit|
+  nunit.command = "#{tools}NUnit/nunit-console.exe"
+  nunit.assemblies "#{source}HotGlue.Tests/bin/release/HotGlue.Tests.dll"
+end
