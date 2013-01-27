@@ -31,6 +31,7 @@ end
 
 desc "Generate the AssemblyInfo"
 assemblyinfo :assembly_info => [ :version ] do |asm|
+  puts ""
   asm.version = version
   asm.file_version = version
   # Unsupported until the next release
@@ -52,7 +53,7 @@ task :update_nuget do
 end
 
 desc "Test"
-nunit :test => :build do |nunit|
+nunit :test => [ :build ] do |nunit|
   puts ""
   nunit.command = "#{tools}NUnit/nunit-console.exe"
   nunit.assemblies = FileList["#{source}*/bin/Release/*.Tests.dll"]
@@ -107,10 +108,10 @@ class Dependency
     end
 end
 
-task :nuspec do
+task :nuspec => [ :build ] do
+  puts ""
   Dir.mkdir("#{deploy}") unless Dir.exists?("#{deploy}")
 
-	version = "0.1"
 	authors = "Nathan Palmer, Aaron Hansen"
 
 	projects = [
@@ -123,6 +124,10 @@ task :nuspec do
 	]
 
 	projects.each do |project|
+    puts "Generating nuspec for #{project.Name}"
+
+    # For some reason the task name has to also be nuspec
+    # Need to find out why so we can rename the task "nuget"
 		nuspec do |nuspec|
 		  nuspec.id = project.Name
 		  nuspec.description = project.Description
@@ -133,11 +138,12 @@ task :nuspec do
 		  project.Dependencies.each do |dep|
 		      nuspec.dependency dep.Name, dep.Version
 		  end
-		  nuspec.licenseUrl = "http://www.gnu.org/licenses/lgpl.txt"
+		  nuspec.licenseUrl = "http://opensource.org/licenses/MIT"
 		  nuspec.working_directory = "#{deploy}"
 		  nuspec.output_file = "#{project.Name}.#{project.Version}.nuspec"
 		  nuspec.tags = ""
       nuspec.file "../#{File::dirname project.FilePath}/bin/Release/*.dll".gsub("/","\\"), "lib\\net40"
+      nuspec.pretty_formatting = true
 		end
 
     sh "#{tools}Nuget.exe pack #{deploy}#{project.Name}.#{project.Version}.nuspec -OutputDirectory #{deploy}"
