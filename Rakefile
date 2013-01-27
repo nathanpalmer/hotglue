@@ -1,9 +1,12 @@
 require 'albacore'
 
+# Variables used throughout
 source = "Source/"
 libraries = "Libraries/"
 tools = "Tools/"
 deploy = "Deploy/"
+version = "0.0.0"
+version_changeset = ""
 
 task :default => [ :build ]
 
@@ -18,14 +21,21 @@ end
 
 desc "Determine version"
 task :version do
-  version = %x[git describe]
-  puts version
+  result = %x[git describe]
+  regex = /^(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)(-(?<revision>\d+))*(-(?<changeset>\S*))*$/
+  matches = regex.match(result)
+
+  version = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:revision]}"
+  version_changeset = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:changeset]}"
 end
 
 desc "Generate the AssemblyInfo"
-assemblyinfo :assembly_info do |asm|
-  asm.version = "0.1.0.*"
-  asm_file_version = "0.1.0.*"
+assemblyinfo :assembly_info => [ :version ] do |asm|
+  asm.version = version
+  asm.file_version = version
+  # Unsupported until the next release
+  # https://github.com/Albacore/albacore/pull/30
+  #asm.assembly_informational_version = version_changeset
   asm.copyright = "Copyright (c) 2012"
   asm.output_file = "#{source}/CommonAssemblyInfo.cs"
 end
