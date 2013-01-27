@@ -8,12 +8,26 @@ deploy = "Deploy/"
 task :default => [ :build ]
 
 desc "Build"
-msbuild :build => [ :update_nuget ] do |msb|
+msbuild :build => [ :update_nuget, :assembly_info ] do |msb|
   puts ""
   msb.properties = { :configuration => :Release }
   msb.verbosity = :Minimal
   msb.targets = [ :Clean, :Build ]
   msb.solution = "#{source}HotGlue.sln"
+end
+
+desc "Determine version"
+task :version do
+  version = %x[git describe]
+  puts version
+end
+
+desc "Generate the AssemblyInfo"
+assemblyinfo :assembly_info do |asm|
+  asm.version = "0.1.0.*"
+  asm_file_version = "0.1.0.*"
+  asm.copyright = "Copyright (c) 2012"
+  asm.output_file = "#{source}/CommonAssemblyInfo.cs"
 end
 
 desc "Install Nuget Packages"

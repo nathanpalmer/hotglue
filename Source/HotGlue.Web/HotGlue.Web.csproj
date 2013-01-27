@@ -50,6 +50,9 @@
     <Compile Include="HotGlueStitchHandler.cs" />
     <Compile Include="HttpContextCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Script.cs" />
   </ItemGroup>
   <ItemGroup>

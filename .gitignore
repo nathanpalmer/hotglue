@@ -4,6 +4,7 @@
 *.user
 *.suo
 TestResult.xml
+CommonAssemblyInfo.cs
 
 [Bb]uild
 [Dd]eploy
