@@ -71,7 +71,7 @@ namespace HotGlue.Model
                                                             typeof (ICompile) != t)
                                                 .Select(t => new HotGlueCompiler
                                                     {
-                                                        Type = t.FullName,
+                                                        Type = t.AssemblyQualifiedName,
                                                         //TODO: Not sure we're actually using these extensions anywhere
                                                         //Extension = String.Join(",", ((ICompile) Activator.CreateInstance(t)).Extensions)
                                                     })
@@ -84,7 +84,7 @@ namespace HotGlue.Model
                                                  typeof (HTMLGenerateScriptReference) != t)
                                      .Select(t => new HotGlueGenerator
                                          {
-                                             Type = t.FullName
+                                             Type = t.AssemblyQualifiedName
                                          })
                                      .FirstOrDefault();
             if (generate != null)
@@ -98,7 +98,7 @@ namespace HotGlue.Model
                                                               typeof (IFindReference) != t)
                                                   .Select(t => new HotGlueReference
                                                       {
-                                                          Type = t.FullName
+                                                          Type = t.AssemblyQualifiedName
                                                       })
                                                   .ToArray();
 
