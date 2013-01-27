@@ -120,7 +120,9 @@ task :nuspec => [ :build ] do
     Project.new("#{source}HotGlue.Compressor.Uglify/HotGlue.Compressor.Uglify.csproj",version,"HotGlue.Compressor.Uglify",authors),
     Project.new("#{source}HotGlue.Compressor.YUI/HotGlue.Compressor.YUI.csproj",version,"HotGlue.Compressor.YUI",authors),
     Project.new("#{source}HotGlue.Reference.LABjs/HotGlue.Reference.LABjs.csproj",version,"HotGlue.Reference.LABjs",authors),
-    Project.new("#{source}HotGlue.Template.jQuery/HotGlue.Template.jQuery.csproj",version,"HotGlue.Template.jQuery",authors)
+    Project.new("#{source}HotGlue.Template.jQuery/HotGlue.Template.jQuery.csproj",version,"HotGlue.Template.jQuery",authors),
+    Project.new("#{source}HotGlue.Template.Mustache/HotGlue.Template.Mustache.csproj",version,"HotGlue.Template.Mustache",authors),
+    Project.new("#{source}HotGlue.Template.Handlebars/HotGlue.Template.Handlebars.csproj",version,"HotGlue.Template.Handlebars",authors)
 	]
 
 	projects.each do |project|
