@@ -29,6 +29,10 @@
         <section>
             <div id="handlebars"></div>
         </section>
+        <h1>Dust Template</h1>
+        <section>
+            <div id="dust"></div>
+        </section>
     </form>
 </body>
 </html>

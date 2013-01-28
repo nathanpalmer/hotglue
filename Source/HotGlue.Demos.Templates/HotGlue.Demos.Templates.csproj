@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\Shared\dust-full-0.3.0.js" />
     <Content Include="Scripts\Shared\handlebars.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Module1\app.js" />
@@ -76,8 +77,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl-dust">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-handlebars" />
-    <None Include="Scripts\Module1\data.tmpl-mustache" />
+    <None Include="Scripts\Module1\data.tmpl-mustache">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-jquery" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
