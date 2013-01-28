@@ -7,7 +7,7 @@
     <ProjectGuid>{B00DBC21-FA37-4B75-BF07-713B378D0866}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HotGlue.Template.Underscore</RootNamespace>
+    <RootNamespace>HotGlue.Templates</RootNamespace>
     <AssemblyName>HotGlue.Template.Underscore</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

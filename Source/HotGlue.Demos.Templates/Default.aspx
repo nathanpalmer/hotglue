@@ -37,6 +37,10 @@
         <section>
             <div id="underscore"></div>
         </section>
+        <h1>EJS Template</h1>
+        <section>
+            <div id="ejs"></div>
+        </section>
     </form>
 </body>
 </html>

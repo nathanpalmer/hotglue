@@ -59,6 +59,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Scripts\Shared\dust-full-0.3.0.js" />
+    <Content Include="Scripts\Shared\ejs.js" />
     <Content Include="Scripts\Shared\handlebars.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Module1\app.js" />
@@ -78,6 +79,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl-ejs">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-underscore">
       <SubType>Designer</SubType>
     </None>
@@ -104,6 +108,10 @@
     <ProjectReference Include="..\HotGlue.Template.Dust\HotGlue.Template.Dust.csproj">
       <Project>{a7956bdd-99e5-4e19-9626-0203544434d1}</Project>
       <Name>HotGlue.Template.Dust</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.EJS\HotGlue.Template.EJS.csproj">
+      <Project>{fd132c78-2ee9-44de-966f-519cc8ab40a5}</Project>
+      <Name>HotGlue.Template.EJS</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Template.Handlebars\HotGlue.Template.Handlebars.csproj">
       <Project>{852892f8-caa2-42d7-8a24-78f3891b47ba}</Project>

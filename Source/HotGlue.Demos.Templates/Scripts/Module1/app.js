@@ -4,11 +4,13 @@
 //= require ../shared/handlebars.js
 //= require ../shared/dust-full-0.3.0.js
 //= require ../shared/underscore.js
+//= require ../shared/ejs.js
 var jqueryTemplate = require('data.tmpl-jquery');
 var mustacheTemplate = require('data.tmpl-mustache');
 var handlebarsTemplate = require('data.tmpl-handlebars');
 var dustTemplate = require('data.tmpl-dust');
 var underscoreTemplate = require('data.tmpl-underscore');
+var ejsTemplate = require('data.tmpl-ejs');
 
 var title = "Hello, World";
 
@@ -39,6 +41,6 @@ $(document).ready(function () {
         console.error(e);
     }
 
-
-    tryRender("#underscore", function() { return underscoreTemplate({ title: title }); });
+    tryRender("#underscore", function () { return underscoreTemplate({ title: title }); });
+    tryRender("#ejs", function () { return ejsTemplate({ title: title }); });
 });
