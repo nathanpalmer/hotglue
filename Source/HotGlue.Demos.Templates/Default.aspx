@@ -33,6 +33,10 @@
         <section>
             <div id="dust"></div>
         </section>
+        <h1>Underscore Template</h1>
+        <section>
+            <div id="underscore"></div>
+        </section>
     </form>
 </body>
 </html>

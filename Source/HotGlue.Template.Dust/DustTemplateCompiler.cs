@@ -27,8 +27,10 @@ namespace HotGlue.Compilers
             reference.Extension = ".js";
             reference.Content = @"
 var template = """ + reference.Content.Replace("\r\n", "").Replace("\n", "").Replace("\"", "'") + @""";
-var compiled = dust.compile(template, """ + name + @""");
-module.exports = (function(data){ return compiled(data); });";
+var compiled = dust.compileFn(template, """ + name + @""");
+module.exports = (function(data,callback){
+    compiled(data, callback);
+});";
         }
     }
 }

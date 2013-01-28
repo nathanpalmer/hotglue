@@ -64,6 +64,7 @@
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery.tmpl.js" />
     <Content Include="Scripts\Shared\mustache.js" />
+    <Content Include="Scripts\Shared\underscore.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl-underscore">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-dust">
       <SubType>Designer</SubType>
     </None>
@@ -97,6 +101,10 @@
       <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
       <Name>HotGlue.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Dust\HotGlue.Template.Dust.csproj">
+      <Project>{a7956bdd-99e5-4e19-9626-0203544434d1}</Project>
+      <Name>HotGlue.Template.Dust</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotGlue.Template.Handlebars\HotGlue.Template.Handlebars.csproj">
       <Project>{852892f8-caa2-42d7-8a24-78f3891b47ba}</Project>
       <Name>HotGlue.Template.Handlebars</Name>
@@ -108,6 +116,10 @@
     <ProjectReference Include="..\HotGlue.Template.Mustache\HotGlue.Template.Mustache.csproj">
       <Project>{9303ff9c-e607-49f3-b075-70d4cb09c12a}</Project>
       <Name>HotGlue.Template.Mustache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Underscore\HotGlue.Template.Underscore.csproj">
+      <Project>{b00dbc21-fa37-4b75-bf07-713b378d0866}</Project>
+      <Name>HotGlue.Template.Underscore</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Web\HotGlue.Web.csproj">
       <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>

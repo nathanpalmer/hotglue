@@ -123,7 +123,9 @@ task :nuspec => [ :build ] do
     Project.new("#{source}HotGlue.Reference.LABjs/HotGlue.Reference.LABjs.csproj",version,"HotGlue.Reference.LABjs",authors),
     Project.new("#{source}HotGlue.Template.jQuery/HotGlue.Template.jQuery.csproj",version,"HotGlue.Template.jQuery",authors),
     Project.new("#{source}HotGlue.Template.Mustache/HotGlue.Template.Mustache.csproj",version,"HotGlue.Template.Mustache",authors),
-    Project.new("#{source}HotGlue.Template.Handlebars/HotGlue.Template.Handlebars.csproj",version,"HotGlue.Template.Handlebars",authors)
+    Project.new("#{source}HotGlue.Template.Handlebars/HotGlue.Template.Handlebars.csproj",version,"HotGlue.Template.Handlebars",authors),
+    Project.new("#{source}HotGlue.Template.Dust/HotGlue.Template.Dust.csproj",version,"HotGlue.Template.Dust",authors),
+    Project.new("#{source}HotGlue.Template.Underscore/HotGlue.Template.Underscore.csproj",version,"HotGlue.Template.Underscore",authors)
 	]
 
 	projects.each do |project|
