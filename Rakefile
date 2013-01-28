@@ -122,7 +122,8 @@ task :nuget => [ :build ] do
 	authors = "Nathan Palmer, Aaron Hansen"
 
 	projects = [
-		Project.new("#{source}HotGlue.Core/HotGlue.Core.csproj",version,"HotGlue",authors, "HotGlue"),
+		Project.new("#{source}HotGlue.Core/HotGlue.Core.csproj",version,"HotGlue.Core",authors, "HotGlue.Core"),
+    Project.new("#{source}HotGlue.Web/HotGlue.Web.csproj",version,"HotGlue.Web",authors, "HotGlue.Web"),
 		Project.new("#{source}HotGlue.Compiler.CoffeeScript/HotGlue.Compiler.CoffeeScript.csproj",version,"HotGlue.Compiler.CoffeeScript",authors),
     Project.new("#{source}HotGlue.Compiler.TypeScript/HotGlue.Compiler.TypeScript.csproj",version,"HotGlue.Compiler.TypeScript",authors),
     Project.new("#{source}HotGlue.Compressor.Uglify/HotGlue.Compressor.Uglify.csproj",version,"HotGlue.Compressor.Uglify",authors),
@@ -162,7 +163,10 @@ nuspec :nuspec, [ :project ] do |nuspec, args|
   nuspec.working_directory = "#{deploy}"
   nuspec.output_file = "#{project.Name}.#{project.Version}.nuspec"
   nuspec.tags = ""
-  nuspec.file "../#{File::dirname project.FilePath}/bin/Release/*.dll".gsub("/","\\"), "lib\\net40"
+  nuspec.file "../#{File::dirname project.FilePath}/bin/Release/#{project.Name}.dll".gsub("/","\\"), "lib\\net40"
+  if !Dir.glob("#{File::dirname project.FilePath}/*.transform").empty?
+    nuspec.file "../#{File::dirname project.FilePath}/*.transform".gsub("/","\\"), "content"
+  end
 end
 
 nugetpack :nupack, [ :project ] do |nuget, args|
