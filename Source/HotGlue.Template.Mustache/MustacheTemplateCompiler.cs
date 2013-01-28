@@ -13,7 +13,7 @@ namespace HotGlue.Compilers
 
         public MustacheTemplateCompiler()
         {
-            Extensions = new List<string>(new[] { ".tmpl" });
+            Extensions = new List<string>(new[] { ".tmpl", ".tmpl-mustache" });
         }
 
         public bool Handles(string Extension)

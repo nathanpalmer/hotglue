@@ -13,7 +13,7 @@ namespace HotGlue.Compilers
 
         public JQueryTemplateCompiler()
         {
-            Extensions = new List<string>(new[] { ".tmpl" });
+            Extensions = new List<string>(new[] { ".tmpl", ".tmpl-jquery" });
         }
 
         public bool Handles(string Extension)

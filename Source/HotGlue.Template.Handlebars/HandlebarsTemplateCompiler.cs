@@ -13,7 +13,7 @@ namespace HotGlue.Compilers
 
         public HandlebarsTemplateCompiler()
         {
-            Extensions = new List<string>(new[] { ".tmpl" });
+            Extensions = new List<string>(new[] { ".tmpl", ".tmpl-handlebars" });
         }
 
         public bool Handles(string Extension)
