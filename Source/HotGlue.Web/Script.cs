@@ -21,7 +21,7 @@ namespace HotGlue
             _locator = new GraphReferenceLocator(_configuration);
         }
 
-        public static HtmlString Reference(string name)
+        public static IHtmlString Reference(string name)
         {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
