@@ -51,6 +51,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Template.Handlebars
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Demos.Templates.Handlebars", "HotGlue.Demos.Templates.Handlebars\HotGlue.Demos.Templates.Handlebars.csproj", "{7BCCF701-AA9C-4681-9179-A8E4DFD966D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Compiler.TypeScript", "HotGlue.Compiler.Typescript\HotGlue.Compiler.TypeScript.csproj", "{05B0472A-8102-4C5C-AD10-3857987E2122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Demos.Compilers.TypeScript", "HotGlue.Demos.Compilers.TypeScript\HotGlue.Demos.Compilers.TypeScript.csproj", "{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -222,6 +226,26 @@ Global
 		{7BCCF701-AA9C-4681-9179-A8E4DFD966D3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7BCCF701-AA9C-4681-9179-A8E4DFD966D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7BCCF701-AA9C-4681-9179-A8E4DFD966D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{05B0472A-8102-4C5C-AD10-3857987E2122}.Release|x86.ActiveCfg = Release|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -240,8 +264,10 @@ Global
 		{5DA6DE08-2144-4F4B-9756-76DB98C05951} = {751E87C5-0FF0-48F3-9B5B-5688718F5A8D}
 		{9303FF9C-E607-49F3-B075-70D4CB09C12A} = {751E87C5-0FF0-48F3-9B5B-5688718F5A8D}
 		{852892F8-CAA2-42D7-8A24-78F3891B47BA} = {751E87C5-0FF0-48F3-9B5B-5688718F5A8D}
+		{05B0472A-8102-4C5C-AD10-3857987E2122} = {751E87C5-0FF0-48F3-9B5B-5688718F5A8D}
 		{810ECA9C-A320-48C2-9322-7808D607A566} = {ADDA079A-71B5-4669-8C8A-921315EC781B}
 		{EFDB3AA4-99D7-4E00-8CD0-D757A072C254} = {ADDA079A-71B5-4669-8C8A-921315EC781B}
 		{7BCCF701-AA9C-4681-9179-A8E4DFD966D3} = {ADDA079A-71B5-4669-8C8A-921315EC781B}
+		{9786A307-C2BC-4E9D-B955-9D6949BCB6A7} = {ADDA079A-71B5-4669-8C8A-921315EC781B}
 	EndGlobalSection
 EndGlobal

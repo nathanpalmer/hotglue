@@ -51,6 +51,7 @@
     <Compile Include="CompileTests.cs" />
     <Compile Include="Console\ArgumentsTests.cs" />
     <Compile Include="Console\ProgramTests.cs" />
+    <Compile Include="TypeScriptTests.cs" />
     <Compile Include="FindReferenceTests.cs" />
     <Compile Include="GraphReferenceLocatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
       <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
       <Name>HotGlue.Compiler.CoffeeScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Compiler.Typescript\HotGlue.Compiler.TypeScript.csproj">
+      <Project>{05b0472a-8102-4c5c-ad10-3857987e2122}</Project>
+      <Name>HotGlue.Compiler.TypeScript</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
