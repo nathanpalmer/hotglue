@@ -108,7 +108,14 @@ class Dependency
     end
 end
 
-task :nuspec => [ :build ] do
+def ExecuteTask(task, *args)
+  # So yeah this doesn't really support more than 1 argument
+  Rake::Task[task].invoke(args[0])
+  # Running .execute didn't seem to work property with albacore's arguments
+  Rake::Task[task].reenable
+end
+
+task :nuget => [ :build ] do
   puts ""
   Dir.mkdir("#{deploy}") unless Dir.exists?("#{deploy}")
 
@@ -132,31 +139,37 @@ task :nuspec => [ :build ] do
 	]
 
 	projects.each do |project|
-    puts "Generating nuspec for #{project.Name}"
-
-    # For some reason the task name has to also be nuspec
-    # Need to find out why so we can rename the task "nuget"
-		nuspec do |nuspec|
-		  nuspec.id = project.Name
-		  nuspec.description = project.Description
-		  nuspec.version = project.Version
-		  nuspec.authors = project.Author
-		  nuspec.owners = project.Author
-		  nuspec.language = "en-US"
-		  project.Dependencies.each do |dep|
-		      nuspec.dependency dep.Name, dep.Version
-		  end
-		  nuspec.licenseUrl = "http://opensource.org/licenses/MIT"
-		  nuspec.working_directory = "#{deploy}"
-		  nuspec.output_file = "#{project.Name}.#{project.Version}.nuspec"
-		  nuspec.tags = ""
-      nuspec.file "../#{File::dirname project.FilePath}/bin/Release/*.dll".gsub("/","\\"), "lib\\net40"
-      nuspec.pretty_formatting = true
-		end
-
-    sh "#{tools}Nuget.exe pack #{deploy}#{project.Name}.#{project.Version}.nuspec -OutputDirectory #{deploy}"
-
-    #File.delete "#{deploy}#{project.Name}.#{project.Version}.nuspec"
+    ExecuteTask(:nuspec, project)
+    ExecuteTask(:nupack, project)
+    File.delete "#{deploy}#{project.Name}.#{project.Version}.nuspec"
 	end
 end
+
+nuspec :nuspec, [ :project ] do |nuspec, args|
+  project = args.project
+  puts "Generating nuspec for #{project.Name}"
+
+  nuspec.id = project.Name
+  nuspec.description = project.Description
+  nuspec.version = project.Version
+  nuspec.authors = project.Author
+  nuspec.owners = project.Author
+  nuspec.language = "en-US"
+  project.Dependencies.each do |dep|
+      nuspec.dependency dep.Name, dep.Version
+  end
+  nuspec.licenseUrl = "http://opensource.org/licenses/MIT"
+  nuspec.working_directory = "#{deploy}"
+  nuspec.output_file = "#{project.Name}.#{project.Version}.nuspec"
+  nuspec.tags = ""
+  nuspec.file "../#{File::dirname project.FilePath}/bin/Release/*.dll".gsub("/","\\"), "lib\\net40"
+end
+
+nugetpack :nupack, [ :project ] do |nuget, args|
+  project = args.project
+  nuget.command     = "#{tools}/Nuget.exe"
+  nuget.nuspec      = "#{deploy}#{project.Name}.#{project.Version}.nuspec"
+  nuget.output      = "#{deploy}"
+end
+
 
