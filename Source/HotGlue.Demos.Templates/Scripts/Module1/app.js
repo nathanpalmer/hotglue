@@ -1,16 +1,26 @@
 ﻿//= require ../shared/jquery-1.7.2.js
+
 //= require ../shared/jquery.tmpl.js
-//= require ../shared/mustache.js
-//= require ../shared/handlebars.js
-//= require ../shared/dust-full-0.3.0.js
-//= require ../shared/underscore.js
-//= require ../shared/ejs.js
 var jqueryTemplate = require('data.tmpl-jquery');
+
+//= require ../shared/mustache.js
 var mustacheTemplate = require('data.tmpl-mustache');
+
+//= require ../shared/handlebars.js
 var handlebarsTemplate = require('data.tmpl-handlebars');
+
+//= require ../shared/dust-full-0.3.0.js
 var dustTemplate = require('data.tmpl-dust');
+
+//= require ../shared/underscore.js
 var underscoreTemplate = require('data.tmpl-underscore');
+
+//= require ../shared/ejs.js
 var ejsTemplate = require('data.tmpl-ejs');
+
+//= require ../shared/jquery.nano.js
+var nanoTemplate = require('data.tmpl-nano');
+
 
 var title = "Hello, World";
 
@@ -43,4 +53,5 @@ $(document).ready(function () {
 
     tryRender("#underscore", function () { return underscoreTemplate({ title: title }); });
     tryRender("#ejs", function () { return ejsTemplate({ title: title }); });
+    tryRender("#nano", function () { return nanoTemplate({ title: title }); });
 });

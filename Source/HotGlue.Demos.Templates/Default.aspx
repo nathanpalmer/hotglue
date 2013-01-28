@@ -41,6 +41,10 @@
         <section>
             <div id="ejs"></div>
         </section>
+        <h1>NANO Template</h1>
+        <section>
+            <div id="nano"></div>
+        </section>
     </form>
 </body>
 </html>

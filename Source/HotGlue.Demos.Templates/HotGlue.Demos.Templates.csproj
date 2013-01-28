@@ -63,6 +63,7 @@
     <Content Include="Scripts\Shared\handlebars.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Module1\app.js" />
+    <Content Include="Scripts\Shared\jquery.nano.js" />
     <Content Include="Scripts\Shared\jquery.tmpl.js" />
     <Content Include="Scripts\Shared\mustache.js" />
     <Content Include="Scripts\Shared\underscore.js" />
@@ -79,6 +80,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl-nano">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-ejs">
       <SubType>Designer</SubType>
     </None>
@@ -124,6 +128,10 @@
     <ProjectReference Include="..\HotGlue.Template.Mustache\HotGlue.Template.Mustache.csproj">
       <Project>{9303ff9c-e607-49f3-b075-70d4cb09c12a}</Project>
       <Name>HotGlue.Template.Mustache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.NANO\HotGlue.Template.NANO.csproj">
+      <Project>{62b5655f-6e9a-4888-9fc6-22be695bb5ff}</Project>
+      <Name>HotGlue.Template.NANO</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Template.Underscore\HotGlue.Template.Underscore.csproj">
       <Project>{b00dbc21-fa37-4b75-bf07-713b378d0866}</Project>
