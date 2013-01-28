@@ -127,7 +127,8 @@ task :nuspec => [ :build ] do
     Project.new("#{source}HotGlue.Template.Dust/HotGlue.Template.Dust.csproj",version,"HotGlue.Template.Dust",authors),
     Project.new("#{source}HotGlue.Template.Underscore/HotGlue.Template.Underscore.csproj",version,"HotGlue.Template.Underscore",authors),
     Project.new("#{source}HotGlue.Template.EJS/HotGlue.Template.EJS.csproj",version,"HotGlue.Template.EJS",authors),
-    Project.new("#{source}HotGlue.Template.NANO/HotGlue.Template.NANO.csproj",version,"HotGlue.Template.NANO",authors)
+    Project.new("#{source}HotGlue.Template.NANO/HotGlue.Template.NANO.csproj",version,"HotGlue.Template.NANO",authors),
+    Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors)
 	]
 
 	projects.each do |project|

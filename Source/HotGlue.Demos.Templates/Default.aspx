@@ -45,6 +45,10 @@
         <section>
             <div id="nano"></div>
         </section>
+        <h1>JsRender Template</h1>
+        <section>
+            <div id="jsrender"></div>
+        </section>
     </form>
 </body>
 </html>

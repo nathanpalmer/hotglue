@@ -21,6 +21,9 @@ var ejsTemplate = require('data.tmpl-ejs');
 //= require ../shared/jquery.nano.js
 var nanoTemplate = require('data.tmpl-nano');
 
+//= require ../shared/jsrender.js
+var jsrenderTemplate = require('data.tmpl-jsrender');
+
 
 var title = "Hello, World";
 
@@ -54,4 +57,5 @@ $(document).ready(function () {
     tryRender("#underscore", function () { return underscoreTemplate({ title: title }); });
     tryRender("#ejs", function () { return ejsTemplate({ title: title }); });
     tryRender("#nano", function () { return nanoTemplate({ title: title }); });
+    tryRender("#jsrender", function () { return jsrenderTemplate({ title: title }); });
 });
