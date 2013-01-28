@@ -7,6 +7,7 @@
         </httpHandlers>
     </system.web>
     <system.webServer>
+        <validation validateIntegratedModeConfiguration="false"/>
         <handlers>
             <add name="HotGlue" type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>
             <add name="HotGlueModule" type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>
