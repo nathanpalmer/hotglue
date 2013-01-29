@@ -1,17 +1,19 @@
 ﻿<configuration>
     <system.web>
+        <httpModules>
+            <add name="HotGlueModule" type="HotGlue.Aspnet.HotGlueModule, HotGlue.Aspnet" />
+        </httpModules>
         <httpHandlers>
-            <add type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>
-            <add type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>
-            <add type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>
+            <add type="HotGlue.Aspnet.HotGlueHandler, HotGlue.Aspnet" verb="GET" path="hotglue.axd"/>
         </httpHandlers>
     </system.web>
     <system.webServer>
         <validation validateIntegratedModeConfiguration="false"/>
+        <modules>
+            <add name="HotGlueModule" type="HotGlue.Aspnet.HotGlueModule, HotGlue.Aspnet" />
+        </modules>
         <handlers>
-            <add name="HotGlue" type="HotGlue.Web.HotGlueHandler, HotGlue.Web, Version=1.0.0.0, Culture=neutral" verb="GET" path="*.js-glue"/>
-            <add name="HotGlueModule" type="HotGlue.Web.HotGlueModuleHandler, HotGlue.Web" verb="GET" path="*.*-module"/>
-            <add name="HotGlueRequire" type="HotGlue.Web.HotGlueRequireHandler, HotGlue.Web" verb="GET" path="*.js-require"/>
+            <add name="HotGlue" type="HotGlue.Aspnet.HotGlueHandler, HotGlue.Aspnet" verb="GET" path="hotglue.axd"/>
         </handlers>
     </system.webServer>
 </configuration>
