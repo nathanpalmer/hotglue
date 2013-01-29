@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <None Include="Scripts\test.coffee" />
     <Content Include="Scripts\Shared\dust-full-0.3.0.js" />
     <Content Include="Scripts\Shared\ejs.js" />
     <Content Include="Scripts\Shared\handlebars.js" />
@@ -68,6 +69,7 @@
     <Content Include="Scripts\Shared\jsrender.js" />
     <Content Include="Scripts\Shared\mustache.js" />
     <Content Include="Scripts\Shared\underscore.js" />
+    <Content Include="Scripts\test.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +83,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\Module1\data.tmpl-jsrender" />
     <None Include="Scripts\Module1\data.tmpl-nano">
       <SubType>Designer</SubType>
@@ -107,6 +112,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
+      <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
+      <Name>HotGlue.Compiler.CoffeeScript</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
       <Name>HotGlue.Core</Name>
@@ -159,7 +168,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50450</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

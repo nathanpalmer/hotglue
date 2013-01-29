@@ -23,11 +23,11 @@ namespace HotGlue.Assembly.CoffeeScript.Tests
             configuration.Debug.ShouldBe(false);
             configuration.ScriptPath.ShouldBe(@"Scripts/");
             configuration.Compilers.Length.ShouldBe(1);
-            configuration.Compilers.Any(x => x.Type == typeof(CoffeeScriptCompiler).FullName).ShouldBe(true);
+            configuration.Compilers.Any(x => x.Type == typeof(CoffeeScriptCompiler).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Length.ShouldBe(3);
-            configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).FullName).ShouldBe(true);
-            configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).FullName).ShouldBe(true);
-            configuration.Referencers.Any(x => x.Type == typeof(RequireReference).FullName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).AssemblyQualifiedName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).AssemblyQualifiedName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(RequireReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.GenerateScript.ShouldBe(null);
         }
     }

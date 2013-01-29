@@ -13,37 +13,45 @@ namespace HotGlue.Web
 {
     public class HotGlueHandler : IHttpHandler
     {
-        private IReferenceLocator _locator;
-        private HotGlueConfiguration _configuration;
-        private HttpContextCache _cache;
+        private static LoadedConfiguration _configuration;
+        private static IReferenceLocator _locator;
+        private static HttpContextCache _cache;
 
-        public HotGlueHandler()
+        static HotGlueHandler()
         {
-            _configuration = HotGlueConfigurationSection.Load();
+            var config = HotGlueConfigurationSection.Load();
+            _configuration = LoadedConfiguration.Load(config);
             _locator = new GraphReferenceLocator(_configuration);
             _cache = new HttpContextCache();
         }
 
         public void ProcessRequest(HttpContext context)
         {
-            context.Response.ContentType = "application/x-javascript";
-
-            if (File.Exists(context.Request.PhysicalPath))
-            {
-                context.Response.TransmitFile(context.Request.PhysicalPath);
-                return;
-            }
-
-            // find references
             var root = context.Server.MapPath("~");
-            var reference = context.BuildReference(Reference.TypeEnum.App);
-            var references = _locator.Load(root, reference);
+            var fullPath = context.FullPath();
 
-            var package = Package.Build(_configuration, root, _cache);
-            var content = package.Compile(references);
-
-            context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
-            context.Response.Write(content);
+            ScriptHelper.RewriteContent(
+                _configuration,
+                _locator,
+                _cache,
+                root,
+                fullPath,
+                (key) =>
+                    {
+                        var value = context.Request.QueryString[key];
+                        return value ?? "";
+                    },
+                (path, contentType) =>
+                    {
+                        context.Response.ContentType = contentType;
+                        context.Response.TransmitFile(fullPath);
+                    },
+                (content, contentType) =>
+                    {
+                        context.Response.ContentType = contentType;
+                        context.Response.AddHeader("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
+                        context.Response.Write(content);
+                    });
         }
 
         public bool IsReusable

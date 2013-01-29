@@ -8,32 +8,15 @@ namespace HotGlue
 {
     public class GraphReferenceLocator : IReferenceLocator
     {
-        private readonly HotGlueConfiguration _configuration;
-        private IFindReference[] _findReferences;
+        private readonly LoadedConfiguration _configuration;
 
-        public GraphReferenceLocator(HotGlueConfiguration configuration)
+        public GraphReferenceLocator(LoadedConfiguration configuration)
         {
             if (configuration == null)
             {
                 throw new ArgumentNullException("configuration");
             }
             _configuration = configuration;
-
-            if (_configuration.Referencers == null || _configuration.Referencers.Length == 0)
-            {
-                _findReferences = new IFindReference[]
-                    {
-                        new SlashSlashEqualReference(),
-                        new RequireReference(),
-                        new TripleSlashReference()
-                    };
-            }
-            else
-            {
-                _findReferences = _configuration.Referencers
-                                         .Select(r => (IFindReference) Activator.CreateInstance(Type.GetType(r.Type)))
-                                         .ToArray();
-            }
         }
 
         public IEnumerable<SystemReference> Load(string rootPath, SystemReference reference)
@@ -207,7 +190,7 @@ namespace HotGlue
 
             var text = File.ReadAllText(reference.FullPath);
             var currentReferences = new List<RelativeReference>();
-            foreach (var findReference in _findReferences)
+            foreach (var findReference in _configuration.FindReferences)
             {
                 currentReferences.AddRange(findReference.Parse(text));
             }

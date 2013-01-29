@@ -23,7 +23,7 @@ namespace HotGlue.Console
             {
                 throw new ArgumentNullException("fileName");
             }
-            var config = HotGlueConfiguration.Default();
+            var config = LoadedConfiguration.Load(HotGlueConfiguration.Default());
             var locator = new GraphReferenceLocator(config);
             var directoryInfo = new DirectoryInfo(rootPath);
             var fileInfo = new FileInfo(Path.Combine(filePath, fileName));

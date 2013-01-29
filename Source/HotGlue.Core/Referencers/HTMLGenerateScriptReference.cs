@@ -10,8 +10,8 @@ namespace HotGlue
             var relativePath = reference.RelativePath(true);
 
             return reference.Name.EndsWith("-module")
-                       ? string.Format("<script src=\"{0}&name={1}\"></script>", relativePath, string.Join("&name=", reference.ReferenceNames))
-                       : string.Format("<script src=\"{0}\"></script>", relativePath);
+                       ? string.Format("<script src=\"/hotglue.axd{0}&name={1}\"></script>", relativePath, string.Join("&name=", reference.ReferenceNames))
+                       : string.Format("<script src=\"/hotglue.axd{0}\"></script>", relativePath);
         }
     }
 }

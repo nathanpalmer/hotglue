@@ -30,7 +30,7 @@ namespace HotGlue.Tests
             var result = package.References(references);
 
             // Assert
-            result.ShouldBe(@"<script src=""/Scripts/depper1.js""></script>
+            result.ShouldBe(@"<script src=""/hotglue.axd/Scripts/depper1.js-app""></script>
 ");
         }
     }

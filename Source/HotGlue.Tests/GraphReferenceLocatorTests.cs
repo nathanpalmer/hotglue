@@ -16,7 +16,7 @@ namespace HotGlue.Tests
 
         public GraphReferenceLocatorTests()
         {
-            configuration = new HotGlueConfiguration()
+            configuration = LoadedConfiguration.Load(new HotGlueConfiguration()
             {
                 ScriptPath = "Scripts\\",
                 Referencers = new HotGlueReference[]
@@ -25,7 +25,7 @@ namespace HotGlue.Tests
                         new HotGlueReference { Type = typeof(RequireReference).FullName },
                         new HotGlueReference { Type = typeof(TripleSlashReference).FullName }
                     }
-            };
+            });
         }
 
         [Test]
@@ -430,7 +430,7 @@ namespace HotGlue.Tests
 
     public class TestBase
     {
-        protected HotGlueConfiguration configuration;
+        protected LoadedConfiguration configuration;
 
         public SystemReference BuildReference(string path, string name, Reference.TypeEnum type)
         {

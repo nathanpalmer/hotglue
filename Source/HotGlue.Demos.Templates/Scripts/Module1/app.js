@@ -1,4 +1,5 @@
 ﻿//= require ../shared/jquery-1.7.2.js
+var defaultTemplate = require('data.tmpl');
 
 //= require ../shared/jquery.tmpl.js
 var jqueryTemplate = require('data.tmpl-jquery');
@@ -37,6 +38,7 @@ function tryRender(element, template) {
 }
 
 $(document).ready(function () {
+    tryRender("#default", function () { return defaultTemplate({ title: title }); });
     tryRender("#jquery", function() { return jqueryTemplate({ title: title }); });
     tryRender("#mustache", function() { return mustacheTemplate({ title: title }); });
     tryRender("#handlebars", function() { return handlebarsTemplate({ title: title }); });

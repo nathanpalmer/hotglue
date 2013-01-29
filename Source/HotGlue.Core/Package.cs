@@ -22,35 +22,12 @@ namespace HotGlue
             _generateScriptReference = generateScriptReference;
         }
 
-        public static Package Build(HotGlueConfiguration configuration, string root, IFileCache cache)
+        public static Package Build(LoadedConfiguration configuration, string root, IFileCache cache)
         {
-            IGenerateScriptReference generateScriptReference;
-            if (configuration == null || configuration.GenerateScript == null)
-            {
-                generateScriptReference = new HTMLGenerateScriptReference();
-            }
-            else
-            {
-                generateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript.Type));
-            }
-
-            IList<ICompile> compilers;
-            if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
-            {
-                compilers = new ICompile[] {};
-            }
-            else
-            {
-                compilers = configuration.Compilers
-                                         .Where(c => string.IsNullOrWhiteSpace(c.Mode) || c.Mode.Equals(configuration.Debug ? "debug" : "release", StringComparison.OrdinalIgnoreCase))
-                                         .Select(compiler => (ICompile) Activator.CreateInstance(Type.GetType(compiler.Type)))
-                                         .ToList();
-            }
-
             _scriptPath = configuration.ScriptPath;
             _cache = cache;
 
-            var package = new Package(root, compilers, generateScriptReference);
+            var package = new Package(root, configuration.Compilers, configuration.GenerateScriptReference);
             return package;
         }
 
@@ -174,7 +151,15 @@ namespace HotGlue
                                                   };
                             sw.AppendLine(_generateScriptReference.GenerateReference(systemReference));
                         }
-                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        if (reference.FullPath.EndsWith("-glue"))
+                        {
+                            sw.AppendLine(_generateScriptReference.GenerateReference(reference));
+                        }
+                        else
+                        {
+                            var app = reference.Clone("-app");
+                            sw.AppendLine(_generateScriptReference.GenerateReference(app));
+                        }
                         break;
                     case Reference.TypeEnum.Library:
                     case Reference.TypeEnum.Dependency:

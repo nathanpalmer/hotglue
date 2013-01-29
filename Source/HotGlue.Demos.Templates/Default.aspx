@@ -17,6 +17,10 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <h1>Default Template</h1>
+        <section>
+            <div id="default"></div>
+        </section>
         <h1>jQuery Template</h1>
         <section>
             <div id="jquery"></div>

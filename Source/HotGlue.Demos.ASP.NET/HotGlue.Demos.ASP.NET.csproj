@@ -14,7 +14,7 @@
     <RootNamespace>HotGlue.Demos.ASP.NET</RootNamespace>
     <AssemblyName>HotGlue.Demos.ASP.NET</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -64,7 +64,10 @@
     <Content Include="Default.aspx" />
     <None Include="Scripts\CoffeeModule1\mod5.coffee" />
     <None Include="Scripts\CoffeeModule1\mod4.coffee" />
+    <None Include="Scripts\CoffeeModule1\app.coffee" />
     <Content Include="Scripts\CoffeeModule1\spine.js" />
+    <Content Include="Scripts\CoffeeModule2\app.js" />
+    <None Include="Scripts\CoffeeModule2\mod1.coffee" />
     <Content Include="Scripts\CommonJS\increment.js" />
     <Content Include="Scripts\CommonJS\math.js" />
     <Content Include="Scripts\CommonJS\program.js" />
@@ -83,7 +86,7 @@
     <Content Include="Scripts\Module5\controllers\controller.js" />
     <Content Include="Scripts\Module5\models.js" />
     <Content Include="Scripts\Module5\models\model.js" />
-    <Content Include="Scripts\Shared\dep1.js" />
+    <Content Include="Scripts\Module1\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Shared\jquery.tmpl.js" />
@@ -147,8 +150,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59009</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:59009/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

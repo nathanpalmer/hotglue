@@ -23,9 +23,9 @@ namespace HotGlue.Assembly.Basic.Tests
             configuration.ScriptPath.ShouldBe(@"Scripts/");
             configuration.Compilers.Length.ShouldBe(0);
             configuration.Referencers.Length.ShouldBe(3);
-            configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).FullName).ShouldBe(true);
-            configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).FullName).ShouldBe(true);
-            configuration.Referencers.Any(x => x.Type == typeof(RequireReference).FullName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).AssemblyQualifiedName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).AssemblyQualifiedName).ShouldBe(true);
+            configuration.Referencers.Any(x => x.Type == typeof(RequireReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.GenerateScript.ShouldBe(null);
         }
     }
