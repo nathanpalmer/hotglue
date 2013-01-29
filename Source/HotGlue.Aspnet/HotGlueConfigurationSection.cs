@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using HotGlue.Model;
 
-namespace HotGlue.Web
+namespace HotGlue.Aspnet
 {
     public class HotGlueConfigurationSection : IConfigurationSectionHandler
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace HotGlue.Web
+namespace HotGlue.Aspnet
 {
     public class HttpContextCache : IFileCache
     {

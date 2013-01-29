@@ -4,7 +4,7 @@ using System.IO;
 using System.Web;
 using System.Web.Configuration;
 using HotGlue.Model;
-using HotGlue.Web;
+using HotGlue.Aspnet;
 
 namespace HotGlue
 {

@@ -112,6 +112,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HotGlue.Aspnet\HotGlue.Aspnet.csproj">
+      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
+      <Name>HotGlue.Aspnet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
       <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
       <Name>HotGlue.Compiler.CoffeeScript</Name>
@@ -151,10 +155,6 @@
     <ProjectReference Include="..\HotGlue.Template.Underscore\HotGlue.Template.Underscore.csproj">
       <Project>{b00dbc21-fa37-4b75-bf07-713b378d0866}</Project>
       <Name>HotGlue.Template.Underscore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HotGlue.Web\HotGlue.Web.csproj">
-      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
-      <Name>HotGlue.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

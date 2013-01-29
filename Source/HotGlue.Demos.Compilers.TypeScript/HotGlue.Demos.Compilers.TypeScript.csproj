@@ -82,6 +82,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HotGlue.Aspnet\HotGlue.Aspnet.csproj">
+      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
+      <Name>HotGlue.Aspnet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotGlue.Compiler.Typescript\HotGlue.Compiler.TypeScript.csproj">
       <Project>{05b0472a-8102-4c5c-ad10-3857987e2122}</Project>
       <Name>HotGlue.Compiler.TypeScript</Name>
@@ -89,10 +93,6 @@
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
       <Name>HotGlue.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HotGlue.Web\HotGlue.Web.csproj">
-      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
-      <Name>HotGlue.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

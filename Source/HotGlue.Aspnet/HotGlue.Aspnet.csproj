@@ -8,8 +8,8 @@
     <ProjectGuid>{51E7E82B-809E-4822-A938-F0249F7B4E0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HotGlue.Web</RootNamespace>
-    <AssemblyName>HotGlue.Web</AssemblyName>
+    <RootNamespace>HotGlue.Aspnet</RootNamespace>
+    <AssemblyName>HotGlue.Aspnet</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

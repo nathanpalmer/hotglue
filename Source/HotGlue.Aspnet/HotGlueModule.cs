@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 
-namespace HotGlue.Web
+namespace HotGlue.Aspnet
 {
     public class HotGlueModule : IHttpModule
     {

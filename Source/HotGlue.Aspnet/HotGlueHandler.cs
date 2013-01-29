@@ -9,7 +9,7 @@ using System.Text;
 using System.Web;
 using HotGlue.Model;
 
-namespace HotGlue.Web
+namespace HotGlue.Aspnet
 {
     public class HotGlueHandler : IHttpHandler
     {
