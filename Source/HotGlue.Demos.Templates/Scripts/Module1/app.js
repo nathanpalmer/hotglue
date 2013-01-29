@@ -25,6 +25,10 @@ var nanoTemplate = require('data.tmpl-nano');
 //= require ../shared/jsrender.js
 var jsrenderTemplate = require('data.tmpl-jsrender');
 
+//= require ../shared/doT.js
+var dotTemplate = require('data.tmpl-dot');
+
+
 
 var title = "Hello, World";
 
@@ -60,4 +64,5 @@ $(document).ready(function () {
     tryRender("#ejs", function () { return ejsTemplate({ title: title }); });
     tryRender("#nano", function () { return nanoTemplate({ title: title }); });
     tryRender("#jsrender", function () { return jsrenderTemplate({ title: title }); });
+    tryRender("#dot", function () { return dotTemplate({ title: title }); });
 });

@@ -52,7 +52,12 @@
         <h1>JsRender Template</h1>
         <section>
             <div id="jsrender"></div>
+        </section> 
+        <h1>doT Template</h1>
+        <section>
+            <div id="dot"></div>
         </section>
+
     </form>
 </body>
 </html>

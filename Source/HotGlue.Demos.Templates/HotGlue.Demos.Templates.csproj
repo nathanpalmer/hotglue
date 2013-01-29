@@ -58,7 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <None Include="Scripts\Module1\data.tmpl-dot">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\test.coffee" />
+    <Content Include="Scripts\Shared\doT.js" />
     <Content Include="Scripts\Shared\dust-full-0.3.0.js" />
     <Content Include="Scripts\Shared\ejs.js" />
     <Content Include="Scripts\Shared\handlebars.js" />
@@ -123,6 +127,10 @@
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
       <Name>HotGlue.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.doT\HotGlue.Template.doT.csproj">
+      <Project>{79958362-6d25-4451-84a8-a810ac756481}</Project>
+      <Name>HotGlue.Template.doT</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Template.Dust\HotGlue.Template.Dust.csproj">
       <Project>{a7956bdd-99e5-4e19-9626-0203544434d1}</Project>

@@ -118,7 +118,7 @@ end
 task :nuget => [ :build ] do
   puts ""
   FileUtils.rm_rf("#{deploy}") if Dir.exists?("#{deploy}")
-  Dir.mkdir("#{deploy}")
+  Dir.mkdir("#{deploy}") unless Dir.exists?("#{deploy}")
 
 	authors = "Nathan Palmer, Aaron Hansen"
 
@@ -138,7 +138,8 @@ task :nuget => [ :build ] do
     Project.new("#{source}HotGlue.Template.Underscore/HotGlue.Template.Underscore.csproj",version,"HotGlue.Template.Underscore",authors),
     Project.new("#{source}HotGlue.Template.EJS/HotGlue.Template.EJS.csproj",version,"HotGlue.Template.EJS",authors),
     Project.new("#{source}HotGlue.Template.NANO/HotGlue.Template.NANO.csproj",version,"HotGlue.Template.NANO",authors),
-    Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors)
+    Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors),
+    Project.new("#{source}HotGlue.Template.doT/HotGlue.Template.doT.csproj",version,"HotGlue.Template.doT",authors)
 	]
 
 	projects.each do |project|
