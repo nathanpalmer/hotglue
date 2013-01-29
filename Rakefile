@@ -117,13 +117,15 @@ end
 
 task :nuget => [ :build ] do
   puts ""
-  Dir.mkdir("#{deploy}") unless Dir.exists?("#{deploy}")
+  FileUtils.rm_rf("#{deploy}") if Dir.exists?("#{deploy}")
+  Dir.mkdir("#{deploy}")
 
 	authors = "Nathan Palmer, Aaron Hansen"
 
 	projects = [
 		Project.new("#{source}HotGlue.Core/HotGlue.Core.csproj",version,"HotGlue.Core",authors, "HotGlue.Core"),
-    Project.new("#{source}HotGlue.Web/HotGlue.Web.csproj",version,"HotGlue.Web",authors, "HotGlue.Web"),
+    Project.new("#{source}HotGlue.Aspnet/HotGlue.Aspnet.csproj",version,"HotGlue.Aspnet",authors, "HotGlue.Aspnet"),
+    Project.new("#{source}HotGlue.Nancy/HotGlue.Nancy.csproj",version,"HotGlue.Nancy",authors, "HotGlue.Nancy"),
 		Project.new("#{source}HotGlue.Compiler.CoffeeScript/HotGlue.Compiler.CoffeeScript.csproj",version,"HotGlue.Compiler.CoffeeScript",authors),
     Project.new("#{source}HotGlue.Compiler.TypeScript/HotGlue.Compiler.TypeScript.csproj",version,"HotGlue.Compiler.TypeScript",authors),
     Project.new("#{source}HotGlue.Compressor.Uglify/HotGlue.Compressor.Uglify.csproj",version,"HotGlue.Compressor.Uglify",authors),
