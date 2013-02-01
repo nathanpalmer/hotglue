@@ -62,6 +62,51 @@ namespace HotGlue
             return sw.ToString();
         }
 
+        public IEnumerable<SystemReference> References(IEnumerable<SystemReference> references)
+        {
+            if (references == null) yield break;
+
+            var modules = false;
+
+            foreach (var reference in references)
+            {
+                switch (reference.Type)
+                {
+                    case Reference.TypeEnum.App:
+                        if (modules)
+                        {
+                            var systemReference = new SystemReference(new DirectoryInfo(_relativeRoot), new FileInfo(_relativeRoot + _scriptPath + "/get.js-require"), "get.js-require")
+                            {
+                                Type = Reference.TypeEnum.Dependency,
+                                Wait = true
+                            };
+                            yield return systemReference;
+                        }
+                        if (reference.FullPath.EndsWith("-glue"))
+                        {
+                            yield return reference;
+                        }
+                        else
+                        {
+                            var app = reference.Clone("-app");
+                            yield return app;
+                        }
+                        break;
+                    case Reference.TypeEnum.Library:
+                    case Reference.TypeEnum.Dependency:
+                        yield return reference;
+                        break;
+                    case Reference.TypeEnum.Module:
+                        modules = true;
+                        var clone = reference.Clone("-module");
+                        yield return clone;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public string CompileDependency<T>(T reference) where T : Reference
         {
             var cacheKey = reference.Path + "/" + reference.Name;
@@ -130,50 +175,19 @@ namespace HotGlue
             return CompileDependency(new Reference { Extension = ".js", Content = Properties.Resources.stitch });
         }
 
-        public string References(IEnumerable<SystemReference> references)
+        public string GenerateReferences(IEnumerable<SystemReference> references)
         {
-            if (references == null) return "";
+            var systemReferences = references as SystemReference[] ?? references.ToArray();
+            if (references == null || !systemReferences.Any()) return "";
 
             var sw = new StringBuilder();
-            var modules = false;
 
-            foreach (var reference in references)
+            sw.Append(_generateScriptReference.GenerateHeader());
+            foreach (var reference in References(systemReferences))
             {
-                switch (reference.Type)
-                {
-                    case Reference.TypeEnum.App:
-                        if (modules)
-                        {
-                            var systemReference = new SystemReference(new DirectoryInfo(_relativeRoot), new FileInfo(_relativeRoot + _scriptPath + "/get.js-require"), "get.js-require")
-                                                  {
-                                                      Type = Reference.TypeEnum.Dependency,
-                                                      Wait = true
-                                                  };
-                            sw.AppendLine(_generateScriptReference.GenerateReference(systemReference));
-                        }
-                        if (reference.FullPath.EndsWith("-glue"))
-                        {
-                            sw.AppendLine(_generateScriptReference.GenerateReference(reference));
-                        }
-                        else
-                        {
-                            var app = reference.Clone("-app");
-                            sw.AppendLine(_generateScriptReference.GenerateReference(app));
-                        }
-                        break;
-                    case Reference.TypeEnum.Library:
-                    case Reference.TypeEnum.Dependency:
-                        sw.AppendLine(_generateScriptReference.GenerateReference(reference));
-                        break;
-                    case Reference.TypeEnum.Module:
-                        modules = true;
-                        var clone = reference.Clone("-module");
-                        sw.AppendLine(_generateScriptReference.GenerateReference(clone));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                sw.Append(_generateScriptReference.GenerateReference(reference));
             }
+            sw.Append(_generateScriptReference.GenerateFooter());
 
             return sw.ToString();
         }

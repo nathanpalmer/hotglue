@@ -27,11 +27,41 @@ namespace HotGlue.Tests
                 };
 
             // Act
-            var result = package.References(references);
+            var result = package.GenerateReferences(references);
 
             // Assert
             result.ShouldBe(@"<script src=""/hotglue.axd/Scripts/depper1.js-app""></script>
 ");
+        }
+
+        [Test]
+        public void Should_Generate_HTML_References_with_pre_and_post_text()
+        {
+            // Arrange
+            var compilers = new[] { new JQueryTemplateCompiler(), };
+            var referencer = new LABjsScriptReference();
+
+            var package = new Package(".", compilers, referencer);
+
+            var references = new[]
+                {
+                    new SystemReference(new DirectoryInfo("C:/Root/"), new FileInfo("C:/Root/Scripts/depper1.js"), "depper1.js")
+                    {
+                        Type = Reference.TypeEnum.App
+                    }
+                };
+
+            // Act
+            var result = package.GenerateReferences(references);
+
+            // Assert
+            result.ShouldBe(
+@"<script>
+$LAB
+.script(""/hotglue.axd/Scripts/depper1.js-app"");
+</script>
+");
+        
         }
     }
 }

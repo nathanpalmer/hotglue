@@ -73,6 +73,10 @@
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
       <Name>HotGlue.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Reference.LABjs\HotGlue.Reference.LABjs.csproj">
+      <Project>{5da6de08-2144-4f4b-9756-76db98c05951}</Project>
+      <Name>HotGlue.Reference.LABjs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotGlue.Template.jQuery\HotGlue.Template.jQuery.csproj">
       <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
       <Name>HotGlue.Template.jQuery</Name>
