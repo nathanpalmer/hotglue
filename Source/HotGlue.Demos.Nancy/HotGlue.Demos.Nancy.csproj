@@ -82,6 +82,7 @@
     <Content Include="packages.config" />
     <None Include="Views\Default\Index.cshtml" />
     <Content Include="Views\Application.cshtml" />
+    <Content Include="Views\Default\SSVE.sshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

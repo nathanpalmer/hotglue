@@ -12,7 +12,12 @@ namespace HotGlue.Demos.Nancy
         {
             Get["/"] = parameters =>
                 {
-                    return View["Index", new { Test = "Test" }];
+                    return View["Index", new {Test = "Test"}];
+                };
+
+            Get["/ssve"] = parameters =>
+                {
+                    return View["SSVE", new {References = Script.Reference("app.js")}];
                 };
         }
     }
