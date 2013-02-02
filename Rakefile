@@ -8,7 +8,7 @@ deploy = "Deploy/"
 version = "0.0.0"
 version_changeset = ""
 
-task :default => [ :build ]
+task :default => [ :test ]
 
 desc "Build"
 msbuild :build => [ :update_nuget, :assembly_info ] do |msb|

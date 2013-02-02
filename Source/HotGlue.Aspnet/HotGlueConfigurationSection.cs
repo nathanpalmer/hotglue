@@ -30,10 +30,8 @@ namespace HotGlue.Aspnet
 
         public static HotGlueConfiguration Load()
         {
-            var configuration = HotGlueConfiguration.Load();
-
-            configuration.Debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
-
+            var debug = ((CompilationSection)ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
+            var configuration = HotGlueConfiguration.Load(debug);
             return configuration;
         }
     }

@@ -16,7 +16,7 @@ namespace HotGlue.Assembly.Basic.Tests
         public void Does_It_Find_Only_The_Basic_Classes()
         {
             // Arrange/Act
-            var configuration = HotGlueConfiguration.Load();
+            var configuration = HotGlueConfiguration.Load(false);
 
             // Assert
             configuration.Debug.ShouldBe(false);

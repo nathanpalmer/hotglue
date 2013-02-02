@@ -29,9 +29,9 @@ namespace HotGlue
 
         static Script()
         {
-            var config = HotGlueConfiguration.Load();
-            _configuration = LoadedConfiguration.Load(config);
             _debug = StaticConfiguration.IsRunningDebug;
+            var config = HotGlueConfiguration.Load(_debug);
+            _configuration = LoadedConfiguration.Load(config);
             _locator = new GraphReferenceLocator(_configuration);
         }
 
