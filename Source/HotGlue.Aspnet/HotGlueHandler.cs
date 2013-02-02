@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Configuration;
 using HotGlue.Model;
 
 namespace HotGlue.Aspnet
@@ -19,7 +20,8 @@ namespace HotGlue.Aspnet
 
         static HotGlueHandler()
         {
-            var config = HotGlueConfigurationSection.Load();
+            var debug = ((CompilationSection)ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
+            var config = HotGlueConfiguration.Load(debug);
             _configuration = LoadedConfiguration.Load(config);
             _locator = new GraphReferenceLocator(_configuration);
             _cache = new HttpContextCache();

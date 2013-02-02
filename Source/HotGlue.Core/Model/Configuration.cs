@@ -55,68 +55,105 @@ namespace HotGlue.Model
 
         public static HotGlueConfiguration Load(bool debug)
         {
-            var section = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
-            if (section != null) return section;
+            var section = (HotGlueConfiguration) ConfigurationManager.GetSection("hotglue");
+
+            if (section != null &&
+                section.Compilers != null && section.Compilers.Length > 0 &&
+                section.Referencers != null && section.Referencers.Length > 0 &&
+                section.GenerateScript != null)
+            {
+                // If all three sections are in the configuration we take it
+                return section;
+            }
 
             var configuration = new HotGlueConfiguration
-            {
-                ScriptPath = "Scripts\\"
-            };
+                {
+                    Debug = debug,
+                    ScriptPath = section != null &&
+                                 !string.IsNullOrWhiteSpace(section.ScriptPath)
+                                     ? section.ScriptPath
+                                     : "Scripts\\"
+                };
 
             var assemblies = GetAssemblies();
 
             // Find Compiler
-            var compilers = assemblies.SelectMany(a => a.GetTypes())
-                                                .Where(t => typeof (ICompile).IsAssignableFrom(t) &&
-                                                            typeof (ICompress).IsAssignableFrom(t) == false &&
-                                                            typeof (ICompile) != t)
-                                                .Select(t => new HotGlueCompiler
-                                                    {
-                                                        Type = t.AssemblyQualifiedName
-                                                    })
-                                                .ToList();
-
-            // Find Compressor
-            if (!debug)
+            if (section != null &&
+                section.Compilers != null && section.Compilers.Length > 0)
             {
-                compilers.AddRange(assemblies.SelectMany(a => a.GetTypes())
-                                             .Where(t => typeof (ICompress).IsAssignableFrom(t) &&
-                                                         typeof (ICompress) != t)
-                                             .Select(t => new HotGlueCompiler
-                                                 {
-                                                     Type = t.AssemblyQualifiedName
-                                                 }));
+                // Pull from configuration
+                configuration.Compilers = section.Compilers;
+            }
+            else
+            {
+                var compilers = assemblies.SelectMany(a => a.GetTypes())
+                                          .Where(t => typeof (ICompile).IsAssignableFrom(t) &&
+                                                      typeof (ICompress).IsAssignableFrom(t) == false &&
+                                                      typeof (ICompile) != t)
+                                          .Select(t => new HotGlueCompiler
+                                              {
+                                                  Type = t.AssemblyQualifiedName
+                                              })
+                                          .ToList();
+
+                // Find Compressor
+                if (!debug)
+                {
+                    compilers.AddRange(assemblies.SelectMany(a => a.GetTypes())
+                                                 .Where(t => typeof (ICompress).IsAssignableFrom(t) &&
+                                                             typeof (ICompress) != t)
+                                                 .Select(t => new HotGlueCompiler
+                                                     {
+                                                         Type = t.AssemblyQualifiedName
+                                                     }));
+                }
+
+                configuration.Compilers = compilers.ToArray();
             }
 
-            configuration.Compilers = compilers.ToArray();
-
             // Script Generator
-            var generate = assemblies.SelectMany(a => a.GetTypes())
-                                     .Where(t => typeof (IGenerateScriptReference).IsAssignableFrom(t) &&
-                                                 typeof (IGenerateScriptReference) != t &&
-                                                 typeof (HTMLGenerateScriptReference) != t)
-                                     .Select(t => new HotGlueGenerator
-                                         {
-                                             Type = t.AssemblyQualifiedName
-                                         })
-                                     .FirstOrDefault();
-            if (generate != null)
+            if (section != null &&
+                section.GenerateScript != null)
             {
-                configuration.GenerateScript = generate;
+                // Load from configuration
+                configuration.GenerateScript = section.GenerateScript;
+            }
+            else
+            {
+                var generate = assemblies.SelectMany(a => a.GetTypes())
+                                         .Where(t => typeof (IGenerateScriptReference).IsAssignableFrom(t) &&
+                                                     typeof (IGenerateScriptReference) != t &&
+                                                     typeof (HTMLGenerateScriptReference) != t)
+                                         .Select(t => new HotGlueGenerator
+                                             {
+                                                 Type = t.AssemblyQualifiedName
+                                             })
+                                         .FirstOrDefault();
+
+                if (generate != null)
+                {
+                    configuration.GenerateScript = generate;
+                }
             }
 
             // Find Referencers
-            configuration.Referencers = assemblies.SelectMany(a => a.GetTypes())
-                                                  .Where(t => typeof (IFindReference).IsAssignableFrom(t) &&
-                                                              typeof (IFindReference) != t)
-                                                  .Select(t => new HotGlueReference
-                                                      {
-                                                          Type = t.AssemblyQualifiedName
-                                                      })
-                                                  .ToArray();
-
-            // Find Compressors
-            //TODO: Right now there isn't a way to scan for compressors because they are just compilers
+            if (section != null &&
+                section.Referencers != null && section.Referencers.Length > 0)
+            {
+                // Pull from configuration
+                configuration.Referencers = section.Referencers;
+            }
+            else
+            {
+                configuration.Referencers = assemblies.SelectMany(a => a.GetTypes())
+                                                      .Where(t => typeof (IFindReference).IsAssignableFrom(t) &&
+                                                                  typeof (IFindReference) != t)
+                                                      .Select(t => new HotGlueReference
+                                                          {
+                                                              Type = t.AssemblyQualifiedName
+                                                          })
+                                                      .ToArray();
+            }
 
             return configuration;
         }

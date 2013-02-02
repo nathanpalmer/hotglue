@@ -57,7 +57,7 @@ namespace HotGlue.Assembly.Compressor.Tests
             var configuration = HotGlueConfiguration.Load(true);
 
             // Assert
-            configuration.Debug.ShouldBe(false);
+            configuration.Debug.ShouldBe(true);
             configuration.ScriptPath.ShouldBe(@"Scripts/");
             configuration.Compilers.Length.ShouldBe(2);
             configuration.Compilers.Any(x => x.Type == typeof(YUICompressor).AssemblyQualifiedName).ShouldBe(true);

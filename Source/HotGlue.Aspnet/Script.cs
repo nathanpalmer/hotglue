@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Configuration;
 using HotGlue.Model;
 using HotGlue.Aspnet;
+using HotGlueConfigurationSection = HotGlue.Configuration.HotGlueConfigurationSection;
 
 namespace HotGlue
 {
@@ -16,7 +17,8 @@ namespace HotGlue
 
         static Script()
         {
-            var config = HotGlueConfigurationSection.Load();
+            var debug = ((CompilationSection)ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
+            var config = HotGlueConfiguration.Load(debug);
             _configuration = LoadedConfiguration.Load(config);
             _debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
             _locator = new GraphReferenceLocator(_configuration);

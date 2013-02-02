@@ -1,4 +1,33 @@
 ﻿<configuration>
+    <configSections>
+        <section name="hotglue" type="HotGlue.Configuration.HotGlueConfigurationSection, HotGlue.Core"/>
+    </configSections>
+
+    <hotglue>
+        <!-- Path to where you store your JavaScript -->
+        <!--  /Scripts                    -> Most common default -->
+        <!--<scriptPath>/Scripts</scriptPath>-->
+
+        <!-- Default service to generate script tags -->
+        <!--  HTMLGenerateScriptReference -> <script src="mod.js"></script> -->
+        <!--<generate type="HotGlue.HTMLGenerateScriptReference, HotGlue.Core"/>-->
+
+        <!-- List of services that compiler or alter your source files -->
+        <!--  CoffeeScriptCompiler        -> Compiles CoffeeScript into JavaScript -->
+        <!--  jQueryTemplateCompiler      -> Compiles a template file to be used in JavaScript -->
+        <compilers>
+            <!--<compiler extension=".coffee" type="HotGlue.Compilers.CoffeeScriptCompiler, HotGlue.Compiler.CoffeeScript"/>-->
+        </compilers>
+
+        <!-- List of services that find references in each file -->
+        <!-- RequireReference            -> var mod = require("mod.js"); -->
+        <!-- SlashSlashEqualsReference   -> //= require "mod.js" -->
+        <!-- TripleSlashReference        -> ///<reference path="mod.js"/> -->
+        <referencers>
+            <!--<referencer type="HotGlue.RequireReference, HotGlue.Core"/>-->
+        </referencers>
+    </hotglue>
+
     <system.web>
         <httpModules>
             <add name="HotGlueModule" type="HotGlue.Aspnet.HotGlueModule, HotGlue.Aspnet" />
@@ -7,6 +36,7 @@
             <add type="HotGlue.Aspnet.HotGlueHandler, HotGlue.Aspnet" verb="GET" path="hotglue.axd"/>
         </httpHandlers>
     </system.web>
+
     <system.webServer>
         <validation validateIntegratedModeConfiguration="false"/>
         <modules>

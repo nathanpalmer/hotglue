@@ -45,6 +45,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FindReferences\TripleSlashReference.cs" />
     <Compile Include="GraphReferenceLocator.cs" />
+    <Compile Include="Configuration\HotGlueConfigurationSection.cs" />
     <Compile Include="ICompress.cs" />
     <Compile Include="IFileCache.cs" />
     <Compile Include="IFindReference.cs" />
