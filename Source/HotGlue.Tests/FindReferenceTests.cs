@@ -233,6 +233,22 @@ var someObject = {
             references.First().Name.ShouldBe("test.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
+
+        [Test]
+        public void Should_Parse_TripleSlashReference_without_the_space()
+        {
+            // Arrange
+            var referencer = new TripleSlashReference();
+
+            // Act
+            var references = referencer.Parse(@"
+///<reference path=""test.js""/>
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("test.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
+        }
         #endregion
 
         #region Coffee Script

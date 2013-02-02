@@ -15,7 +15,7 @@ namespace HotGlue
     public class TripleSlashReference : IFindReference
     {
         static readonly Regex ReferenceCommentRegex = new Regex(
-            @"^\s*///\s+<reference\s+path=""(?<path>.+?)""\s*(?<identifier>library?)?\s*/>\s*$",
+            @"^\s*///\s*<reference\s+path=""(?<path>.+?)""\s*(?<identifier>library?)?\s*/>\s*$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
