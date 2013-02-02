@@ -33,7 +33,7 @@ namespace HotGlue
 
                 var references = locator.Load(root, reference);
 
-                return package.References(references);
+                return package.GenerateReferences(references);
             }
 
             var appName = name + "-glue";
@@ -41,7 +41,7 @@ namespace HotGlue
             var appFile = new FileInfo(Path.Combine(root + configuration.ScriptPath, appName));
             var appReference = new SystemReference(appDirectory, appFile, appName) { Type = Model.Reference.TypeEnum.App };
 
-            return package.References(new[] { appReference });
+            return package.GenerateReferences(new[] { appReference });
         }
 
         public static void RewriteContent(
