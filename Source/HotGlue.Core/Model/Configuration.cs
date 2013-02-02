@@ -53,7 +53,7 @@ namespace HotGlue.Model
             };
         }
 
-        public static HotGlueConfiguration Load()
+        public static HotGlueConfiguration Load(bool debug)
         {
             var section = (HotGlueConfiguration)ConfigurationManager.GetSection("hotglue");
             if (section != null) return section;
@@ -66,16 +66,29 @@ namespace HotGlue.Model
             var assemblies = GetAssemblies();
 
             // Find Compiler
-            configuration.Compilers = assemblies.SelectMany(a => a.GetTypes())
+            var compilers = assemblies.SelectMany(a => a.GetTypes())
                                                 .Where(t => typeof (ICompile).IsAssignableFrom(t) &&
+                                                            typeof (ICompress).IsAssignableFrom(t) == false &&
                                                             typeof (ICompile) != t)
                                                 .Select(t => new HotGlueCompiler
                                                     {
-                                                        Type = t.AssemblyQualifiedName,
-                                                        //TODO: Not sure we're actually using these extensions anywhere
-                                                        //Extension = String.Join(",", ((ICompile) Activator.CreateInstance(t)).Extensions)
+                                                        Type = t.AssemblyQualifiedName
                                                     })
-                                                .ToArray();
+                                                .ToList();
+
+            // Find Compressor
+            if (!debug)
+            {
+                compilers.AddRange(assemblies.SelectMany(a => a.GetTypes())
+                                             .Where(t => typeof (ICompress).IsAssignableFrom(t) &&
+                                                         typeof (ICompress) != t)
+                                             .Select(t => new HotGlueCompiler
+                                                 {
+                                                     Type = t.AssemblyQualifiedName
+                                                 }));
+            }
+
+            configuration.Compilers = compilers.ToArray();
 
             // Script Generator
             var generate = assemblies.SelectMany(a => a.GetTypes())

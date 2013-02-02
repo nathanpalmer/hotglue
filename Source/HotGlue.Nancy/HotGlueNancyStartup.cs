@@ -16,6 +16,7 @@ namespace HotGlue.Demos.Nancy
     {
         private LoadedConfiguration _configuration;
         private GraphReferenceLocator _locator;
+        private bool _debug;
         //TODO: Add in a file cache implementation
         //private IFileCache _cache;
         public static string Root { get; private set; }
@@ -27,7 +28,8 @@ namespace HotGlue.Demos.Nancy
 
         public void Initialize(IPipelines pipelines)
         {
-            var config = HotGlueConfiguration.Load();
+            _debug = StaticConfiguration.IsRunningDebug;
+            var config = HotGlueConfiguration.Load(_debug);
             _configuration = LoadedConfiguration.Load(config);
             _locator = new GraphReferenceLocator(_configuration);
 
