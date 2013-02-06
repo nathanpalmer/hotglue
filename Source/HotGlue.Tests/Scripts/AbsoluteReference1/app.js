@@ -1,3 +1,3 @@
-﻿/// <reference path="/Scripts/AbsoluteReference/mod.js"/>
+﻿/// <reference path="/Scripts/AbsoluteReference1/mod.js"/>
 
 var j = 1;
