@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HotGlue.Model;
 
 namespace HotGlue
@@ -137,10 +138,11 @@ namespace HotGlue
         {
             String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
             SystemReference systemReference = null;
-            var referenceIsAbsolutePath =
-                !string.IsNullOrEmpty(relativeReference.ReferenceName) && (relativeReference.ReferenceName[0] == '/');
+            var modifiedPath = Regex.Replace(relativeReference.ReferenceName, "^~/", "/");
+            var referenceIsAbsolutePath = !string.IsNullOrEmpty(relativeReference.ReferenceName) &&
+                                          (modifiedPath[0] == '/');
             var filePath = referenceIsAbsolutePath
-                               ? Path.Combine(rootDirectory.FullName, relativeReference.ReferenceName.Substring(1))
+                               ? Path.Combine(rootDirectory.FullName, modifiedPath.Substring(1))
                                : Path.Combine(currentPath, relativeReference.ReferenceName);
             var fileReference = new FileInfo(filePath);
             if (fileReference.Exists)
