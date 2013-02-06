@@ -239,7 +239,7 @@ namespace HotGlue.Tests
         {
             // Arrange
             var locator = new GraphReferenceLocator(configuration);
-            var reference = BuildReference("AbsoluteReference", "app.js", Reference.TypeEnum.App);
+            var reference = BuildReference("AbsoluteReference1", "app.js", Reference.TypeEnum.App);
 
             // Act
             var references = locator.Load(root, reference).ToList();
@@ -248,6 +248,22 @@ namespace HotGlue.Tests
             references.Count.ShouldBe(2);
             references.ShouldContain(r => r.Name.Equals("mod.js", StringComparison.InvariantCultureIgnoreCase));
         }
+
+        [Test]
+        public void Can_Find_Absolute_References_With_Tilde()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("AbsoluteReference2", "app.js", Reference.TypeEnum.App);
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            references.Count.ShouldBe(2);
+            references.ShouldContain(r => r.Name.Equals("mod.js", StringComparison.InvariantCultureIgnoreCase));
+        }
+
 
         [Test]
         [TestCase(false)]

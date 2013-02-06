@@ -87,8 +87,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\AbsoluteReference\app.js" />
-    <Content Include="Scripts\AbsoluteReference\mod.js" />
+    <Content Include="Scripts\AbsoluteReference1\app.js" />
+    <Content Include="Scripts\AbsoluteReference1\mod.js" />
+    <Content Include="Scripts\AbsoluteReference2\app.js" />
+    <Content Include="Scripts\AbsoluteReference2\mod.js" />
     <Content Include="Scripts\Compile1\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
