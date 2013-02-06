@@ -1,0 +1,13 @@
+﻿<configuration>
+    <configSections>
+        <section name="razor" type="Nancy.ViewEngines.Razor.RazorConfigurationSection" />
+    </configSections>
+    <razor disableAutoIncludeModelNamespace="false">
+        <assemblies>
+            <add assembly="Nancy.Hosting.Aspnet" />
+            <add assembly="HotGlue.Nancy.Razor" />
+        </assemblies>
+        <namespaces>
+        </namespaces>
+    </razor>
+</configuration>

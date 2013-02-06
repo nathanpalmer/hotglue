@@ -7,6 +7,7 @@ using System.Text;
 using HotGlue.Demos.Nancy;
 using HotGlue.Model;
 using Nancy;
+using Nancy.ViewEngines.Razor;
 
 namespace HotGlue
 {
@@ -24,10 +25,10 @@ namespace HotGlue
             _locator = new GraphReferenceLocator(_configuration);
         }
 
-        public static string Reference(string name)
+        public static IHtmlString Reference(string name)
         {
             var root = HotGlueNancyStartup.Root;
-            return ScriptHelper.Reference(_configuration, _locator, root, name, _debug);
+            return new NonEncodedHtmlString(ScriptHelper.Reference(_configuration, _locator, root, name, _debug));
         }
     }
 }
