@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using HotGlue.Demos.Nancy;
-using HotGlue.Model;
+﻿using HotGlue.Model;
+using HotGlue.Nancy;
 using Nancy;
 using Nancy.ViewEngines.Razor;
 

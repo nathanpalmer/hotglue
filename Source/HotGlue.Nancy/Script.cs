@@ -4,8 +4,8 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
-using HotGlue.Demos.Nancy;
 using HotGlue.Model;
+using HotGlue.Nancy;
 using Nancy;
 
 namespace HotGlue

@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Web;
-using HotGlue;
 using HotGlue.Model;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Responses;
 
-namespace HotGlue.Demos.Nancy
+namespace HotGlue.Nancy
 {
     public class HotGlueNancyStartup : IApplicationStartup
     {
+        public static string Root { get; private set; }
+
         private LoadedConfiguration _configuration;
         private GraphReferenceLocator _locator;
         private bool _debug;
-        //TODO: Add in a file cache implementation
-        //private IFileCache _cache;
-        public static string Root { get; private set; }
+        private readonly IFileCache _cache;
 
         public HotGlueNancyStartup(IRootPathProvider rootPathProvider)
         {
             Root = rootPathProvider.GetRootPath();
+            _cache = new DictionaryCache();
         }
 
         public void Initialize(IPipelines pipelines)
@@ -45,8 +41,7 @@ namespace HotGlue.Demos.Nancy
             ScriptHelper.RewriteContent(
                 _configuration,
                 _locator,
-                //TODO: Replace with _cache when we have an implementation
-                null,
+                _cache,
                 Root,
                 fullPath, 
                 (key) =>
@@ -63,9 +58,11 @@ namespace HotGlue.Demos.Nancy
                         context.Response.Headers.Add("Content-Length", content.Length.ToString(CultureInfo.InvariantCulture));
                         context.Response.Contents = stream =>
                         {
-                            StreamWriter sw = new StreamWriter(stream);
-                            sw.Write(content);
-                            sw.Close();
+                            using (var sw = new StreamWriter(stream))
+                            {
+                                sw.Write(content);
+                                sw.Close();
+                            }
                         };
                         context.Response.ContentType = contentType;
                         context.Response.StatusCode = HttpStatusCode.OK;
