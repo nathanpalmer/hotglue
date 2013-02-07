@@ -16,7 +16,7 @@ namespace HotGlue
             string name,
             bool debug)
         {
-            var package = Package.Build(configuration, root, null);
+            var package = Package.Build(configuration, root);
 
             if (debug)
             {
@@ -47,7 +47,6 @@ namespace HotGlue
         public static void RewriteContent(
             LoadedConfiguration configuration,
             IReferenceLocator locator,
-            IFileCache cache,
             string root,
             string fullPath,
             Func<String,String> queryString,
@@ -72,7 +71,7 @@ namespace HotGlue
                                                 ? Model.Reference.TypeEnum.App
                                                 : Model.Reference.TypeEnum.Dependency;
 
-            var package = Package.Build(configuration, root, cache);
+            var package = Package.Build(configuration, root);
             string content = null;
 
             if (fullPath.EndsWith("js-require"))

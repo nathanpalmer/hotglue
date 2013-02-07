@@ -27,6 +27,9 @@ namespace HotGlue.Model
         [XmlElement("generate")]
         public ObjectType GenerateScript { get; set; }
 
+        [XmlElement("cache")]
+        public ObjectType Cache { get; set; }
+
         [XmlArray("compilers")]
         [XmlArrayItem("compiler")]
         public HotGlueCompiler[] Compilers { get; set; }
@@ -134,6 +137,14 @@ namespace HotGlue.Model
                 {
                     configuration.GenerateScript = generate;
                 }
+            }
+
+            // Script Cache
+            if (section != null &&
+                section.Cache != null)
+            {
+                // Load from configuration
+                configuration.Cache = section.Cache;
             }
 
             // Find Referencers
