@@ -24,9 +24,15 @@ task :version do
   result = %x[git describe]
   regex = /^(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)(-(?<revision>\d+))*(-(?<changeset>\S*))*$/
   matches = regex.match(result)
-
-  version = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:revision]}"
-  version_changeset = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:changeset]}"
+  
+  if matches.nil?
+    puts "No version information found. You need to fetch the tags from the repository -- 'git fetch --tags'"
+    version = "0.0.0.0"
+    version_changeset = "0.0.0.0"
+  else
+    version = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:revision]}"
+    version_changeset = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:changeset]}"
+  end
 end
 
 desc "Generate the AssemblyInfo"

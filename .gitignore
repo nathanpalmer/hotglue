@@ -5,6 +5,7 @@
 *.suo
 TestResult.xml
 CommonAssemblyInfo.cs
+*.DotSettings
 
 [Bb]uild
 [Dd]eploy
