@@ -35,6 +35,11 @@ task :version do
   end
 end
 
+desc "Tag the repository"
+task :tag, :version do |t, args|
+  sh "git tag -a #{args[:version]} -m \"Upgraded to #{args[:version]}\""
+end
+
 desc "Generate the AssemblyInfo"
 assemblyinfo :assembly_info => [ :version ] do |asm|
   puts ""
