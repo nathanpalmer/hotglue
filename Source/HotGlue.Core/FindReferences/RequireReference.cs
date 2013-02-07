@@ -6,6 +6,12 @@ using HotGlue.Model;
 
 namespace HotGlue
 {
+    /// <summary>
+    /// Finds references in the format of
+    /// 
+    ///    var variable = require('test.js');   OR
+    ///    variable = require('test.js')
+    /// </summary>
     public class RequireReference : IFindReference
     {
         private static readonly Regex ReferenceVariableRegex = new Regex(

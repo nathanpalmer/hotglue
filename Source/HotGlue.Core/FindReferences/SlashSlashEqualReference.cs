@@ -6,6 +6,13 @@ using HotGlue.Model;
 
 namespace HotGlue
 {
+    /// <summary>
+    /// Finds references in the format of
+    /// 
+    ///    //= require('test.js')   OR
+    ///    #= require 'test.js'     OR
+    ///    #= library 'test.js'     OR
+    /// </summary>
     public class SlashSlashEqualReference : IFindReference
     {
         static readonly Regex ReferenceCommentRegex = new Regex(

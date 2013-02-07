@@ -1,0 +1,1 @@
+﻿var mod1 = require('mod1.coffee');

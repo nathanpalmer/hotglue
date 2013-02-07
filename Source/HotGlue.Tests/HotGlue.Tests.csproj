@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\Libraries\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Shouldly">
       <HintPath>..\..\Libraries\Shouldly.1.1.1.1\lib\35\Shouldly.dll</HintPath>
@@ -50,27 +51,46 @@
     <Compile Include="CompileTests.cs" />
     <Compile Include="Console\ArgumentsTests.cs" />
     <Compile Include="Console\ProgramTests.cs" />
+    <Compile Include="TypeScriptTests.cs" />
     <Compile Include="FindReferenceTests.cs" />
     <Compile Include="GraphReferenceLocatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReferenceTests.cs" />
+    <Compile Include="GenerateReferenceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HotGlue.Console\HotGlue.Console.csproj">
-      <Project>{D66E6030-2FA2-4845-9D9E-DAFB9C6BD115}</Project>
-      <Name>HotGlue.Console</Name>
+    <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
+      <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
+      <Name>HotGlue.Compiler.CoffeeScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Compiler.Typescript\HotGlue.Compiler.TypeScript.csproj">
+      <Project>{05b0472a-8102-4c5c-ad10-3857987e2122}</Project>
+      <Name>HotGlue.Compiler.TypeScript</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
       <Name>HotGlue.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Reference.LABjs\HotGlue.Reference.LABjs.csproj">
+      <Project>{5da6de08-2144-4f4b-9756-76db98c05951}</Project>
+      <Name>HotGlue.Reference.LABjs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.jQuery\HotGlue.Template.jQuery.csproj">
+      <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
+      <Name>HotGlue.Template.jQuery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue\HotGlue.csproj">
+      <Project>{d66e6030-2fa2-4845-9d9e-dafb9c6bd115}</Project>
+      <Name>HotGlue</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\AbsoluteReference\app.js" />
-    <Content Include="Scripts\AbsoluteReference\mod.js" />
+    <Content Include="Scripts\AbsoluteReference1\app.js" />
+    <Content Include="Scripts\AbsoluteReference1\mod.js" />
+    <Content Include="Scripts\AbsoluteReference2\app.js" />
+    <Content Include="Scripts\AbsoluteReference2\mod.js" />
     <Content Include="Scripts\Compile1\dep1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

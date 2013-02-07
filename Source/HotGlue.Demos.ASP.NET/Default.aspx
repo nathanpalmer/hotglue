@@ -8,7 +8,7 @@
     <script src="Scripts/LAB.js"></script>
     <script>
         $LAB
-        <%= HotGlue.Script.Reference("Module2/app.js") %>;
+        <%= HotGlue.Script.Reference("Module1/app.js") %>;
     </script>
 </head>
 <body>

@@ -191,7 +191,7 @@ namespace HotGlue.Model
                 return 0;
             };
 
-            var extensionIndex = lastIndexOf(path, new[] { "-module", "-require", "-glue" }, 0);
+            var extensionIndex = lastIndexOf(path, new[] { "-module", "-require", "-glue", "-app" }, 0);
             if (extensionIndex > 0)
             {
                 path = path.Substring(0, extensionIndex);
@@ -231,6 +231,19 @@ namespace HotGlue.Model
                             Wait = Wait
                         };
             return clone;
+        }
+
+        public static SystemReference Build(Reference.TypeEnum type, string fullPath, string rootPath, string keys)
+        {
+            var name = System.IO.Path.GetFileName(fullPath).RealFileName();
+            var directory = System.IO.Path.GetDirectoryName(fullPath);
+
+            var reference = new SystemReference(new DirectoryInfo(rootPath), new FileInfo(System.IO.Path.Combine(directory, name)), name);
+            foreach (var key in keys.Split(','))
+            {
+                reference.ReferenceNames.Add(key);
+            }
+            return reference;
         }
     }
 }

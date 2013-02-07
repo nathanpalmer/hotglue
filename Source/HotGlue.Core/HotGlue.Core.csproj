@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,15 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EcmaScript.NET.modified">
-      <HintPath>..\..\Libraries\YUICompressor.NET.1.7.1.0\lib\net35\EcmaScript.NET.modified.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.Core">
-      <HintPath>..\..\Libraries\SassAndCoffee.Core.2.0.2.0\lib\net40-Client\SassAndCoffee.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.JavaScript">
-      <HintPath>..\..\Libraries\SassAndCoffee.JavaScript.2.0.2.0\lib\net40-Client\SassAndCoffee.JavaScript.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -48,22 +40,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yahoo.Yui.Compressor">
-      <HintPath>..\..\Libraries\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compilers\CoffeeScriptCompiler.cs" />
-    <Compile Include="Compilers\UglifyCompressor.cs" />
-    <Compile Include="Compilers\YUICompressor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FindReferences\TripleSlashReference.cs" />
     <Compile Include="GraphReferenceLocator.cs" />
+    <Compile Include="Configuration\HotGlueConfigurationSection.cs" />
+    <Compile Include="ICompress.cs" />
     <Compile Include="IFileCache.cs" />
     <Compile Include="IFindReference.cs" />
     <Compile Include="IReferenceLocator.cs" />
-    <Compile Include="Compilers\JQueryTemplateCompiler.cs" />
     <Compile Include="Model\Configuration.cs" />
+    <Compile Include="Model\LoadedConfiguration.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -76,12 +64,12 @@
     <Compile Include="Model\Reference.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="FindReferences\RequireReference.cs" />
     <Compile Include="FindReferences\SlashSlashEqualReference.cs" />
-    <Compile Include="Referencers\LABjsScriptReference.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="ScriptHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

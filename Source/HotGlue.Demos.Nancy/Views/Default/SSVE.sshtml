@@ -1,0 +1,9 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        @Model.References
+    </head>
+    <body>
+        <div id="container">Not Loaded</div>
+    </body>
+</html>

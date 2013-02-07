@@ -3,8 +3,11 @@
 *.pdb
 *.user
 *.suo
+TestResult.xml
+CommonAssemblyInfo.cs
 
 [Bb]uild
+[Dd]eploy
 [Ll]ibraries
 [Bb]in
 [Oo]bj

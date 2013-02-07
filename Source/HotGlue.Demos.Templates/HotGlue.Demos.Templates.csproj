@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E6177099-19C0-4694-819F-322D013D73E2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HotGlue.Demos.Templates</RootNamespace>
+    <AssemblyName>HotGlue.Demos.Templates</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Default.aspx" />
+    <None Include="Scripts\Module1\data.tmpl-dot">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\test.coffee" />
+    <Content Include="Scripts\Shared\doT.js" />
+    <Content Include="Scripts\Shared\dust-full-0.3.0.js" />
+    <Content Include="Scripts\Shared\ejs.js" />
+    <Content Include="Scripts\Shared\handlebars.js" />
+    <Content Include="Scripts\Shared\jquery-1.7.2.js" />
+    <Content Include="Scripts\Module1\app.js" />
+    <Content Include="Scripts\Shared\jquery.nano.js" />
+    <Content Include="Scripts\Shared\jquery.tmpl.js" />
+    <Content Include="Scripts\Shared\jsrender.js" />
+    <Content Include="Scripts\Shared\mustache.js" />
+    <Content Include="Scripts\Shared\underscore.js" />
+    <Content Include="Scripts\test.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Module1\data.tmpl">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-jsrender" />
+    <None Include="Scripts\Module1\data.tmpl-nano">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-ejs">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-underscore">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-dust">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-handlebars" />
+    <None Include="Scripts\Module1\data.tmpl-mustache">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\Module1\data.tmpl-jquery" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotGlue.Aspnet\HotGlue.Aspnet.csproj">
+      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
+      <Name>HotGlue.Aspnet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
+      <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
+      <Name>HotGlue.Compiler.CoffeeScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
+      <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
+      <Name>HotGlue.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.doT\HotGlue.Template.doT.csproj">
+      <Project>{79958362-6d25-4451-84a8-a810ac756481}</Project>
+      <Name>HotGlue.Template.doT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Dust\HotGlue.Template.Dust.csproj">
+      <Project>{a7956bdd-99e5-4e19-9626-0203544434d1}</Project>
+      <Name>HotGlue.Template.Dust</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.EJS\HotGlue.Template.EJS.csproj">
+      <Project>{fd132c78-2ee9-44de-966f-519cc8ab40a5}</Project>
+      <Name>HotGlue.Template.EJS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Handlebars\HotGlue.Template.Handlebars.csproj">
+      <Project>{852892f8-caa2-42d7-8a24-78f3891b47ba}</Project>
+      <Name>HotGlue.Template.Handlebars</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.jQuery\HotGlue.Template.jQuery.csproj">
+      <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
+      <Name>HotGlue.Template.jQuery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.JsRender\HotGlue.Template.JsRender.csproj">
+      <Project>{195eaa85-7ba7-4f9b-b4b6-95486654357c}</Project>
+      <Name>HotGlue.Template.JsRender</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Mustache\HotGlue.Template.Mustache.csproj">
+      <Project>{9303ff9c-e607-49f3-b075-70d4cb09c12a}</Project>
+      <Name>HotGlue.Template.Mustache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.NANO\HotGlue.Template.NANO.csproj">
+      <Project>{62b5655f-6e9a-4888-9fc6-22be695bb5ff}</Project>
+      <Name>HotGlue.Template.NANO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.Underscore\HotGlue.Template.Underscore.csproj">
+      <Project>{b00dbc21-fa37-4b75-bf07-713b378d0866}</Project>
+      <Name>HotGlue.Template.Underscore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50450</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50429/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

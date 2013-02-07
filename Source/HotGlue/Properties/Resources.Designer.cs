@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HotGlue.Properties {
+namespace HotGlue.Console.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace HotGlue.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HotGlue.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HotGlue.Console.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,11 @@ namespace HotGlue.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Usage: hotglue infile.js [-o[utfile] outfile.js].
         /// </summary>
-        internal static string stitch {
+        internal static string UsageHelp {
             get {
-                return ResourceManager.GetString("stitch", resourceCulture);
+                return ResourceManager.GetString("UsageHelp", resourceCulture);
             }
         }
     }

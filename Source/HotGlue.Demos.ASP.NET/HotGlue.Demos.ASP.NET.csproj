@@ -14,12 +14,16 @@
     <RootNamespace>HotGlue.Demos.ASP.NET</RootNamespace>
     <AssemblyName>HotGlue.Demos.ASP.NET</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +64,10 @@
     <Content Include="Default.aspx" />
     <None Include="Scripts\CoffeeModule1\mod5.coffee" />
     <None Include="Scripts\CoffeeModule1\mod4.coffee" />
+    <None Include="Scripts\CoffeeModule1\app.coffee" />
     <Content Include="Scripts\CoffeeModule1\spine.js" />
+    <Content Include="Scripts\CoffeeModule2\app.js" />
+    <None Include="Scripts\CoffeeModule2\mod1.coffee" />
     <Content Include="Scripts\CommonJS\increment.js" />
     <Content Include="Scripts\CommonJS\math.js" />
     <Content Include="Scripts\CommonJS\program.js" />
@@ -79,7 +86,7 @@
     <Content Include="Scripts\Module5\controllers\controller.js" />
     <Content Include="Scripts\Module5\models.js" />
     <Content Include="Scripts\Module5\models\model.js" />
-    <Content Include="Scripts\Shared\dep1.js" />
+    <Content Include="Scripts\Module1\dep1.js" />
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Shared\jquery.tmpl.js" />
@@ -102,9 +109,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HotGlue.Web\HotGlue.Web.csproj">
-      <Project>{51E7E82B-809E-4822-A938-F0249F7B4E0D}</Project>
-      <Name>HotGlue.Web</Name>
+    <ProjectReference Include="..\HotGlue.Aspnet\HotGlue.Aspnet.csproj">
+      <Project>{51e7e82b-809e-4822-a938-f0249f7b4e0d}</Project>
+      <Name>HotGlue.Aspnet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Compiler.CoffeeScript\HotGlue.Compiler.CoffeeScript.csproj">
+      <Project>{52657cbd-a839-4585-85e0-cb0706282757}</Project>
+      <Name>HotGlue.Compiler.CoffeeScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Compressor.YUI\HotGlue.Compressor.YUI.csproj">
+      <Project>{805b213b-efcf-4317-9eef-7cac0bae9f40}</Project>
+      <Name>HotGlue.Compressor.YUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Reference.LABjs\HotGlue.Reference.LABjs.csproj">
+      <Project>{5da6de08-2144-4f4b-9756-76db98c05951}</Project>
+      <Name>HotGlue.Reference.LABjs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotGlue.Template.jQuery\HotGlue.Template.jQuery.csproj">
+      <Project>{784a0a7e-4df5-44c5-919e-b21c3a3966ca}</Project>
+      <Name>HotGlue.Template.jQuery</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
       <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
@@ -127,8 +150,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59009</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:59009/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

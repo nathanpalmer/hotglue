@@ -2,36 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HotGlue.Model;
 
 namespace HotGlue
 {
     public class GraphReferenceLocator : IReferenceLocator
     {
-        private readonly HotGlueConfiguration _config;
-        private IFindReference[] _findReferences;
+        private readonly LoadedConfiguration _configuration;
 
-        public GraphReferenceLocator(HotGlueConfiguration config)
+        public GraphReferenceLocator(LoadedConfiguration configuration)
         {
-            if (config == null)
+            if (configuration == null)
             {
-                throw new ArgumentNullException("config");
+                throw new ArgumentNullException("configuration");
             }
-            _config = config;
-
-            if (_config.Referencers == null || _config.Referencers.Length == 0)
-            {
-                _findReferences = new IFindReference[]
-                    {
-                        new SlashSlashEqualReference(),
-                        new RequireReference(),
-                        new TripleSlashReference()
-                    };
-            }
-            else
-            {
-                _findReferences = _config.Referencers.Select(referencer => (IFindReference)Activator.CreateInstance(Type.GetType(referencer.Type))).ToArray();
-            }
+            _configuration = configuration;
         }
 
         public IEnumerable<SystemReference> Load(string rootPath, SystemReference reference)
@@ -152,10 +138,11 @@ namespace HotGlue
         {
             String currentPath = Path.Combine(rootDirectory.FullName, relativePath);
             SystemReference systemReference = null;
-            var referenceIsAbsolutePath =
-                !string.IsNullOrEmpty(relativeReference.ReferenceName) && (relativeReference.ReferenceName[0] == '/');
+            var modifiedPath = Regex.Replace(relativeReference.ReferenceName, "^~/", "/");
+            var referenceIsAbsolutePath = !string.IsNullOrEmpty(relativeReference.ReferenceName) &&
+                                          (modifiedPath[0] == '/');
             var filePath = referenceIsAbsolutePath
-                               ? Path.Combine(rootDirectory.FullName, relativeReference.ReferenceName.Substring(1))
+                               ? Path.Combine(rootDirectory.FullName, modifiedPath.Substring(1))
                                : Path.Combine(currentPath, relativeReference.ReferenceName);
             var fileReference = new FileInfo(filePath);
             if (fileReference.Exists)
@@ -205,7 +192,7 @@ namespace HotGlue
 
             var text = File.ReadAllText(reference.FullPath);
             var currentReferences = new List<RelativeReference>();
-            foreach (var findReference in _findReferences)
+            foreach (var findReference in _configuration.FindReferences)
             {
                 currentReferences.AddRange(findReference.Parse(text));
             }
