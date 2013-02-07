@@ -22,11 +22,7 @@ namespace HotGlue.Tests
                     Extension = ".ts",
                     Content = "class Greeter {}"
                 };
-            var result = @"var Greeter = (function () {
-    function Greeter() { }
-    return Greeter;
-})();
-";
+            var result = "var Greeter = (function () {\n    function Greeter() { }\n    return Greeter;\n})();\n";
 
             // Act
             compiler.Compile(ref reference);
