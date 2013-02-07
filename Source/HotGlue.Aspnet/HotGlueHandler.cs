@@ -16,7 +16,6 @@ namespace HotGlue.Aspnet
     {
         private static LoadedConfiguration _configuration;
         private static IReferenceLocator _locator;
-        private static HttpContextCache _cache;
 
         static HotGlueHandler()
         {
@@ -24,7 +23,6 @@ namespace HotGlue.Aspnet
             var config = HotGlueConfiguration.Load(debug);
             _configuration = LoadedConfiguration.Load(config);
             _locator = new GraphReferenceLocator(_configuration);
-            _cache = new HttpContextCache();
         }
 
         public void ProcessRequest(HttpContext context)
@@ -35,7 +33,6 @@ namespace HotGlue.Aspnet
             ScriptHelper.RewriteContent(
                 _configuration,
                 _locator,
-                _cache,
                 root,
                 fullPath,
                 (key) =>

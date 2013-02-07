@@ -22,10 +22,10 @@ namespace HotGlue
             _generateScriptReference = generateScriptReference;
         }
 
-        public static Package Build(LoadedConfiguration configuration, string root, IFileCache cache)
+        public static Package Build(LoadedConfiguration configuration, string root)
         {
             _scriptPath = configuration.ScriptPath;
-            _cache = cache;
+            _cache = configuration.FileCache;
 
             var package = new Package(root, configuration.Compilers, configuration.GenerateScriptReference);
             return package;

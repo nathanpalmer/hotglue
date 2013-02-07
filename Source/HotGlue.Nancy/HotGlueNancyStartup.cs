@@ -14,12 +14,10 @@ namespace HotGlue.Nancy
         private LoadedConfiguration _configuration;
         private GraphReferenceLocator _locator;
         private bool _debug;
-        private readonly IFileCache _cache;
 
         public HotGlueNancyStartup(IRootPathProvider rootPathProvider)
         {
             Root = rootPathProvider.GetRootPath();
-            _cache = new DictionaryCache();
         }
 
         public void Initialize(IPipelines pipelines)
@@ -41,7 +39,6 @@ namespace HotGlue.Nancy
             ScriptHelper.RewriteContent(
                 _configuration,
                 _locator,
-                _cache,
                 Root,
                 fullPath, 
                 (key) =>

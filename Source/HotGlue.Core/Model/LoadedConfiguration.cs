@@ -8,6 +8,7 @@ namespace HotGlue.Model
     {
         public string ScriptPath { get; set; }
         public IGenerateScriptReference GenerateScriptReference { get; private set; }
+        public IFileCache FileCache { get; private set; }
         public ICompile[] Compilers { get; private set; }
         public IFindReference[] FindReferences { get; private set; }
 
@@ -24,6 +25,15 @@ namespace HotGlue.Model
             else
             {
                 loaded.GenerateScriptReference = (IGenerateScriptReference)Activator.CreateInstance(Type.GetType(configuration.GenerateScript.Type));
+            }
+
+            if (configuration == null || configuration.Cache == null)
+            {
+                loaded.FileCache = null;
+            }
+            else
+            {
+                loaded.FileCache = (IFileCache)Activator.CreateInstance(Type.GetType(configuration.Cache.Type));
             }
 
             if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
