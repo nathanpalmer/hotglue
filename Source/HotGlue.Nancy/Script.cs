@@ -12,9 +12,9 @@ namespace HotGlue
 {
     public static class Script
     {
-        private static LoadedConfiguration _configuration;
-        private static bool _debug;
-        private static IReferenceLocator _locator;
+        private static readonly LoadedConfiguration _configuration;
+        private static readonly bool _debug;
+        private static readonly IReferenceLocator _locator;
 
         static Script()
         {
@@ -24,10 +24,10 @@ namespace HotGlue
             _locator = new GraphReferenceLocator(_configuration);
         }
 
-        public static string Reference(string name)
+        public static string Reference(params string[] names)
         {
             var root = HotGlueNancyStartup.Root;
-            return ScriptHelper.Reference(_configuration, _locator, root, name, _debug);
+            return ScriptHelper.Reference(_configuration, _locator, root, names, _debug);
         }
     }
 }

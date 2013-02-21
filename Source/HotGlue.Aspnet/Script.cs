@@ -11,9 +11,9 @@ namespace HotGlue
 {
     public static class Script
     {
-        private static LoadedConfiguration _configuration;
-        private static bool _debug;
-        private static IReferenceLocator _locator;
+        private static readonly LoadedConfiguration _configuration;
+        private static readonly bool _debug;
+        private static readonly IReferenceLocator _locator;
 
         static Script()
         {
@@ -24,11 +24,11 @@ namespace HotGlue
             _locator = new GraphReferenceLocator(_configuration);
         }
 
-        public static IHtmlString Reference(string name)
+        public static IHtmlString Reference(params string[] names)
         {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
-            return new HtmlString(ScriptHelper.Reference(_configuration, _locator, root, name, _debug));
+            return new HtmlString(ScriptHelper.Reference(_configuration, _locator, root, names, _debug));
         }
     }
 }

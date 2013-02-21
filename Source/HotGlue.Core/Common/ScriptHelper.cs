@@ -13,35 +13,43 @@ namespace HotGlue
             LoadedConfiguration configuration, 
             IReferenceLocator locator,
             string root,
-            string name,
+            IEnumerable<string> names,
             bool debug)
         {
             var package = Package.Build(configuration, root);
+            var references = new List<SystemReference>();
 
             if (debug)
             {
-                name = name.Reslash();
+                foreach (var name in names)
+                {
+                    var cleanedName = name.Reslash();
 
-                string file = name.StartsWith("/")
-                                  ? name.Substring(1)
-                                  : Path.Combine(configuration.ScriptPath.Reslash(), name).Reslash();
-                file = file.StartsWith("/") ? file.Substring(1) : file;
+                    string file = cleanedName.StartsWith("/")
+                                      ? name.Substring(1)
+                                      : Path.Combine(configuration.ScriptPath.Reslash(), cleanedName).Reslash();
+                    file = file.StartsWith("/") ? file.Substring(1) : file;
 
-                name = file.Substring(file.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                    cleanedName = file.Substring(file.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
-                var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(root, file)), name);
+                    var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(root, file)), cleanedName);
 
-                var references = locator.Load(root, reference);
+                    references.AddRange(locator.Load(root, reference));
+                }
 
                 return package.GenerateReferences(references);
             }
 
-            var appName = name + "-glue";
-            var appDirectory = new DirectoryInfo(root);
-            var appFile = new FileInfo(Path.Combine(root + configuration.ScriptPath, appName));
-            var appReference = new SystemReference(appDirectory, appFile, appName) { Type = Model.Reference.TypeEnum.App };
+            foreach (var name in names)
+            {
+                var appName = name + "-glue";
+                var appDirectory = new DirectoryInfo(root);
+                var appFile = new FileInfo(Path.Combine(root + configuration.ScriptPath, appName));
+                var appReference = new SystemReference(appDirectory, appFile, appName) { Type = Model.Reference.TypeEnum.App };
+                references.Add(appReference);                
+            }
 
-            return package.GenerateReferences(new[] { appReference });
+            return package.GenerateReferences(references);
         }
 
         public static void RewriteContent(
