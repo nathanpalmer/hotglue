@@ -178,13 +178,22 @@ namespace HotGlue.Model
             var files = folder.GetFiles()
                               .Where(x => new[] {".exe", ".dll"}.Contains(x.Extension));
 
+            var thisAssembly = typeof (HotGlueConfiguration).Assembly;
+            assemblies.Add(thisAssembly);
+            string thisAssemblyName = thisAssembly.FullName;
             foreach (var file in files)
             {
                 AssemblyName name = new AssemblyName() { Name = System.IO.Path.GetFileNameWithoutExtension(file.Name) };
                 try
                 {
                     var asm = Assembly.Load(name);
-                    assemblies.Add(asm);
+                    // Only want assemblies which reference this one, as other assemblies won't
+                    // implement our interfaces and scanning them is a waste of time / possibly 
+                    // could fail if types can't be loaded.
+                    if (asm.GetReferencedAssemblies().Any(ra => thisAssemblyName.Equals(ra.FullName)))
+                    {
+                        assemblies.Add(asm);
+                    }
                 }
                 catch
                 {
