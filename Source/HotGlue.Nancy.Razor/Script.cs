@@ -1,4 +1,5 @@
-﻿using HotGlue.Model;
+﻿using System;
+using HotGlue.Model;
 using HotGlue.Nancy;
 using Nancy;
 using Nancy.ViewEngines.Razor;
@@ -7,22 +8,22 @@ namespace HotGlue
 {
     public static class Script
     {
-        private static readonly LoadedConfiguration _configuration;
-        private static readonly bool _debug;
-        private static readonly IReferenceLocator _locator;
+        private static readonly Lazy<HelperContext> Context 
+            = new Lazy<HelperContext>(CreateContext, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
-        static Script()
+        static HelperContext CreateContext()
         {
-            _debug = StaticConfiguration.IsRunningDebug;
-            var config = HotGlueConfiguration.Load(_debug);
-            _configuration = LoadedConfiguration.Load(config);
-            _locator = new GraphReferenceLocator(_configuration);
+            var debug = StaticConfiguration.IsRunningDebug;
+            var config = HotGlueConfiguration.Load(debug);
+            var configuration = LoadedConfiguration.Load(config);
+            var locator = new GraphReferenceLocator(configuration);
+            return new HelperContext(configuration, locator, debug);
         }
 
         public static IHtmlString Reference(params string[] names)
         {
             var root = HotGlueNancyStartup.Root;
-            return new NonEncodedHtmlString(ScriptHelper.Reference(_configuration, _locator, root, names, _debug));
+            return new NonEncodedHtmlString(ScriptHelper.Reference(Context.Value, root, names));
         }
     }
 }

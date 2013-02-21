@@ -10,16 +10,14 @@ namespace HotGlue
     public static class ScriptHelper
     {
         public static string Reference(
-            LoadedConfiguration configuration, 
-            IReferenceLocator locator,
+            HelperContext context,
             string root,
-            IEnumerable<string> names,
-            bool debug)
+            IEnumerable<string> names)
         {
-            var package = Package.Build(configuration, root);
+            var package = Package.Build(context.Configuration, root);
             var references = new List<SystemReference>();
 
-            if (debug)
+            if (context.Debug)
             {
                 foreach (var name in names)
                 {
@@ -27,14 +25,14 @@ namespace HotGlue
 
                     string file = cleanedName.StartsWith("/")
                                       ? name.Substring(1)
-                                      : Path.Combine(configuration.ScriptPath.Reslash(), cleanedName).Reslash();
+                                      : Path.Combine(context.Configuration.ScriptPath.Reslash(), cleanedName).Reslash();
                     file = file.StartsWith("/") ? file.Substring(1) : file;
 
                     cleanedName = file.Substring(file.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
                     var reference = new SystemReference(new DirectoryInfo(root), new FileInfo(Path.Combine(root, file)), cleanedName);
 
-                    references.AddRange(locator.Load(root, reference));
+                    references.AddRange(context.Locator.Load(root, reference));
                 }
 
                 return package.GenerateReferences(references);
@@ -44,7 +42,7 @@ namespace HotGlue
             {
                 var appName = name + "-glue";
                 var appDirectory = new DirectoryInfo(root);
-                var appFile = new FileInfo(Path.Combine(root + configuration.ScriptPath, appName));
+                var appFile = new FileInfo(Path.Combine(root + context.Configuration.ScriptPath, appName));
                 var appReference = new SystemReference(appDirectory, appFile, appName) { Type = Model.Reference.TypeEnum.App };
                 references.Add(appReference);                
             }

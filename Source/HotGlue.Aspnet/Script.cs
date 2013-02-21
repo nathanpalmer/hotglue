@@ -5,30 +5,28 @@ using System.Web;
 using System.Web.Configuration;
 using HotGlue.Model;
 using HotGlue.Aspnet;
-using HotGlueConfigurationSection = HotGlue.Configuration.HotGlueConfigurationSection;
 
 namespace HotGlue
 {
     public static class Script
     {
-        private static readonly LoadedConfiguration _configuration;
-        private static readonly bool _debug;
-        private static readonly IReferenceLocator _locator;
+        private static readonly Lazy<HelperContext> Context
+            = new Lazy<HelperContext>(CreateContext, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
-        static Script()
+        static HelperContext CreateContext()
         {
             var debug = ((CompilationSection)ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
             var config = HotGlueConfiguration.Load(debug);
-            _configuration = LoadedConfiguration.Load(config);
-            _debug = ((CompilationSection) ConfigurationManager.GetSection(@"system.web/compilation")).Debug;
-            _locator = new GraphReferenceLocator(_configuration);
+            var configuration = LoadedConfiguration.Load(config);
+            var locator = new GraphReferenceLocator(configuration);
+            return new HelperContext(configuration, locator, debug);
         }
 
         public static IHtmlString Reference(params string[] names)
         {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
-            return new HtmlString(ScriptHelper.Reference(_configuration, _locator, root, names, _debug));
+            return new HtmlString(ScriptHelper.Reference(Context.Value, root, names));
         }
     }
 }
