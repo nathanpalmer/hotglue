@@ -24,9 +24,14 @@ namespace HotGlue
 
         public static IHtmlString Reference(params string[] names)
         {
+            return Reference(Context.Value.DefaultOptions, names);
+        }
+
+        public static IHtmlString Reference(HelperOptions options, params string[] names)
+        {
             var context = HttpContext.Current;
             var root = context.Server.MapPath("~");
-            return new HtmlString(ScriptHelper.Reference(Context.Value, root, names));
+            return new HtmlString(ScriptHelper.Reference(Context.Value, options, root, names));
         }
     }
 }

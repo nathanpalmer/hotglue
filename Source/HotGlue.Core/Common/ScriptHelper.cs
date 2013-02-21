@@ -11,6 +11,7 @@ namespace HotGlue
     {
         public static string Reference(
             HelperContext context,
+            HelperOptions options,
             string root,
             IEnumerable<string> names)
         {
@@ -35,7 +36,7 @@ namespace HotGlue
                     references.AddRange(context.Locator.Load(root, reference));
                 }
 
-                return package.GenerateReferences(references);
+                return package.GenerateReferences(references, options);
             }
 
             foreach (var name in names)
@@ -47,7 +48,7 @@ namespace HotGlue
                 references.Add(appReference);                
             }
 
-            return package.GenerateReferences(references);
+            return package.GenerateReferences(references, options);
         }
 
         public static void RewriteContent(

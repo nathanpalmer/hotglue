@@ -6,10 +6,7 @@
 <head runat="server">
     <title>HotGlue Test</title>
     <script src="Scripts/LAB.js"></script>
-    <script>
-        $LAB
-        <%= HotGlue.Script.Reference("Module1/app.js") %>;
-    </script>
+    <%: HotGlue.Script.Reference("Module1/app.js") %>;
 </head>
 <body>
     <form id="form1" runat="server">

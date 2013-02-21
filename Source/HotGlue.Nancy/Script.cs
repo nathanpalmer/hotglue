@@ -26,8 +26,13 @@ namespace HotGlue
 
         public static string Reference(params string[] names)
         {
+            return Reference(Context.Value.DefaultOptions, names);
+        }
+
+        public static string Reference(HelperOptions options, params string[] names)
+        {
             var root = HotGlueNancyStartup.Root;
-            return ScriptHelper.Reference(Context.Value, root, names);
+            return ScriptHelper.Reference(Context.Value, options, root, names);
         }
     }
 }

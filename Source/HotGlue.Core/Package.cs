@@ -175,19 +175,25 @@ namespace HotGlue
             return CompileDependency(new Reference { Extension = ".js", Content = Properties.Resources.stitch });
         }
 
-        public string GenerateReferences(IEnumerable<SystemReference> references)
+        public string GenerateReferences(IEnumerable<SystemReference> references, HelperOptions options)
         {
             var systemReferences = references as SystemReference[] ?? references.ToArray();
             if (references == null || !systemReferences.Any()) return "";
 
             var sw = new StringBuilder();
 
-            sw.Append(_generateScriptReference.GenerateHeader());
+            if (options.GenerateHeaderAndFooter)
+            {
+                sw.Append(_generateScriptReference.GenerateHeader());
+            }
             foreach (var reference in References(systemReferences))
             {
                 sw.Append(_generateScriptReference.GenerateReference(reference));
             }
-            sw.Append(_generateScriptReference.GenerateFooter());
+            if (options.GenerateHeaderAndFooter)
+            {
+                sw.Append(_generateScriptReference.GenerateFooter());
+            }
 
             return sw.ToString();
         }

@@ -13,9 +13,14 @@ namespace HotGlue.Model
             Configuration = configuration;
             Locator = locator;
             Debug = debug;
+            DefaultOptions = new HelperOptions
+                {
+                    GenerateHeaderAndFooter = true
+                };
         }
 
         public LoadedConfiguration Configuration { get; private set; }
+        public HelperOptions DefaultOptions { get; private set; }
         public IReferenceLocator Locator { get; private set; }
         public bool Debug { get; private set; }
     }

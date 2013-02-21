@@ -53,6 +53,7 @@
     <Compile Include="IReferenceLocator.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Model\HelperContext.cs" />
+    <Compile Include="Model\HelperOptions.cs" />
     <Compile Include="Model\LoadedConfiguration.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
