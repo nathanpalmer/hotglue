@@ -25,7 +25,7 @@ namespace HotGlue
                     var cleanedName = name.Reslash();
 
                     string file = cleanedName.StartsWith("/")
-                                      ? name.Substring(1)
+                                      ? cleanedName.Substring(1)
                                       : Path.Combine(context.Configuration.ScriptPath.Reslash(), cleanedName).Reslash();
                     file = file.StartsWith("/") ? file.Substring(1) : file;
 
