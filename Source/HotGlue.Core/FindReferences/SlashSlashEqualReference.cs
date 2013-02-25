@@ -27,12 +27,19 @@ namespace HotGlue
             var matches = ReferenceCommentRegex.Matches(fileText)
                 .Cast<Match>()
                 .Where(m => !String.IsNullOrWhiteSpace(m.Groups["path"].Value))
-                .Select(m => new RelativeReference(m.Groups["path"].Value) { Type = m.Groups["identifier"].Value.GetTypeEnum(Reference.TypeEnum.Dependency) });
+                .Select(MatchToRelativeReference);
 
             foreach(var match in matches)
             {
                 yield return match;
             }
+        }
+
+        private RelativeReference MatchToRelativeReference(Match match)
+        {
+            var pathGroup = match.Groups["path"];
+            var identifierGroup = match.Groups["identifier"];
+            return new RelativeReference(pathGroup.Value, pathGroup.Index) { Type = identifierGroup.Value.GetTypeEnum(Reference.TypeEnum.Dependency) };
         }
     }
 }

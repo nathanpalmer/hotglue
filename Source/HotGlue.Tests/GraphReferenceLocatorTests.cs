@@ -215,6 +215,31 @@ namespace HotGlue.Tests
         }
 
         [Test]
+        public void Order_Of_Dependencies_Should_Match_File_Order()
+        {
+            // Arrange
+            var locator = new GraphReferenceLocator(configuration);
+            var reference = BuildReference("OrderOfDependencies", "main.js", Reference.TypeEnum.App);
+            var matchReferences = new[]
+                                  {
+                                      BuildReference("OrderOfDependencies", "dep1.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("OrderOfDependencies", "dep2.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("OrderOfDependencies", "dep3.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("OrderOfDependencies", "dep4.js", Reference.TypeEnum.Dependency),
+                                      BuildReference("OrderOfDependencies", "main.js", Reference.TypeEnum.App)
+                                  };
+
+            // Act
+            var references = locator.Load(root, reference).ToList();
+
+            // Assert
+            for (int i = 0; i < matchReferences.Length; i++)
+            {
+                ShouldMatch(matchReferences[i], references[i]);
+            }
+        }
+
+        [Test]
         public void Can_Parse_Relative_Paths_Within_References()
         {
             // Arrange

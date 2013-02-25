@@ -114,7 +114,7 @@ namespace HotGlue
                 throw new DirectoryNotFoundException(String.Format("The rootPath '{0}' passed in doesn't exist or can't resolve.", rootPath));
             }
             var references = new Dictionary<SystemReference, IList<RelativeReference>>();
-            Parse(rootDirectory, relativePath, new RelativeReference(fileName) { Type = Reference.TypeEnum.App }, ref references);
+            Parse(rootDirectory, relativePath, new RelativeReference(fileName, 0) { Type = Reference.TypeEnum.App }, ref references);
             AddAbsoluteReferences(references);
             return references;
         }
@@ -198,7 +198,7 @@ namespace HotGlue
             }
 
             var list = references[reference];
-            foreach (var currentReference in currentReferences)
+            foreach (var currentReference in currentReferences.OrderBy(r => r.Index))
             {
                 // find any duplicate references for the same type in the file and remove.
                 // look off the full referenced name and not the internal equals name

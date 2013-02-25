@@ -135,6 +135,19 @@
     </Content>
     <Content Include="Scripts\Module9\app.js" />
     <Content Include="Scripts\Module9\module.js" />
+    <Content Include="Scripts\OrderOfDependencies\dep3.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\OrderOfDependencies\dep4.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\OrderOfDependencies\dep1.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\OrderOfDependencies\main.js" />
+    <Content Include="Scripts\OrderOfDependencies\dep2.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Path1\app.js" />
     <Content Include="Scripts\Path1\Sub\library.js" />
     <Content Include="Scripts\Path1\Sub\module.js" />

@@ -92,11 +92,17 @@ namespace HotGlue.Model
     public class RelativeReference : Reference
     {
         /// <summary>
+        /// The position in the referring file where the reference was first used.
+        /// This is used to ensure that references are loaded in order.
+        /// </summary>
+        public int Index { get; private set; }
+
+        /// <summary>
         /// The text after require referenced in the file
         /// </summary>
         public string ReferenceName { get; private set; }
 
-        public RelativeReference(string referenceName)
+        public RelativeReference(string referenceName, int index)
         {
             if (String.IsNullOrWhiteSpace(referenceName))
             {
@@ -104,12 +110,13 @@ namespace HotGlue.Model
             }
             // Not resolving with System.File because reference could be anything
             Name = System.IO.Path.GetFileName(referenceName);
-            var index = Name.LastIndexOf(".");
-            if (index > 0)
+            var dotIndex = Name.LastIndexOf(".");
+            if (dotIndex > 0)
             {
-                Extension = Name.Substring(index);
+                Extension = Name.Substring(dotIndex);
             }
             ReferenceName = referenceName;
+            Index = index;
         }
 
         internal void UpdateFromSystemReference(Reference systemReference)

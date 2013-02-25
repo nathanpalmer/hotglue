@@ -26,12 +26,18 @@ namespace HotGlue
             var matches = ReferenceVariableRegex.Matches(fileText)
                 .Cast<Match>()
                 .Where(m => !String.IsNullOrWhiteSpace(m.Groups["path"].Value))
-                .Select(m => new RelativeReference(m.Groups["path"].Value) { Type = Reference.TypeEnum.Module });
+                .Select(MatchToRelativeReference);
 
             foreach (var match in matches)
             {
                 yield return match;
             }
+        }
+
+        private RelativeReference MatchToRelativeReference(Match match)
+        {
+            var group = match.Groups["path"];
+            return new RelativeReference(group.Value, group.Index) {Type = Reference.TypeEnum.Module};
         }
     }
 }
