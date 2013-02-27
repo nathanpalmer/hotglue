@@ -22,7 +22,7 @@ end
 desc "Determine version"
 task :version do
   result = %x[git describe]
-  regex = /^(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)(-(?<revision>\d+))*(-(?<changeset>\S*))*$/
+  regex = /^(?<major>\d+)\.(?<minor>\d+)(\.|-)(?<build>\d+)(-(?<revision>\d+))*(-(?<changeset>\S*))*$/
   matches = regex.match(result)
   
   if matches.nil?
@@ -30,9 +30,16 @@ task :version do
     version = "0.0.0.0"
     version_changeset = "0.0.0.0"
   else
-    version = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:revision]}"
+	if matches[:revision]
+		revision = matches[:revision]
+	else
+		revision = 0
+	end
+    version = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{revision}"
     version_changeset = "#{matches[:major]}.#{matches[:minor]}.#{matches[:build]}.#{matches[:changeset]}"
   end
+  
+  puts version
 end
 
 desc "Tag the repository"
