@@ -90,13 +90,22 @@
     <Content Include="Scripts\Module1\app.js" />
     <Content Include="Scripts\Shared\jquery-1.7.2.js" />
     <Content Include="Scripts\Shared\jquery.tmpl.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Scripts\SpineJS\ajax.coffee" />
+    <Content Include="Scripts\SpineJS\list.coffee" />
+    <Content Include="Scripts\SpineJS\local.coffee" />
+    <Content Include="Scripts\SpineJS\manager.coffee" />
+    <Content Include="Scripts\SpineJS\relation.coffee" />
+    <Content Include="Scripts\SpineJS\route.coffee" />
+    <Content Include="Scripts\SpineJS\spine.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default.aspx.cs">
