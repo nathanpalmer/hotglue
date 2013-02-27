@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using HotGlue.Model;
@@ -11,18 +12,66 @@ using SassAndCoffee.JavaScript.JavaScriptEngines;
 
 namespace HotGlue.Compilers
 {
+    public class SassAndCoffeeCompiler : IJavaScriptCompiler
+    {
+        private readonly IJavaScriptRuntime _javaScriptRuntime;
+
+        public SassAndCoffeeCompiler(IJavaScriptRuntime javaScriptRuntime)
+        {
+            _javaScriptRuntime = javaScriptRuntime;
+            _javaScriptRuntime.Initialize();
+        }
+
+        public void LoadLibrary(string code)
+        {
+            _javaScriptRuntime.LoadLibrary(code);
+        }
+
+        public T Execute<T>(string functionName, params object[] args)
+        {
+            return _javaScriptRuntime.ExecuteFunction<T>(functionName, args);
+        }
+    }
+
     public class CoffeeScriptCompiler : ICompile
     {
-        private IInstanceProvider<IJavaScriptRuntime> _jsRuntimeProvider;
-        private SassAndCoffee.JavaScript.CoffeeScript.CoffeeScriptCompiler _compiler;
         public List<string> Extensions { get; private set; }
+
+        private readonly IJavaScriptCompiler _javaScriptRuntime;
+        private readonly object _padLock = new object();
+        private bool _initialized;
 
         public CoffeeScriptCompiler()
         {
             Extensions = new List<string>(new[] { ".coffee" });
 
-            _jsRuntimeProvider = new InstanceProvider<IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
-            _compiler = new SassAndCoffee.JavaScript.CoffeeScript.CoffeeScriptCompiler(_jsRuntimeProvider);
+            try
+            {
+                _javaScriptRuntime = new SassAndCoffeeCompiler(new IEJavaScriptRuntime());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
+        private void Initialize()
+        {
+            if (_initialized) return;
+            lock (_padLock)
+            {
+                var library = new StringBuilder();
+                var content = GetType().GetResource("HotGlue.Compilers.CoffeeScript.coffee-script.js");
+                library.Append(content);
+                library.Append(@"
+function hotglue_compile(code) {
+    return CoffeeScript.compile(code);
+}
+");
+                _javaScriptRuntime.LoadLibrary(library.ToString());
+                _initialized = true;
+            }
         }
 
         public bool Handles(string Extension)
@@ -35,7 +84,8 @@ namespace HotGlue.Compilers
             reference.Extension = ".js";
             try
             {
-                reference.Content = _compiler.Compile(reference.Content);
+                Initialize();
+                reference.Content = _javaScriptRuntime.Execute<String>("hotglue_compile", reference.Content);
             }
             catch (Exception ex)
             {

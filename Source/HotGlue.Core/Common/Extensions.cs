@@ -32,5 +32,17 @@ namespace HotGlue
             var name = match.Groups["file"].Value + match.Groups["extension"].Value;
             return name;
         }
+
+        public static string GetResource(this Type type, string resource)
+        {
+            using (var stream = type.Assembly.GetManifestResourceStream(resource))
+            {
+                if (stream == null) return null;
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
     }
 }
