@@ -13,18 +13,29 @@ namespace HotGlue.Compilers
 {
     public class TypeScriptCompiler : ICompile
     {
-        private IInstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime> _jsRuntimeProvider;
-        private SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler _compiler;
         public List<string> Extensions { get; private set; }
 
-        public TypeScriptCompiler()
-        {
-            string[] names = this.GetType().Assembly.GetManifestResourceNames();
-            var resourceStream = this.GetType().Assembly.GetManifestResourceStream(typeof(SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler), "typescript.js");
-            Extensions = new List<string>(new[] { ".ts" });
+        private readonly IJavaScriptRuntime _javaScriptRuntime;
+        private readonly object _padLock = new object();
+        private bool _initialized;
 
-            _jsRuntimeProvider = new InstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
-            _compiler = new SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler(_jsRuntimeProvider);
+        public TypeScriptCompiler(IJavaScriptRuntime javaScriptRuntime)
+        {
+            _javaScriptRuntime = javaScriptRuntime;
+            Extensions = new List<string>(new[] { ".ts" });
+        }
+
+        private void Initialize()
+        {
+            if (_initialized) return;
+            lock (_padLock)
+            {
+                var library = new StringBuilder();
+                var content = GetType().GetResource("HotGlue.Compilers.TypeScript.typescript.js");
+                library.Append(content);
+                _javaScriptRuntime.LoadLibrary(library.ToString());
+                _initialized = true;
+            }
         }
 
         public bool Handles(string Extension)
@@ -37,7 +48,8 @@ namespace HotGlue.Compilers
             reference.Extension = ".js";
             try
             {
-                reference.Content = _compiler.Compile(reference.Content);
+                Initialize();
+                reference.Content = _javaScriptRuntime.Execute("hotglue_compile", reference.Content);
             }
             catch (Exception ex)
             {

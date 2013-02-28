@@ -51,7 +51,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="TypeScriptSassAndCoffeeCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
@@ -64,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TypeScript\typescript.js">
-      <LogicalName>SassAndCoffee.JavaScript.TypeScript.typescript.js</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using HotGlue.Compilers;
 using HotGlue.Model;
+using HotGlue.Runtimes;
 using NUnit.Framework;
 using Shouldly;
 
@@ -16,7 +17,8 @@ namespace HotGlue.Tests
         public void Can_Compile_TypeScript()
         {
             // Arrange
-            var compiler = new TypeScriptCompiler();
+            var runtime = new SassAndCoffeeRuntime();
+            var compiler = new TypeScriptCompiler(runtime);
             var reference = new Reference
                 {
                     Extension = ".ts",

@@ -20955,7 +20955,7 @@ Buffer.prototype = {
     }
 };
 
-function compilify_ts(code) {
+function hotglue_compile(code) {
     
     var output = new Buffer();
     var error = new Buffer();
