@@ -13,7 +13,7 @@ namespace HotGlue.Compilers
 {
     public class TypeScriptCompiler : ICompile
     {
-        private IInstanceProvider<IJavaScriptRuntime> _jsRuntimeProvider;
+        private IInstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime> _jsRuntimeProvider;
         private SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler _compiler;
         public List<string> Extensions { get; private set; }
 
@@ -23,7 +23,7 @@ namespace HotGlue.Compilers
             var resourceStream = this.GetType().Assembly.GetManifestResourceStream(typeof(SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler), "typescript.js");
             Extensions = new List<string>(new[] { ".ts" });
 
-            _jsRuntimeProvider = new InstanceProvider<IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
+            _jsRuntimeProvider = new InstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
             _compiler = new SassAndCoffee.JavaScript.TypeScript.TypeScriptCompiler(_jsRuntimeProvider);
         }
 

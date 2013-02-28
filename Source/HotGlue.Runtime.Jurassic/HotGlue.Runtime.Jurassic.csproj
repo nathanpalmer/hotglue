@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{52657CBD-A839-4585-85E0-CB0706282757}</ProjectGuid>
+    <ProjectGuid>{8F5CAB36-5CED-4A2A-B6C6-62EF101A1525}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HotGlue.Compilers</RootNamespace>
-    <AssemblyName>HotGlue.Compiler.CoffeeScript</AssemblyName>
+    <RootNamespace>HotGlue.Runtimes</RootNamespace>
+    <AssemblyName>HotGlue.Runtime.Jurassic</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Jurassic">
+      <HintPath>..\..\Libraries\Jurassic.2.1.1\lib\Jurassic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,24 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoffeeScriptCompiler.cs" />
+    <Compile Include="JurassicRuntime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotGlue.Core\HotGlue.Core.csproj">
-      <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
+      <Project>{D7F9CBE9-6B0E-4304-99A6-4BABD4CA9C99}</Project>
       <Name>HotGlue.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HotGlue.Runtime.Node\HotGlue.Runtime.Node.csproj">
-      <Project>{4bc9adb2-86af-40fd-8aa2-ca37ba6c1857}</Project>
-      <Name>HotGlue.Runtime.Node</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CoffeeScript\coffee-script.js" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

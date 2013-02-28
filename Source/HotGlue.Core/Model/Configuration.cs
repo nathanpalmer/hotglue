@@ -38,6 +38,9 @@ namespace HotGlue.Model
         [XmlArrayItem("reference")]
         public HotGlueReference[] Referencers { get; set; }
 
+        [XmlElement("javascript")]
+        public ObjectType JavaScriptRuntime { get; set; }
+
         public HotGlueConfiguration()
         {
             ScriptPath = "Scripts";
@@ -79,6 +82,16 @@ namespace HotGlue.Model
                 };
 
             var assemblies = GetAssemblies();
+
+            // Find Runtime
+            configuration.JavaScriptRuntime = assemblies.SelectMany(a => a.GetTypes())
+                                                 .Where(t => typeof (IJavaScriptRuntime).IsAssignableFrom(t) &&
+                                                             typeof (IJavaScriptRuntime) != t)
+                                                 .Select(t => new ObjectType()
+                                                     {
+                                                         Type = t.AssemblyQualifiedName
+                                                     })
+                                                 .FirstOrDefault();
 
             // Find Compiler
             if (section != null &&

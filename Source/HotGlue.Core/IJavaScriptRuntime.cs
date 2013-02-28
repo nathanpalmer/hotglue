@@ -5,9 +5,9 @@ using System.Text;
 
 namespace HotGlue
 {
-    public interface IJavaScriptCompiler
+    public interface IJavaScriptRuntime
     {
         void LoadLibrary(string code);
-        T Execute<T>(string functionName, params object[] args);
+        string Execute(string functionName, params object[] args);
     }
 }

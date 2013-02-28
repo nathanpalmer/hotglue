@@ -9,6 +9,7 @@ namespace HotGlue.Model
         public string ScriptPath { get; set; }
         public IGenerateScriptReference GenerateScriptReference { get; private set; }
         public IFileCache FileCache { get; private set; }
+        public IJavaScriptRuntime JavaScriptRuntime { get; private set; }
         public ICompile[] Compilers { get; private set; }
         public IFindReference[] FindReferences { get; private set; }
 
@@ -36,15 +37,29 @@ namespace HotGlue.Model
                 loaded.FileCache = (IFileCache)Activator.CreateInstance(Type.GetType(configuration.Cache.Type));
             }
 
+            if (configuration.JavaScriptRuntime != null)
+            {
+                loaded.JavaScriptRuntime = (IJavaScriptRuntime) Activator.CreateInstance(Type.GetType(configuration.JavaScriptRuntime.Type));
+            }
+
             if (configuration == null || configuration.Compilers == null || configuration.Compilers.Length == 0)
             {
                 loaded.Compilers = new ICompile[] { };
             }
             else
             {
+                var argTypes = new [] {typeof (IJavaScriptRuntime)};
                 loaded.Compilers = configuration.Compilers
                                          .Where(c => string.IsNullOrWhiteSpace(c.Mode) || c.Mode.Equals(configuration.Debug ? "debug" : "release", StringComparison.OrdinalIgnoreCase))
-                                         .Select(compiler => (ICompile)Activator.CreateInstance(Type.GetType(compiler.Type)))
+                                         .Select(compiler =>
+                                         {
+                                             var type = Type.GetType(compiler.Type);
+                                             if (loaded.JavaScriptRuntime != null && type.GetConstructor(argTypes) != null)
+                                             {
+                                                 return (ICompile) Activator.CreateInstance(type, loaded.JavaScriptRuntime);
+                                             }
+                                             return (ICompile) Activator.CreateInstance(type);
+                                         })
                                          .ToArray();
             }
 

@@ -4,56 +4,24 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using HotGlue.Model;
-using SassAndCoffee.Core;
-using SassAndCoffee.Core.Caching;
-using SassAndCoffee.JavaScript;
-using SassAndCoffee.JavaScript.CoffeeScript;
-using SassAndCoffee.JavaScript.JavaScriptEngines;
 
 namespace HotGlue.Compilers
 {
-    public class SassAndCoffeeCompiler : IJavaScriptCompiler
-    {
-        private readonly IJavaScriptRuntime _javaScriptRuntime;
-
-        public SassAndCoffeeCompiler(IJavaScriptRuntime javaScriptRuntime)
-        {
-            _javaScriptRuntime = javaScriptRuntime;
-            _javaScriptRuntime.Initialize();
-        }
-
-        public void LoadLibrary(string code)
-        {
-            _javaScriptRuntime.LoadLibrary(code);
-        }
-
-        public T Execute<T>(string functionName, params object[] args)
-        {
-            return _javaScriptRuntime.ExecuteFunction<T>(functionName, args);
-        }
-    }
-
     public class CoffeeScriptCompiler : ICompile
     {
         public List<string> Extensions { get; private set; }
+        public bool Bare { get; set; }
 
-        private readonly IJavaScriptCompiler _javaScriptRuntime;
+        private readonly IJavaScriptRuntime _javaScriptRuntime;
         private readonly object _padLock = new object();
         private bool _initialized;
 
-        public CoffeeScriptCompiler()
+        public CoffeeScriptCompiler(IJavaScriptRuntime javaScriptRuntime)
         {
             Extensions = new List<string>(new[] { ".coffee" });
+            Bare = true;
 
-            try
-            {
-                _javaScriptRuntime = new SassAndCoffeeCompiler(new IEJavaScriptRuntime());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-                throw;
-            }
+            _javaScriptRuntime = javaScriptRuntime;
         }
 
         private void Initialize()
@@ -65,8 +33,10 @@ namespace HotGlue.Compilers
                 var content = GetType().GetResource("HotGlue.Compilers.CoffeeScript.coffee-script.js");
                 library.Append(content);
                 library.Append(@"
-function hotglue_compile(code) {
-    return CoffeeScript.compile(code);
+var root = this;
+
+function hotglue_compile(code, bare) {
+    return root.CoffeeScript.compile(code, { bare: bare });
 }
 ");
                 _javaScriptRuntime.LoadLibrary(library.ToString());
@@ -85,7 +55,7 @@ function hotglue_compile(code) {
             try
             {
                 Initialize();
-                reference.Content = _javaScriptRuntime.Execute<String>("hotglue_compile", reference.Content);
+                reference.Content = _javaScriptRuntime.Execute("hotglue_compile", reference.Content, Bare);
             }
             catch (Exception ex)
             {

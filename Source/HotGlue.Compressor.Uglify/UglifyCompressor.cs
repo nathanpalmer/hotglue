@@ -12,7 +12,7 @@ namespace HotGlue.Compilers
 {
     public class UglifyCompressor : ICompile
     {
-        private InstanceProvider<IJavaScriptRuntime> _jsRuntimeProvider;
+        private InstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime> _jsRuntimeProvider;
         private UglifyCompiler _compiler;
 
         public List<string> Extensions { get; private set; }
@@ -20,7 +20,7 @@ namespace HotGlue.Compilers
         public UglifyCompressor()
         {
             Extensions = new List<string>(new[] { ".js" });
-            _jsRuntimeProvider = new InstanceProvider<IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
+            _jsRuntimeProvider = new InstanceProvider<SassAndCoffee.JavaScript.IJavaScriptRuntime>(() => new IEJavaScriptRuntime());
             _compiler = new SassAndCoffee.JavaScript.Uglify.UglifyCompiler(_jsRuntimeProvider);
         }
 
