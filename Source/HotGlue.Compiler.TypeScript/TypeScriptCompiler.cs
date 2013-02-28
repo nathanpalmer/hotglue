@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HotGlue.Model;
-using SassAndCoffee.Core;
-using SassAndCoffee.Core.Caching;
-using SassAndCoffee.JavaScript;
-using SassAndCoffee.JavaScript.CoffeeScript;
-using SassAndCoffee.JavaScript.JavaScriptEngines;
 
 namespace HotGlue.Compilers
 {
