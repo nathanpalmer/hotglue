@@ -53,23 +53,35 @@ stdin.on('end', function() {
             start.ErrorDialog = false;
 
             var process = Process.Start(start);
+            var output = new StringBuilder();
+            var error = new StringBuilder();
+
+            process.OutputDataReceived += (sender, e) =>
+            {
+                if (e.Data == null) return;
+                output.AppendLine(e.Data);
+            };
+            process.BeginOutputReadLine();
+            process.ErrorDataReceived += (sender, e) =>
+            {
+                if (e.Data == null) return;
+                error.AppendLine(e.Data);
+            };
+            process.BeginErrorReadLine();
 
             StreamWriter sw = process.StandardInput;
             sw.WriteLine(args[0]);
             sw.Close();
 
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
             process.WaitForExit();
             process.Close();
 
-            if (!string.IsNullOrEmpty(error))
+            if (error.Length > 0)
             {
-                throw new Exception(error);
+                throw new Exception(error.ToString());
             }
 
-            return output;
+            return output.ToString();
         }
     }
 }
