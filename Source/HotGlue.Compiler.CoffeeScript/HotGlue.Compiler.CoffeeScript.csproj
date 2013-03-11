@@ -52,9 +52,9 @@
       <Project>{d7f9cbe9-6b0e-4304-99a6-4babd4ca9c99}</Project>
       <Name>HotGlue.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HotGlue.Runtime.Node\HotGlue.Runtime.Node.csproj">
-      <Project>{4bc9adb2-86af-40fd-8aa2-ca37ba6c1857}</Project>
-      <Name>HotGlue.Runtime.Node</Name>
+    <ProjectReference Include="..\HotGlue.Runtime.SassAndCoffee\HotGlue.Runtime.SassAndCoffee.csproj">
+      <Project>{6561ce21-4ade-4924-b628-b4a8facb0291}</Project>
+      <Name>HotGlue.Runtime.SassAndCoffee</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
