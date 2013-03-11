@@ -6,5 +6,5 @@ gem which bundler 2>&1|findstr /r /c:"^ERROR" >nul && (
   echo Bundler is installed
 )
 
-bundle install
+cmd /c bundle install
 rake
