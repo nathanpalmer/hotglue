@@ -141,24 +141,40 @@ task :nuget => [ :build ] do
 	authors = "Nathan Palmer, Aaron Hansen"
 
 	projects = [
+		# Core
 		Project.new("#{source}HotGlue.Core/HotGlue.Core.csproj",version,"HotGlue.Core",authors, "HotGlue.Core"),
-    Project.new("#{source}HotGlue.Aspnet/HotGlue.Aspnet.csproj",version,"HotGlue.Aspnet",authors, "HotGlue.Aspnet"),
-    Project.new("#{source}HotGlue.Nancy/HotGlue.Nancy.csproj",version,"HotGlue.Nancy",authors, "HotGlue.Nancy"),
-    Project.new("#{source}HotGlue.Nancy.Razor/HotGlue.Nancy.Razor.csproj",version,"HotGlue.Nancy.Razor",authors, "HotGlue.Nancy.Razor"),
-    Project.new("#{source}HotGlue.Compiler.CoffeeScript/HotGlue.Compiler.CoffeeScript.csproj",version,"HotGlue.Compiler.CoffeeScript",authors),
-    Project.new("#{source}HotGlue.Compiler.TypeScript/HotGlue.Compiler.TypeScript.csproj",version,"HotGlue.Compiler.TypeScript",authors),
-    Project.new("#{source}HotGlue.Compressor.Uglify/HotGlue.Compressor.Uglify.csproj",version,"HotGlue.Compressor.Uglify",authors),
-    Project.new("#{source}HotGlue.Compressor.YUI/HotGlue.Compressor.YUI.csproj",version,"HotGlue.Compressor.YUI",authors),
-    Project.new("#{source}HotGlue.Reference.LABjs/HotGlue.Reference.LABjs.csproj",version,"HotGlue.Reference.LABjs",authors),
-    Project.new("#{source}HotGlue.Template.jQuery/HotGlue.Template.jQuery.csproj",version,"HotGlue.Template.jQuery",authors),
-    Project.new("#{source}HotGlue.Template.Mustache/HotGlue.Template.Mustache.csproj",version,"HotGlue.Template.Mustache",authors),
-    Project.new("#{source}HotGlue.Template.Handlebars/HotGlue.Template.Handlebars.csproj",version,"HotGlue.Template.Handlebars",authors),
-    Project.new("#{source}HotGlue.Template.Dust/HotGlue.Template.Dust.csproj",version,"HotGlue.Template.Dust",authors),
-    Project.new("#{source}HotGlue.Template.Underscore/HotGlue.Template.Underscore.csproj",version,"HotGlue.Template.Underscore",authors),
-    Project.new("#{source}HotGlue.Template.EJS/HotGlue.Template.EJS.csproj",version,"HotGlue.Template.EJS",authors),
-    Project.new("#{source}HotGlue.Template.NANO/HotGlue.Template.NANO.csproj",version,"HotGlue.Template.NANO",authors),
-    Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors),
-    Project.new("#{source}HotGlue.Template.doT/HotGlue.Template.doT.csproj",version,"HotGlue.Template.doT",authors)
+		
+		# Web
+		Project.new("#{source}HotGlue.Aspnet/HotGlue.Aspnet.csproj",version,"HotGlue.Aspnet",authors, "HotGlue.Aspnet"),
+		Project.new("#{source}HotGlue.Nancy/HotGlue.Nancy.csproj",version,"HotGlue.Nancy",authors, "HotGlue.Nancy"),
+		Project.new("#{source}HotGlue.Nancy.Razor/HotGlue.Nancy.Razor.csproj",version,"HotGlue.Nancy.Razor",authors, "HotGlue.Nancy.Razor"),
+		
+		# Compiler
+		Project.new("#{source}HotGlue.Compiler.CoffeeScript/HotGlue.Compiler.CoffeeScript.csproj",version,"HotGlue.Compiler.CoffeeScript",authors),
+		Project.new("#{source}HotGlue.Compiler.TypeScript/HotGlue.Compiler.TypeScript.csproj",version,"HotGlue.Compiler.TypeScript",authors),
+		
+		# Compressor
+		Project.new("#{source}HotGlue.Compressor.Uglify/HotGlue.Compressor.Uglify.csproj",version,"HotGlue.Compressor.Uglify",authors),
+		Project.new("#{source}HotGlue.Compressor.YUI/HotGlue.Compressor.YUI.csproj",version,"HotGlue.Compressor.YUI",authors),
+		
+		# Generate Reference
+		Project.new("#{source}HotGlue.Reference.LABjs/HotGlue.Reference.LABjs.csproj",version,"HotGlue.Reference.LABjs",authors),
+		
+		# Template
+		Project.new("#{source}HotGlue.Template.jQuery/HotGlue.Template.jQuery.csproj",version,"HotGlue.Template.jQuery",authors),
+		Project.new("#{source}HotGlue.Template.Mustache/HotGlue.Template.Mustache.csproj",version,"HotGlue.Template.Mustache",authors),
+		Project.new("#{source}HotGlue.Template.Handlebars/HotGlue.Template.Handlebars.csproj",version,"HotGlue.Template.Handlebars",authors),
+		Project.new("#{source}HotGlue.Template.Dust/HotGlue.Template.Dust.csproj",version,"HotGlue.Template.Dust",authors),
+		Project.new("#{source}HotGlue.Template.Underscore/HotGlue.Template.Underscore.csproj",version,"HotGlue.Template.Underscore",authors),
+		Project.new("#{source}HotGlue.Template.EJS/HotGlue.Template.EJS.csproj",version,"HotGlue.Template.EJS",authors),
+		Project.new("#{source}HotGlue.Template.NANO/HotGlue.Template.NANO.csproj",version,"HotGlue.Template.NANO",authors),
+		Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors),
+		Project.new("#{source}HotGlue.Template.doT/HotGlue.Template.doT.csproj",version,"HotGlue.Template.doT",authors),
+		
+		# Runtime
+		Project.new("#{source}HotGlue.Runtime.Node/HotGlue.Runtime.Node.csproj",version,"HotGlue.Runtime.Node",authors),
+		Project.new("#{source}HotGlue.Runtime.Jurassic/HotGlue.Runtime.Jurassic.csproj",version,"HotGlue.Runtime.Jurassic",authors),
+		Project.new("#{source}HotGlue.Runtime.SassAndCoffee/HotGlue.Runtime.SassAndCoffee.csproj",version,"HotGlue.Runtime.SassAndCoffee",authors)
 	]
 
 	projects.each do |project|
