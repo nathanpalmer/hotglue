@@ -10,12 +10,13 @@ namespace HotGlue
     /// Finds references in the format of
     /// 
     ///    var variable = require('test.js');   OR
-    ///    variable = require('test.js')
+    ///    variable = require('test.js')        OR
+    ///    variable = require 'test.js'
     /// </summary>
     public class RequireReference : IFindReference
     {
         private static readonly Regex ReferenceVariableRegex = new Regex(
-            @"^\s*(?!//|#|/\*)(?:var\s+)?(?<variable>\S+)\s*(=|:){1}\s*require\((""|')?(?<path>.+?)(""|')?\)\S*;?\s*$",
+            @"^\s*(?!//|#|/\*)(?:var\s+)?(?<variable>\S+)\s*(=|:){1}\s*require(\(|\s)(""|')(?<path>.+?)(""|')\)?\S*;?\s*$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 

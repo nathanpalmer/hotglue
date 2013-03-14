@@ -268,6 +268,41 @@ var someObject = {
         }
 
         [Test]
+        public void Should_Find_CoffeeScript_Module_Without_Parentheses()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse("mod4 = require 'mod4.coffee'\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("mod4.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Can_Parse_Multiple_CoffeeScript_Module_References_With_Mixed_Styles()
+        {
+            // Arrange
+            var referencer = new RequireReference();
+
+            // Act
+            var references = referencer.Parse(@"
+mod1 = require('mod1.coffee')
+mod4 = require 'mod4.coffee'
+
+");
+            // Assert
+            references.Count().ShouldBe(2);
+            references.First().Name.ShouldBe("mod1.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+            references.Last().Name.ShouldBe("mod4.coffee");
+            references.Last().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
         public void Should_Find_CoffeeScript_Dependency()
         {
             // Arrange
