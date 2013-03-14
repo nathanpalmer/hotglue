@@ -71,9 +71,6 @@
     <Content Include="Scripts\CommonJS\increment.js" />
     <Content Include="Scripts\CommonJS\math.js" />
     <Content Include="Scripts\CommonJS\program.js" />
-    <Content Include="Scripts\Generated\app.js" />
-    <Content Include="Scripts\Generated\dep.js" />
-    <Content Include="Scripts\Generated\mod.js" />
     <Content Include="Scripts\LAB.js" />
     <Content Include="Scripts\Module2\app.js" />
     <Content Include="Scripts\Module2\alert.js" />
@@ -132,10 +129,6 @@
     <ProjectReference Include="..\HotGlue.Compressor.YUI\HotGlue.Compressor.YUI.csproj">
       <Project>{805b213b-efcf-4317-9eef-7cac0bae9f40}</Project>
       <Name>HotGlue.Compressor.YUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HotGlue.Generator.MVCRoutes\HotGlue.Generator.MVCRoutes.csproj">
-      <Project>{b99ff92f-7e7f-49b6-bed7-b2449f9ca755}</Project>
-      <Name>HotGlue.Generator.MVCRoutes</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotGlue.Reference.LABjs\HotGlue.Reference.LABjs.csproj">
       <Project>{5da6de08-2144-4f4b-9756-76db98c05951}</Project>

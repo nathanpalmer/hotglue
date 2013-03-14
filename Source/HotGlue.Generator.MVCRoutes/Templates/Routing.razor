@@ -1,0 +1,130 @@
+﻿@using System.Web.Mvc
+@using System.Web.Routing
+window.BP_CSS_URL = '@Model.cssHost@Model.cssFolder';
+window.BP_JS_URL = '@Model.jsHost@Model.jsFolder';
+
+(function (win, undefined) {
+
+    var ParseParam = function(paramName, paramValue, keys, values) {
+        if(paramValue !== null && paramValue !== undefined) {
+            if (typeof paramValue === 'object') {
+                var param;
+                if($.isArray(paramValue)) {
+                    var obj = {};
+                    obj[paramName] = paramValue;
+                    param=$.param(obj, true);
+                } else {
+                    param=$.param(paramValue);
+                }
+                keys.push("");
+                values.push(param);
+            }
+            else {            
+                keys.push(paramName);
+                values.push(paramValue);
+            }
+        }
+    };
+
+    var Router = function () {
+        this.MediaUrl = {
+            Css : function() {
+                var generatedUrl = '@Model.cssHost@Model.cssFolder';
+                return new Route(generatedUrl);
+            },
+            Js : function() {
+                var generatedUrl = '@Model.jsHost@Model.jsFolder';
+                return new Route(generatedUrl);
+            }
+        };
+
+    var addParam = function (delimiter, paramName, paramValue) { 
+            return delimiter + (paramName === "" ? paramValue : paramName + "=" + paramValue); 
+        };
+
+    var addParams = function (url, keys, values, includeId) { 
+            var delimiter = "?";
+            for (var i = 0; i < keys.length; i++) {
+                if (includeId || keys[i].toLowerCase() !== "id") {
+                    url += addParam(delimiter, keys[i], values[i]);
+                    delimiter = "&";
+                }
+            }
+            return url;
+        };
+
+    @foreach(var controller in Model.controllers) {
+        @:this.@controller.Key = {
+        var validMethods = controller.Value;
+        var methodIndex = -1;
+
+        foreach(var method in validMethods) {
+            methodIndex++;
+            @:@method.Key: function(@String.Join(", ", method.Value)) {
+            
+            var routeData = new RouteData();
+            routeData.Values.Add("controller", controller.Key);
+            routeData.Values.Add("action", method.Key);
+
+            var variations = new List<string[]>();
+            variations.Add(new string[0]);
+            variations.AddRange(Variations(0, null, method.Value));
+            var variationIndex = -1;
+
+            @:    var _keys = [], __values = [], generatedUrl;
+            foreach(var parameter in method.Value) {
+                @:ParseParam('@parameter', @parameter, _keys, __values);
+            }
+
+            var requestContext = new RequestContext(httpContext, routeData);
+            var idVariation = variations.FirstOrDefault(v => v.Any(i => i.Equals("id", StringComparison.OrdinalIgnoreCase)));
+            var noIdVariation = variations.FirstOrDefault(v => !v.Any() || v.Any(i => !i.Equals("id", StringComparison.OrdinalIgnoreCase)));
+
+            if (idVariation != null) {
+                var vp = routeTable.GetVirtualPath(requestContext, null, new RouteValueDictionary { { "id", 1234 } });
+                var generatedUrl = vp == null ? "" : vp.VirtualPath;
+                @:if (id !== undefined && id !== null) {
+                @:    generatedUrl = addParams('@generatedUrl', _keys, __values, false).replace("1234", id);
+                @:    return new Route(generatedUrl);
+                @:}
+            }
+
+            if (noIdVariation != null) {
+                var vp = routeTable.GetVirtualPath(requestContext, null, new RouteValueDictionary());
+                var generatedUrl = vp == null ? "" : vp.VirtualPath;
+                if (!string.IsNullOrEmpty(generatedUrl)) {
+                @:generatedUrl = addParams('@generatedUrl', _keys, __values, true);
+                @:return new Route(generatedUrl);
+                }
+            } else if (idVariation != null) {
+                var vp = routeTable.GetVirtualPath(requestContext, null, new RouteValueDictionary { { "id", 1234 } });
+                var generatedUrl = (vp == null ? "" : vp.VirtualPath).Replace("1234", "");
+                if (!string.IsNullOrEmpty(generatedUrl)) {
+                @:generatedUrl = addParams('@generatedUrl', _keys, __values, true);
+                @:return new Route(generatedUrl);
+                }
+            }
+
+            @:}@(methodIndex < validMethods.Count-1 ? "," : "")
+        }
+        @:};
+    }
+    };
+
+    var Route = function(url) {
+        return {
+            url: url,
+            toString: function() {
+                return url;
+            },
+            valueOf: function() {
+                return url;
+            },
+            post: function(options) {
+                $.post(url, options);
+            }
+        };
+    };
+
+    module.exports = new Router();
+})(window);

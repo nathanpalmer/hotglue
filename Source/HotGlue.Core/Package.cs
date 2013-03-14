@@ -98,6 +98,7 @@ namespace HotGlue
                         break;
                     case Reference.TypeEnum.Generated:
                         {
+                            modules = true;
                             var clone = reference.Clone("-gen");
                             yield return clone;
                             break;
