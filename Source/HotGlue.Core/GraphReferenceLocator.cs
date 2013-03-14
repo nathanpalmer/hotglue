@@ -145,6 +145,19 @@ namespace HotGlue
                                ? Path.Combine(rootDirectory.FullName, modifiedPath.Substring(1))
                                : Path.Combine(currentPath, relativeReference.ReferenceName);
             var fileReference = new FileInfo(filePath);
+
+            // Doesn't really exist, just create the system reference and return
+            if (relativeReference.Type == Reference.TypeEnum.Generated)
+            {
+                systemReference = new SystemReference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
+                relativeReference.UpdateFromSystemReference(systemReference);
+                if (!references.ContainsKey(systemReference))
+                {
+                    references.Add(systemReference, new List<RelativeReference>());
+                }
+                return;
+            }
+
             if (fileReference.Exists)
             {
                 systemReference = new SystemReference(rootDirectory, fileReference, relativeReference.ReferenceName) { Type = relativeReference.Type };
@@ -166,14 +179,14 @@ namespace HotGlue
                 return;
             }
 
-            var newRelativeReferences = GetReferences(rootDirectory, systemReference, ref references);
+            var newRelativeReferences = GetReferences(systemReference, ref references);
             foreach (var reference in newRelativeReferences)
             {
                 Parse(rootDirectory, systemReference.Path, reference, ref references);
             }
         }
 
-        private IList<RelativeReference> GetReferences(DirectoryInfo rootDirectory, SystemReference reference, ref Dictionary<SystemReference, IList<RelativeReference>> references)
+        private IList<RelativeReference> GetReferences(SystemReference reference, ref Dictionary<SystemReference, IList<RelativeReference>> references)
         {
             if (references.ContainsKey(reference))
             {

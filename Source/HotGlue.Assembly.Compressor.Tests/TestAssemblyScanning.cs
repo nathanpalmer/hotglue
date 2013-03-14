@@ -23,7 +23,7 @@ namespace HotGlue.Assembly.Compressor.Tests
             configuration.ScriptPath.ShouldBe(@"Scripts/");
             configuration.Compilers.Length.ShouldBe(2);
             configuration.Compilers.Any(x => x.Type == typeof(YUICompressor).AssemblyQualifiedName).ShouldBe(true);
-            configuration.Referencers.Length.ShouldBe(3);
+            configuration.Referencers.Length.ShouldBe(4);
             configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(RequireReference).AssemblyQualifiedName).ShouldBe(true);
@@ -42,7 +42,7 @@ namespace HotGlue.Assembly.Compressor.Tests
             configuration.Compilers.Length.ShouldBe(2);
             configuration.Compilers.First().Type.ShouldBe(typeof (CoffeeScriptCompiler).AssemblyQualifiedName);
             configuration.Compilers.Last().Type.ShouldBe(typeof(YUICompressor).AssemblyQualifiedName);
-            configuration.Referencers.Length.ShouldBe(3);
+            configuration.Referencers.Length.ShouldBe(4);
             configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(RequireReference).AssemblyQualifiedName).ShouldBe(true);
@@ -61,7 +61,7 @@ namespace HotGlue.Assembly.Compressor.Tests
             configuration.ScriptPath.ShouldBe(@"Scripts/");
             configuration.Compilers.Length.ShouldBe(2);
             configuration.Compilers.Any(x => x.Type == typeof(YUICompressor).AssemblyQualifiedName).ShouldBe(true);
-            configuration.Referencers.Length.ShouldBe(3);
+            configuration.Referencers.Length.ShouldBe(4);
             configuration.Referencers.Any(x => x.Type == typeof(SlashSlashEqualReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(TripleSlashReference).AssemblyQualifiedName).ShouldBe(true);
             configuration.Referencers.Any(x => x.Type == typeof(RequireReference).AssemblyQualifiedName).ShouldBe(true);

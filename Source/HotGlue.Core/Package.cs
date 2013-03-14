@@ -96,11 +96,19 @@ namespace HotGlue
                     case Reference.TypeEnum.Dependency:
                         yield return reference;
                         break;
+                    case Reference.TypeEnum.Generated:
+                        {
+                            var clone = reference.Clone("-gen");
+                            yield return clone;
+                            break;
+                        }
                     case Reference.TypeEnum.Module:
-                        modules = true;
-                        var clone = reference.Clone("-module");
-                        yield return clone;
-                        break;
+                        {
+                            modules = true;
+                            var clone = reference.Clone("-module");
+                            yield return clone;
+                            break;
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -123,7 +131,9 @@ namespace HotGlue
                 }
             }
 
-            if (reference.Content == null && reference is SystemReference)
+            if (reference.Content == null && 
+                reference.Type != Reference.TypeEnum.Generated &&
+                reference is SystemReference)
             {
                 var systemReference = reference as SystemReference;
                 reference.Content = File.ReadAllText(systemReference.FullPath);
@@ -137,6 +147,11 @@ namespace HotGlue
                 }
             }
 
+            if (reference.Type == Reference.TypeEnum.Generated && reference.Content == null)
+            {
+                throw new Exception(String.Format("Unable to find compiler for generated reference: {0}", reference.Name));
+            }
+
             if (_cache != null)
             {
                 _cache.Set(cacheKey, new { LastWriteTimeUtc = lastWriteTimeUtc, Content = reference.Content });
@@ -148,19 +163,16 @@ namespace HotGlue
         public string CompileModule(SystemReference reference)
         {
             var itemName = "";
-            if (string.IsNullOrEmpty(itemName))
+            if (string.IsNullOrEmpty((reference.Name)))
             {
-                if (string.IsNullOrEmpty((reference.Name)))
-                {
-                    throw new InvalidOperationException("Either name or reference.Name is required here.");
-                }
-                itemName = reference.Name.ToLower();
-                if (!string.IsNullOrEmpty(reference.Path))
-                {
-                    itemName = reference.Path.ToLower() + "/" + reference.Name.ToLower().Replace("\\", "/");
-                }
-                itemName = itemName.Replace("\\", "/");
+                throw new InvalidOperationException("Either name or reference.Name is required here.");
             }
+            itemName = reference.Name.ToLower();
+            if (!string.IsNullOrEmpty(reference.Path))
+            {
+                itemName = reference.Path.ToLower() + "/" + reference.Name.ToLower().Replace("\\", "/");
+            }
+            itemName = itemName.Replace("\\", "/");
 
             var sb = new StringBuilder();
             sb.Append(@"if(typeof(__hotglue_assets)==='undefined'){__hotglue_assets={};}__hotglue_assets['" + itemName + @"'] = { keys: [ '" + String.Join(",", reference.ReferenceNames).Replace(",","','") + "' ], item: function(exports, require, module) {");

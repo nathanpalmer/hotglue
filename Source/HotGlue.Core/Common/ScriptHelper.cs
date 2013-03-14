@@ -35,7 +35,7 @@ namespace HotGlue
 
                     references.AddRange(context.Locator.Load(root, reference));
                 }
-
+                
                 return package.GenerateReferences(references, options);
             }
 
@@ -76,6 +76,8 @@ namespace HotGlue
                                           ? Model.Reference.TypeEnum.Module
                                           : fullPath.EndsWith("-glue")
                                                 ? Model.Reference.TypeEnum.App
+                                                : fullPath.EndsWith("-gen") 
+                                                ? Model.Reference.TypeEnum.Generated
                                                 : Model.Reference.TypeEnum.Dependency;
 
             var package = Package.Build(configuration, root);
@@ -99,8 +101,8 @@ namespace HotGlue
                     case Model.Reference.TypeEnum.Dependency:
                         content = package.CompileDependency(reference);
                         break;
-                    case Model.Reference.TypeEnum.Library:
                     case Model.Reference.TypeEnum.Module:
+                    case Model.Reference.TypeEnum.Generated:
                         content = package.CompileModule(reference);
                         break;
                     default:

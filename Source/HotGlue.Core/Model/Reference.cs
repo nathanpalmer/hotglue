@@ -82,10 +82,26 @@ namespace HotGlue.Model
 
         public enum TypeEnum
         {
+            /// <summary>
+            /// The main file to return with all other dependencies
+            /// </summary>
             App,
+            /// <summary>
+            /// Return file is parsed for additional references
+            /// </summary>
             Dependency,
+            /// <summary>
+            /// Returned file is not parsed for references
+            /// </summary>
             Library,
-            Module
+            /// <summary>
+            /// Returned file is wrapped as a self contained module
+            /// </summary>
+            Module,
+            /// <summary>
+            /// Returned file doesn't exist, is generated dynamically from user request
+            /// </summary>
+            Generated
         }
     }
 
@@ -245,7 +261,7 @@ namespace HotGlue.Model
             var name = System.IO.Path.GetFileName(fullPath).RealFileName();
             var directory = System.IO.Path.GetDirectoryName(fullPath);
 
-            var reference = new SystemReference(new DirectoryInfo(rootPath), new FileInfo(System.IO.Path.Combine(directory, name)), name);
+            var reference = new SystemReference(new DirectoryInfo(rootPath), new FileInfo(System.IO.Path.Combine(directory, name)), name) { Type = type };
             foreach (var key in keys.Split(','))
             {
                 reference.ReferenceNames.Add(key);

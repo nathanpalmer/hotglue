@@ -28,6 +28,7 @@
                 throw 'module \'' + name + '\' not found';
             }
         };
+        this.generate = this.require;
         this.require.define = function (bundle) {
             for (var name in bundle) {
                 modules[name] = bundle[name].item;

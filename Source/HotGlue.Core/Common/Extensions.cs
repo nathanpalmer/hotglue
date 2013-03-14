@@ -10,7 +10,7 @@ namespace HotGlue
 {
     public static class Extensions
     {
-        private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.(.+(?=(-module|-glue|-require|-app))|.+))");
+        private static readonly Regex FileNameRegex = new Regex(@"(?<file>\S+)(?<extension>\.(.+(?=(-module|-glue|-require|-app|-gen))|.+))");
 
         public static string Reslash(this string input)
         {

@@ -93,6 +93,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Runtime.Jurassic", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Runtime.Node", "HotGlue.Runtime.Node\HotGlue.Runtime.Node.csproj", "{4BC9ADB2-86AF-40FD-8AA2-CA37BA6C1857}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7. ContentGenerators", "7. ContentGenerators", "{4F3FB82D-C529-4256-8338-29EF5561C77D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Generator.MVCRoutes", "HotGlue.Generator.MVCRoutes\HotGlue.Generator.MVCRoutes.csproj", "{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -435,6 +439,16 @@ Global
 		{4BC9ADB2-86AF-40FD-8AA2-CA37BA6C1857}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4BC9ADB2-86AF-40FD-8AA2-CA37BA6C1857}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4BC9ADB2-86AF-40FD-8AA2-CA37BA6C1857}.Release|x86.ActiveCfg = Release|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -473,5 +487,6 @@ Global
 		{6561CE21-4ADE-4924-B628-B4A8FACB0291} = {0BC52988-4E7B-4A42-8002-547501886BFF}
 		{8F5CAB36-5CED-4A2A-B6C6-62EF101A1525} = {0BC52988-4E7B-4A42-8002-547501886BFF}
 		{4BC9ADB2-86AF-40FD-8AA2-CA37BA6C1857} = {0BC52988-4E7B-4A42-8002-547501886BFF}
+		{B99FF92F-7E7F-49B6-BED7-B2449F9CA755} = {4F3FB82D-C529-4256-8338-29EF5561C77D}
 	EndGlobalSection
 EndGlobal
