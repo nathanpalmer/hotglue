@@ -27,7 +27,7 @@ namespace HotGlue.Tests
             references.First().Name.ShouldBe("module1.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Dependency);
         }
-
+        
         [Test]
         public void Can_Parse_Comment__Library_Reference()
         {
@@ -59,6 +59,41 @@ var mod = require('module1.js');
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Can_Parse_Generate_Reference()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var route1 = generate('all.routes');
+var route2 = generate(""all.routes"");
+
+");
+            // Assert
+            references.Count().ShouldBe(2);
+            references.ToList().ForEach(x => x.Name.ShouldBe("all.routes"));
+            references.ToList().ForEach(x => x.Type.ShouldBe(Reference.TypeEnum.Generated));
+        }
+
+        [Test]
+        public void Does_Not_Parse_Generate_Comment_Reference()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+//= generate('all.routes')
+//= generate 'all.routes'
+//= generate(""all.routes"")
+//= generate ""all.routes""
+");
+            // Assert
+            references.Count().ShouldBe(0);
         }
 
         [Test]
@@ -116,6 +151,24 @@ var mod1 = require('module1.js');
         }
 
         [Test]
+        public void Should_Not_Parse_Commented_Generate_With_Spaces_Reference()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var mod1 = generate('all.routes');
+  //   var mod2 = generate('all.routes');
+
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
+        }
+
+        [Test]
         public void Should_Not_Parse_Commented_With_Space_Reference()
         {
             // Arrange
@@ -137,16 +190,32 @@ var mod1 = require('module1.js');
         public void Should_Parse_Reference_That_Pulls_SubObject()
         {
             // Arrange
-            var referencer = new RequireReference();
+            var referencer = new GenerateReference();
 
             // Act
             var references = referencer.Parse(@"
-var mod1 = require('module1.js').increment;
+var mod1 = generate('all.routes').increment;
 ");
             // Assert
             references.Count().ShouldBe(1);
-            references.First().Name.ShouldBe("module1.js");
-            references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
+        }
+
+        [Test]
+        public void Should_Parse_Generated_Reference_That_Pulls_SubObject()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var mod1 = generate('all.routes').increment;
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
         }
 
         [Test]
@@ -168,6 +237,24 @@ var someObject = {
         }
 
         [Test]
+        public void Should_Parse_Generated_Object_Initialize_Reference()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var someObject = {
+        mod1: generate('all.routes')
+};
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
+        }
+
+        [Test]
         public void Should_Not_Parse_Object_Initialize_Comment_Reference()
         {
             // Arrange
@@ -184,6 +271,25 @@ var someObject = {
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Not_Parse_Generated_Object_Initialize_Comment_Reference()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+var someObject = {
+        mod1: generate('all.routes')
+        //mod2: generate('all.routes')
+};
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
         }
 
         [Test]
@@ -280,6 +386,36 @@ var someObject = {
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("mod4.coffee");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Find_Generate_CoffeeScript_Module()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse("mod4 = generate('all.routes')\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("all.routes");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
+        }
+
+        [Test]
+        public void Should_Find_Generate_CoffeeScript_Module_Without_Parentheses()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse("mod4 = generate 'mod4.coffee'\r\n\r\nt = 4").ToList();
+
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("mod4.coffee");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
         }
 
         [Test]
@@ -417,6 +553,23 @@ someObject:
             references.Count().ShouldBe(1);
             references.First().Name.ShouldBe("module1.js");
             references.First().Type.ShouldBe(Reference.TypeEnum.Module);
+        }
+
+        [Test]
+        public void Should_Parse_Generated_Object_Initialize_Class_Reference_Coffee_Script()
+        {
+            // Arrange
+            var referencer = new GenerateReference();
+
+            // Act
+            var references = referencer.Parse(@"
+someObject:
+    mod1: generate 'module1.js'
+");
+            // Assert
+            references.Count().ShouldBe(1);
+            references.First().Name.ShouldBe("module1.js");
+            references.First().Type.ShouldBe(Reference.TypeEnum.Generated);
         }
 
 

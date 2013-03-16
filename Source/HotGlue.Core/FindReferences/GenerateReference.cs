@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using HotGlue.Model;
 
-namespace HotGlue.FindReferences
+namespace HotGlue
 {
     /// <summary>
     /// A Place holder to generate references in the format of
@@ -16,7 +16,8 @@ namespace HotGlue.FindReferences
     public class GenerateReference : IFindReference
     {
         private static readonly Regex ReferenceVariableRegex = new Regex(
-            @"^\s*(?!//|#|/\*)(?:var\s+)?(?<variable>\S+)\s*(=|:){1}\s*generate\((""|')?(?<path>.+?)(""|')?\)\S*;?\s*$",
+            // Generate currently only supports modular type references. 
+            @"^\s*(?!//|#|/\*)(?:var\s+)?(?<variable>\S+)\s*(=|:){1}\s*generate(\(|\s)(""|')(?<path>.+?)(""|')\)?\S*;?\s*$",
             RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.ExplicitCapture
             );
 
