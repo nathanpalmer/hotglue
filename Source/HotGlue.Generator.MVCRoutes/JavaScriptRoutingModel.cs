@@ -10,34 +10,22 @@ namespace HotGlue.Generator.MVCRoutes
     public class JavaScriptRoutingModel
     {
         public SortedDictionary<string, SortedDictionary<string, string[]>> controllers { get; private set; }
-        public String cssHost { get; set; }
-        public String cssFolder { get; set; }
-        public String jsHost { get; set; }
-        public String jsFolder { get; set; }
 
         public JavaScriptRoutingModel(Assembly mvcAssembly, String controllerName)
         {
-            controllers = !String.IsNullOrWhiteSpace(controllerName)
-                            ? GetSingleController(mvcAssembly, controllerName) // generate single controller
-                            : GetAllControllers(mvcAssembly);
-
-            jsHost = "";
-            jsFolder = "/Scripts/";
-            cssHost = "";
-            cssFolder = "/Content/";
+            controllers = GetControllers(mvcAssembly, controllerName);
         }
-
-        public SortedDictionary<string, SortedDictionary<string, string[]>> GetAllControllers(Assembly mvcAssembly)
+        
+        public SortedDictionary<string, SortedDictionary<string, string[]>> GetControllers(Assembly mvcAssembly, String controllerName)
         {
             var controllerBase = typeof(Controller);
-            var controllerInfo = mvcAssembly.GetTypes().Where(t => t != controllerBase && controllerBase.IsAssignableFrom(t));
-            return ToMvcActionList(controllerInfo);
-        }
-
-        public SortedDictionary<string, SortedDictionary<string, string[]>> GetSingleController(Assembly mvcAssembly, String controllerName)
-        {
-            var controllerBase = typeof(Controller);
-            var controllerInfo = mvcAssembly.GetTypes().Where(t => t != controllerBase && controllerBase.IsAssignableFrom(t) && t.Name.Equals(controllerName + "Controller", StringComparison.OrdinalIgnoreCase));
+            var controllerInfo = mvcAssembly.GetTypes().Where(t => t != controllerBase && 
+                                                                   controllerBase.IsAssignableFrom(t) && 
+                                                                   (
+                                                                        String.IsNullOrWhiteSpace(controllerName) ||
+                                                                        t.Name.Equals(controllerName + "Controller", StringComparison.OrdinalIgnoreCase)
+                                                                   )
+                                                             );
             return ToMvcActionList(controllerInfo);
         }
 
