@@ -12,7 +12,7 @@ namespace HotGlue.Generator.MVCRoutes
 {
     public class Template
     {
-        public String Render(JavaScriptRoutingModel javaScriptRoutingModel)
+        public String Render(TemplateModel templateModel)
         {
             var assembly = Assembly.GetExecutingAssembly();
             string template;
@@ -30,7 +30,7 @@ namespace HotGlue.Generator.MVCRoutes
                 using (var service = new TemplateService(config))
                 {
                     Razor.SetTemplateService(service);
-                    result = Razor.Parse(template, javaScriptRoutingModel);
+                    result = Razor.Parse(template, templateModel);
                     return result;
                 }
             }

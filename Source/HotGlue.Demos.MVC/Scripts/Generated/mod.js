@@ -1,2 +1,2 @@
-﻿var routes = generate('test.routes');
+﻿var routes = generate('all.routes');
 var num = 2;

@@ -41,7 +41,7 @@
 			return url;
 		};
 
-    @foreach(var controller in Model.controllers) {
+    @foreach(var controller in Model) {
         @:this.@controller.Key = {
         var validMethods = controller.Value;
         var methodIndex = -1;

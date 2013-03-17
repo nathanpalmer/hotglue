@@ -19,7 +19,7 @@ namespace HotGlue.Demos.MVC
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            HotGlue.Generator.MVCRouteGenerator.RegisterRoutes(RouteTable.Routes, typeof(Controllers.HomeController).Assembly);
+            HotGlue.Generator.MVCRouteConfiguration.Initialize(RouteTable.Routes, typeof(Controllers.HomeController).Assembly);
         }
     }
 }

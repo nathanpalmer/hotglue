@@ -8,6 +8,7 @@ using System.Web.Routing;
 using HotGlue;
 using HotGlue.Demos.MVC;
 using HotGlue.Generator;
+using HotGlue.Generator.MVCRoutes;
 using HotGlue.Model;
 using Hotglue.MVCRoutes.Tests.Controllers;
 using Jurassic;
@@ -31,7 +32,7 @@ namespace Hotglue.MVCRoutes.Tests
         {
             RouteCollection routeTable = new RouteCollection();
             RouteConfig.RegisterRoutes(routeTable);
-            MVCRouteGenerator.RegisterRoutes(routeTable, typeof(HomeController).Assembly);
+            MVCRouteConfiguration.Initialize(routeTable, typeof(HomeController).Assembly);
             routeGeneration = new MVCRouteGenerator();
             // Generate all routes
             var allReference = new RelativeReference("all.routes", 0)

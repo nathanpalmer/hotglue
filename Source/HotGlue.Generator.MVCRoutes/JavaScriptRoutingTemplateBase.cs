@@ -11,12 +11,11 @@ namespace HotGlue.Generator.MVCRoutes
     public class JavaScriptRoutingTemplateBase<T> : TemplateBase<T>
     {
         public HttpContextBase httpContext { get; private set; }
-        public RouteCollection routeTable { get; private set; }
+        public RouteCollection routeTable { get { return MVCRouteConfiguration.Current.Routes;  } }
         
         public JavaScriptRoutingTemplateBase()
         {
             httpContext = new TempHttpContext();
-            routeTable = MVCRouteGenerator.routes;
         }
 
         public IEnumerable<string[]> Variations(int position, string[] values, string[] array)
