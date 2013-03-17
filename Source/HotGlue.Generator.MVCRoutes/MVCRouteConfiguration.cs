@@ -16,6 +16,13 @@ namespace HotGlue.Generator
             current = new MVCRouteSettings(routes, mvcAssembly);
         }
 
+        public static void Initialize(Action<RouteCollection> registerRoutes, Assembly mvcAssembly)
+        {
+            RouteCollection routes = new RouteCollection();
+            registerRoutes(routes);
+            Initialize(routes, mvcAssembly);
+        }
+
         private static MVCRouteSettings current;
 
         public static MVCRouteSettings Current

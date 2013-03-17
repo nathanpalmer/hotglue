@@ -77,54 +77,7 @@ nunit :test => [ :build ] do |nunit|
   nunit.assemblies = FileList["#{source}*/bin/Release/*.Tests.dll"]
 end
 
-# Nuget Generation
-class Project
-  attr_accessor :Name, :Description, :Author, :Version, :FilePath, :Platforms, :Dependencies
- 
-  def initialize(path, version, description, author, name = nil)
-    @FilePath = path
-    @Version = version
-    @Name = name.nil? ? @FilePath.split(/\//).last.split(/.csproj/).first : name
-    @Description = description
-    @Author = author
-    @Platforms = ["NET40"]
-    @Dependencies = Array.new
- 
-    LoadPackageDependencies()
-    LoadProjectDependencies()
-  end
- 
-  def LoadPackageDependencies()
-    path = "#{File::dirname @FilePath}/packages.config"
- 
-    if File.exists? path
-        packageConfigXml = File.read("#{File::dirname @FilePath}/packages.config")
-        doc = REXML::Document.new(packageConfigXml)
-        doc.elements.each("packages/package") do |package|
-            @Dependencies << Dependency.new(package.attributes["id"], package.attributes["version"])
-        end
-    end
-  end
- 
-  def LoadProjectDependencies()
-    if File.exists? @FilePath
-        projectFileXml = File.read(@FilePath)
-        doc = REXML::Document.new(projectFileXml)
-        doc.elements.each("Project/ItemGroup/ProjectReference/Name") do |proj|
-            @Dependencies << Dependency.new(proj.text, @Version)
-        end
-    end
-  end
-end
-
-class Dependency
-    attr_accessor :Name, :Version
- 
-    def initialize(name, version)
-        @Name = name
-        @Version = version
-    end
-end
+import 'Nuget.rake'
 
 def ExecuteTask(task, *args)
   # So yeah this doesn't really support more than 1 argument
@@ -171,20 +124,31 @@ task :nuget => [ :build ] do
 		Project.new("#{source}HotGlue.Template.JsRender/HotGlue.Template.JsRender.csproj",version,"HotGlue.Template.JsRender",authors),
 		Project.new("#{source}HotGlue.Template.doT/HotGlue.Template.doT.csproj",version,"HotGlue.Template.doT",authors),
 		
+    # Generator
+    Project.new("#{source}HotGlue.Generator.MVCRoutes/HotGlue.Generator.MVCRoutes.csproj",version,"HotGlue.Generator.MVCRoutes",authors, nil, [
+      Dependency.new("HotGlue.Aspnet", version),
+      Dependency.new("WebActivator", "1.5")
+      ]),
+
 		# Runtime
 		Project.new("#{source}HotGlue.Runtime.Node/HotGlue.Runtime.Node.csproj",version,"HotGlue.Runtime.Node",authors),
 		Project.new("#{source}HotGlue.Runtime.Jurassic/HotGlue.Runtime.Jurassic.csproj",version,"HotGlue.Runtime.Jurassic",authors),
 		Project.new("#{source}HotGlue.Runtime.SassAndCoffee/HotGlue.Runtime.SassAndCoffee.csproj",version,"HotGlue.Runtime.SassAndCoffee",authors)
 	]
 
-	projects.each do |project|
-    ExecuteTask(:nuspec, project)
+  projects.each do |project|
+    puts project.FilePath
+    if project.FilePath.match("csproj$")
+      ExecuteTask(:nuproject, project)
+    else
+      ExecuteTask(:nucontent, project)
+    end
     ExecuteTask(:nupack, project)
     File.delete "#{deploy}#{project.Name}.#{project.Version}.nuspec"
-	end
+  end
 end
 
-nuspec :nuspec, [ :project ] do |nuspec, args|
+nuspec :nuproject, [ :project ] do |nuspec, args|
   project = args.project
   puts "Generating nuspec for #{project.Name}"
 
@@ -195,7 +159,7 @@ nuspec :nuspec, [ :project ] do |nuspec, args|
   nuspec.owners = project.Author
   nuspec.language = "en-US"
   project.Dependencies.each do |dep|
-      nuspec.dependency dep.Name, dep.Version
+    nuspec.dependency dep.Name, dep.Version
   end
   nuspec.licenseUrl = "http://opensource.org/licenses/MIT"
   nuspec.working_directory = "#{deploy}"
@@ -205,6 +169,43 @@ nuspec :nuspec, [ :project ] do |nuspec, args|
   if !Dir.glob("#{File::dirname project.FilePath}/*.transform").empty?
     nuspec.file "../#{File::dirname project.FilePath}/*.transform".gsub("/","\\"), "content"
   end
+  if !Dir.glob("#{File::dirname project.FilePath}/App_Start/*.*").empty?
+    nuspec.file "../#{File::dirname project.FilePath}/App_Start/*.*".gsub("/","\\"), "content\\App_Start"
+  end
+end
+
+nuspec :nucontent, [ :project ] do |nuspec, args|
+  project = args.project
+  puts "Generating nuspec for #{project.Name}"
+
+  nuspec.id = project.Name
+  nuspec.description = project.Description
+  nuspec.version = project.Version
+  nuspec.authors = project.Author
+  nuspec.owners = project.Author
+  nuspec.language = "en-US"
+  project.Dependencies.each do |dep|
+    nuspec.dependency dep.Name, dep.Version
+  end
+  nuspec.licenseUrl = "http://opensource.org/licenses/MIT"
+  nuspec.working_directory = "#{deploy}"
+  nuspec.output_file = "#{project.Name}.#{project.Version}.nuspec"
+  nuspec.tags = ""
+
+  if project.FilePath.strip().length == 0
+    nuspec.file "../#{project.FilePath}/**/*.*".gsub("/","\\"), "content"
+  else
+    Dir.glob("#{project.FilePath}/*").each do |entity|
+      basename = File.basename(entity)
+      if basename[0] == "_" && File.directory?(entity)
+        nuspec.file "../#{project.FilePath}/#{basename}/**/*.*".gsub("/","\\"), "#{basename[1, basename.length]}"
+      elsif File.directory?(entity)
+        nuspec.file "../#{project.FilePath}/#{basename}/**/*.*".gsub("/","\\"), "content\\#{basename}"
+      else 
+        nuspec.file "../#{project.FilePath}/#{basename}".gsub("/","\\"), "content\\#{basename}"
+      end
+    end
+  end
 end
 
 nugetpack :nupack, [ :project ] do |nuget, args|
@@ -213,5 +214,3 @@ nugetpack :nupack, [ :project ] do |nuget, args|
   nuget.nuspec      = "#{deploy}#{project.Name}.#{project.Version}.nuspec"
   nuget.output      = "#{deploy}"
 end
-
-
