@@ -99,7 +99,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Generator.MVCRoutes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGlue.Demos.MVC", "HotGlue.Demos.MVC\HotGlue.Demos.MVC.csproj", "{D69F4CEC-A094-475E-8574-2DB5DD27AAFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotglue.MVCRoutes.Tests", "Hotglue.MVCRoutes.Tests\Hotglue.MVCRoutes.Tests.csproj", "{A81DD0A9-1045-4CEF-AFAC-1211874A7C4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotglue.Tests.MVCRoutes", "Hotglue.Tests.MVCRoutes\Hotglue.Tests.MVCRoutes.csproj", "{A81DD0A9-1045-4CEF-AFAC-1211874A7C4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

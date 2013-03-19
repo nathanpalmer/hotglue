@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using HotGlue;
-using HotGlue.Demos.MVC;
 using HotGlue.Generator;
-using HotGlue.Generator.MVCRoutes;
 using HotGlue.Model;
-using Hotglue.MVCRoutes.Tests.Controllers;
+using Hotglue.Tests.MVCRoutes.App_Start;
+using Hotglue.Tests.MVCRoutes.Controllers;
 using Jurassic;
 using NUnit.Framework;
 using Shouldly;
 
-namespace Hotglue.MVCRoutes.Tests
+namespace Hotglue.Tests.MVCRoutes
 {
     [TestFixture]
     public class RouteTests

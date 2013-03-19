@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace Hotglue.MVCRoutes.Tests.Controllers
+namespace Hotglue.Tests.MVCRoutes.Controllers
 {
     public class AuthController : Controller
     {
